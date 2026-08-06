@@ -58,3 +58,5 @@ jobs:
           git add -A
           git commit -m "Build global factory database foundation"
           git push origin HEAD:agent/global-factory-database
+
+# Triggered after workflow registration.
