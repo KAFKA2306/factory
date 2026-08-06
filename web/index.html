@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="公式一次情報に基づく世界の企業・工場データベース">
+  <title>FactoryDB</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">OFFICIAL-SOURCE INDUSTRIAL DATA</p>
+      <h1>FactoryDB</h1>
+      <p>企業、工場、製品、工程、設備、投資、財務を、出典まで辿れる形で配信します。</p>
+    </div>
+    <a class="github" href="https://github.com/KAFKA2306/factory">GitHub</a>
+  </header>
+
+  <main>
+    <section id="metrics" class="metrics" aria-label="データカバレッジ"></section>
+    <section class="controls" aria-label="検索条件">
+      <label>国
+        <select id="country"><option value="">すべて</option></select>
+      </label>
+      <label>工程
+        <select id="process"><option value="">すべて</option></select>
+      </label>
+      <label>製品検索
+        <input id="query" type="search" placeholder="例: battery, Hilux">
+      </label>
+    </section>
+    <p id="coverage-warning" class="warning" hidden></p>
+    <section>
+      <div class="section-title">
+        <h2>工場・製造拠点</h2>
+        <span id="count"></span>
+      </div>
+      <div id="facilities" class="grid"></div>
+    </section>
+  </main>
+
+  <template id="facility-template">
+    <article class="card">
+      <div class="card-head">
+        <span class="country"></span>
+        <span class="status"></span>
+      </div>
+      <h3></h3>
+      <p class="meta"></p>
+      <dl>
+        <div><dt>製品</dt><dd class="products"></dd></div>
+        <div><dt>工程</dt><dd class="processes"></dd></div>
+      </dl>
+      <a class="source" target="_blank" rel="noreferrer">公式出典</a>
+    </article>
+  </template>
+  <script src="app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "policy": "official-primary-sources-only",
+  "sources": [
+    {
+      "id": "iso-3166",
+      "publisher": "ISO",
+      "type": "country_registry",
+      "url": "https://www.iso.org/iso-3166-country-codes.html",
+      "adapter": "curated"
+    },
+    {
+      "id": "world-bank-wdi",
+      "publisher": "World Bank",
+      "type": "country_industrial_indicators",
+      "url": "https://api.worldbank.org/v2/",
+      "adapter": "world_bank"
+    },
+    {
+      "id": "unido-stat",
+      "publisher": "UNIDO",
+      "type": "industrial_statistics",
+      "url": "https://stat.unido.org/",
+      "adapter": "planned"
+    },
+    {
+      "id": "unido-ipp",
+      "publisher": "UNIDO",
+      "type": "industrial_parks",
+      "url": "https://ipp.unido.org/industrial-parks",
+      "adapter": "planned"
+    },
+    {
+      "id": "sec-companyfacts",
+      "publisher": "U.S. SEC",
+      "type": "financial_statements",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/",
+      "adapter": "sec_companyfacts"
+    },
+    {
+      "id": "toyota-global-operations",
+      "publisher": "Toyota Motor Corporation",
+      "type": "factory_master",
+      "url": "https://global.toyota/en/company/profile/facilities/manufacturing-worldwide/",
+      "adapter": "curated"
+    }
+  ]
+}

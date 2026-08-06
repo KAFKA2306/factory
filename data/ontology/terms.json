@@ -1,0 +1,79 @@
+[
+  {
+    "id": "ISIC:C",
+    "label_ja": "製造業",
+    "label_en": "Manufacturing",
+    "scheme": "ISIC Rev.4",
+    "broader": null
+  },
+  {
+    "id": "ISIC:C29",
+    "label_ja": "自動車・トレーラー・セミトレーラー製造業",
+    "label_en": "Manufacture of motor vehicles, trailers and semi-trailers",
+    "scheme": "ISIC Rev.4",
+    "broader": "ISIC:C"
+  },
+  {
+    "id": "process:vehicle_assembly",
+    "label_ja": "車両組立",
+    "label_en": "Vehicle assembly",
+    "scheme": "factorydb",
+    "broader": "process:assembly"
+  },
+  {
+    "id": "process:engine_manufacturing",
+    "label_ja": "エンジン製造",
+    "label_en": "Engine manufacturing",
+    "scheme": "factorydb",
+    "broader": "process:machining"
+  },
+  {
+    "id": "process:battery_manufacturing",
+    "label_ja": "電池製造",
+    "label_en": "Battery manufacturing",
+    "scheme": "factorydb",
+    "broader": "process:electrochemical"
+  },
+  {
+    "id": "process:stamping",
+    "label_ja": "プレス成形",
+    "label_en": "Stamping",
+    "scheme": "factorydb",
+    "broader": "process:forming"
+  },
+  {
+    "id": "process:forging",
+    "label_ja": "鍛造",
+    "label_en": "Forging",
+    "scheme": "factorydb",
+    "broader": "process:forming"
+  },
+  {
+    "id": "process:casting",
+    "label_ja": "鋳造",
+    "label_en": "Casting",
+    "scheme": "factorydb",
+    "broader": "process:forming"
+  },
+  {
+    "id": "asset:assembly_line",
+    "label_ja": "組立ライン",
+    "label_en": "Assembly line",
+    "scheme": "factorydb",
+    "broader": "asset:production_line"
+  },
+  {
+    "id": "facility:factory",
+    "label_ja": "工場",
+    "label_en": "Factory",
+    "scheme": "factorydb",
+    "broader": "facility:industrial_site"
+  },
+  {
+    "id": "facility:manufacturing_entity",
+    "label_ja": "製造会社・製造拠点群",
+    "label_en": "Manufacturing entity or site group",
+    "scheme": "factorydb",
+    "broader": "facility:industrial_site"
+  }
+]
