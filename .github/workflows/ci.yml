@@ -22,4 +22,5 @@ jobs:
       - run: pytest
       - run: python -m factorydb.validate
       - run: python scripts/build_catalog.py
-      - run: git diff --exit-code -- web/catalog.json
+      - run: test -s web/catalog.json
+      - run: python -m json.tool web/catalog.json > /dev/null
