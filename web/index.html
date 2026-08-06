@@ -27,7 +27,7 @@
         <select id="process"><option value="">すべて</option></select>
       </label>
       <label>製品検索
-        <input id="query" type="search" placeholder="例: battery, Hilux">
+        <input id="query" type="search" placeholder="battery / Hilux">
       </label>
     </section>
     <p id="coverage-warning" class="warning" hidden></p>
@@ -37,6 +37,21 @@
         <span id="count"></span>
       </div>
       <div id="facilities" class="grid"></div>
+    </section>
+
+    <section class="data-section">
+      <div class="section-title"><h2>設備資産</h2><span id="asset-count"></span></div>
+      <div id="assets" class="grid compact-grid"></div>
+    </section>
+
+    <section class="data-section">
+      <div class="section-title"><h2>投資</h2><span id="investment-count"></span></div>
+      <div id="investments" class="grid compact-grid"></div>
+    </section>
+
+    <section class="data-section">
+      <div class="section-title"><h2>財務・バランスシート</h2><span id="financial-count"></span></div>
+      <div id="financials" class="grid financial-grid"></div>
     </section>
   </main>
 

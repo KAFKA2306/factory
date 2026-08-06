@@ -17,20 +17,6 @@
       "adapter": "world_bank"
     },
     {
-      "id": "unido-stat",
-      "publisher": "UNIDO",
-      "type": "industrial_statistics",
-      "url": "https://stat.unido.org/",
-      "adapter": "planned"
-    },
-    {
-      "id": "unido-ipp",
-      "publisher": "UNIDO",
-      "type": "industrial_parks",
-      "url": "https://ipp.unido.org/industrial-parks",
-      "adapter": "planned"
-    },
-    {
       "id": "sec-companyfacts",
       "publisher": "U.S. SEC",
       "type": "financial_statements",

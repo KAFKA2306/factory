@@ -27,6 +27,12 @@ def validate(require_factory_every_country: bool = False) -> dict:
     if len(countries) != 249:
         errors.append(f"country shards must contain 249 ISO entries; got {len(countries)}")
 
+    for collection_name in ("countries", "companies", "facilities", "assets", "investments", "financials"):
+        ids = [row.id for row in data[collection_name]]
+        duplicates = sorted({item for item in ids if ids.count(item) > 1})
+        if duplicates:
+            errors.append(f"{collection_name}: duplicate ids {duplicates}")
+
     company_ids = {row.id for row in data["companies"]}
     facility_ids = {row.id for row in data["facilities"]}
     for facility in data["facilities"]:
@@ -43,6 +49,9 @@ def validate(require_factory_every_country: bool = False) -> dict:
         for facility_id in investment.facility_ids:
             if facility_id not in facility_ids:
                 errors.append(f"{investment.id}: unknown facility_id {facility_id}")
+    for financial in data["financials"]:
+        if financial.company_id not in company_ids:
+            errors.append(f"{financial.id}: unknown company_id {financial.company_id}")
 
     report = coverage(data)
     if require_factory_every_country and report["factory_missing_countries"]:

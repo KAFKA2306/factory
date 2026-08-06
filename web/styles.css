@@ -58,3 +58,16 @@ dd { margin: .25rem 0 0; font-size: .86rem; line-height: 1.5; }
   .hero { align-items: start; flex-direction: column; padding-top: 2rem; }
   .metrics, .controls, .grid { grid-template-columns: 1fr; }
 }
+
+.data-section { margin-top: 3rem; }
+.compact-card h3 { font-size: 1rem; }
+.fact-list { list-style: none; margin: 1rem 0; padding: 0; }
+.fact-list li { display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--line); padding: .55rem 0; }
+.fact-list span { color: var(--muted); font-size: .75rem; }
+.money-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .6rem; margin: 1rem 0; }
+.money-grid div { background: var(--soft); border-radius: 10px; padding: .75rem; }
+.money-grid span { display: block; color: var(--muted); font-size: .72rem; }
+.money-grid strong { display: block; margin-top: .2rem; font-size: 1rem; }
+.financial-card { grid-column: span 2; }
+@media (max-width: 800px) { .financial-card { grid-column: span 2; } }
+@media (max-width: 520px) { .financial-card { grid-column: span 1; } .money-grid { grid-template-columns: 1fr; } }

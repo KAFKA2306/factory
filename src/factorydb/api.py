@@ -66,6 +66,54 @@ def get_facility(facility_id: str) -> dict:
     raise HTTPException(status_code=404, detail="facility not found")
 
 
+@app.get("/v1/products")
+def get_products() -> list[dict]:
+    facilities = load_all()["facilities"]
+    products: dict[str, dict] = {}
+    for facility in facilities:
+        for name in facility.products:
+            item = products.setdefault(
+                name,
+                {"name": name, "facility_ids": [], "country_codes": set()},
+            )
+            item["facility_ids"].append(facility.id)
+            item["country_codes"].add(facility.country_code)
+    return [
+        {
+            "name": item["name"],
+            "facility_count": len(item["facility_ids"]),
+            "country_count": len(item["country_codes"]),
+            "facility_ids": sorted(item["facility_ids"]),
+            "country_codes": sorted(item["country_codes"]),
+        }
+        for item in sorted(products.values(), key=lambda row: row["name"])
+    ]
+
+
+@app.get("/v1/processes")
+def get_processes() -> list[dict]:
+    facilities = load_all()["facilities"]
+    processes: dict[str, dict] = {}
+    for facility in facilities:
+        for name in facility.processes:
+            item = processes.setdefault(
+                name,
+                {"name": name, "facility_ids": [], "country_codes": set()},
+            )
+            item["facility_ids"].append(facility.id)
+            item["country_codes"].add(facility.country_code)
+    return [
+        {
+            "name": item["name"],
+            "facility_count": len(item["facility_ids"]),
+            "country_count": len(item["country_codes"]),
+            "facility_ids": sorted(item["facility_ids"]),
+            "country_codes": sorted(item["country_codes"]),
+        }
+        for item in sorted(processes.values(), key=lambda row: row["name"])
+    ]
+
+
 @app.get("/v1/assets")
 def get_assets() -> list[dict]:
     return [row.model_dump(mode="json") for row in load_all()["assets"]]

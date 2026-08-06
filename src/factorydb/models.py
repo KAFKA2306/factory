@@ -52,6 +52,7 @@ class Facility(StrictModel):
     processes: list[str] = Field(min_length=1)
     sources: list[SourceCitation] = Field(min_length=1)
     notes: str | None = None
+    scale_metrics: dict[str, float | int | str] = Field(default_factory=dict)
 
     @field_validator("production_start")
     @classmethod
@@ -81,6 +82,7 @@ class Investment(StrictModel):
     purpose: list[str] = Field(min_length=1)
     status: Literal["announced", "approved", "in_progress", "completed", "cancelled"]
     scope_note: str | None = None
+    expected_impacts: dict[str, float | int | str] = Field(default_factory=dict)
     sources: list[SourceCitation] = Field(min_length=1)
 
 
@@ -91,5 +93,6 @@ class FinancialSnapshot(StrictModel):
     fiscal_year: str
     accounting_standard: Literal["IFRS", "US_GAAP", "JGAAP", "OTHER"]
     currency: str = Field(pattern=r"^[A-Z]{3}$")
+    scale: Literal["unit", "thousand", "million", "billion"] = "unit"
     metrics: dict[str, float] = Field(min_length=1)
     sources: list[SourceCitation] = Field(min_length=1)

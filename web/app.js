@@ -59,6 +59,72 @@ function renderFacilities() {
   });
 }
 
+
+function formatAmount(value, currency, scale = "unit") {
+  const multipliers = { unit: 1, thousand: 1e3, million: 1e6, billion: 1e9 };
+  const absolute = value * (multipliers[scale] || 1);
+  return new Intl.NumberFormat("ja-JP", {
+    style: "currency",
+    currency,
+    notation: "compact",
+    maximumFractionDigits: 2
+  }).format(absolute);
+}
+
+function renderAssets() {
+  $("#asset-count").textContent = `${catalog.assets.length}件`;
+  $("#assets").innerHTML = catalog.assets.map(row => `
+    <article class="card compact-card">
+      <div class="card-head"><span>${row.asset_type}</span><span>${row.status}</span></div>
+      <h3>${row.name}</h3>
+      <p class="meta">${row.facility_id}</p>
+      <a class="source" href="${row.sources[0].url}" target="_blank" rel="noreferrer">公式出典</a>
+    </article>
+  `).join("");
+}
+
+function renderInvestments() {
+  $("#investment-count").textContent = `${catalog.investments.length}件`;
+  $("#investments").innerHTML = catalog.investments.map(row => {
+    const impacts = Object.entries(row.expected_impacts || {})
+      .map(([key, value]) => `<li><span>${key}</span><strong>${Number(value).toLocaleString()}</strong></li>`)
+      .join("");
+    return `
+      <article class="card compact-card">
+        <div class="card-head"><span>${row.announcement_date}</span><span>${row.status}</span></div>
+        <h3>${formatAmount(row.amount, row.currency)}</h3>
+        <p>${row.purpose.join("、")}</p>
+        ${impacts ? `<ul class="fact-list">${impacts}</ul>` : ""}
+        <a class="source" href="${row.sources[0].url}" target="_blank" rel="noreferrer">公式出典</a>
+      </article>
+    `;
+  }).join("");
+}
+
+function renderFinancials() {
+  $("#financial-count").textContent = `${catalog.financials.length}件`;
+  const keys = [
+    ["total_assets", "総資産"],
+    ["total_liabilities", "負債"],
+    ["total_shareholders_equity", "株主資本"],
+    ["sales_revenues", "営業収益"],
+    ["operating_income", "営業利益"],
+    ["cash_flow_from_operating_activities", "営業CF"]
+  ];
+  $("#financials").innerHTML = catalog.financials.map(row => `
+    <article class="card financial-card">
+      <div class="card-head"><span>${row.fiscal_year}</span><span>${row.accounting_standard}</span></div>
+      <h3>${row.company_id}</h3>
+      <div class="money-grid">
+        ${keys.filter(([key]) => row.metrics[key] !== undefined).map(([key, label]) => `
+          <div><span>${label}</span><strong>${formatAmount(row.metrics[key], row.currency, row.scale)}</strong></div>
+        `).join("")}
+      </div>
+      <a class="source" href="${row.sources[0].url}" target="_blank" rel="noreferrer">公式財務資料</a>
+    </article>
+  `).join("");
+}
+
 fetch("catalog.json")
   .then(response => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -69,6 +135,9 @@ fetch("catalog.json")
     renderMetrics();
     setupFilters();
     renderFacilities();
+    renderAssets();
+    renderInvestments();
+    renderFinancials();
   })
   .catch(error => {
     document.body.innerHTML = `<main><h1>FactoryDB</h1><p>データ読み込みに失敗しました: ${error.message}</p></main>`;

@@ -43,6 +43,8 @@ uvicorn factorydb.api:app --reload
 - `GET /v1/countries`
 - `GET /v1/companies`
 - `GET /v1/facilities?country=JP&process=vehicle_assembly`
+- `GET /v1/products`
+- `GET /v1/processes`
 - `GET /v1/assets`
 - `GET /v1/investments`
 - `GET /v1/financials`
@@ -69,6 +71,8 @@ World Bank APIは各国の製造業付加価値等を更新し、SEC Companyfact
 python -m factorydb.validate --require-factory-every-country
 ```
 
-この厳格ゲートが未達の間は、UIに未収録国数を表示し、完成済みとは扱いません。
+この厳格ゲートが未達の間は、UIに未収録国数を表示し、完成済みとは扱いません。GitHub Pagesの本番配信も同じ厳格ゲートで停止します。
+
+FY2026財務レコードには、営業収益・利益だけでなく、総資産、負債、株主資本、営業・投資・財務キャッシュフローの公式絶対額を百万円単位で格納しています。
 
 詳細: [アーキテクチャ](docs/architecture.md) / [データポリシー](docs/data-policy.md)

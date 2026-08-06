@@ -20,7 +20,7 @@ CONCEPTS = {
 
 def fetch(cik: str) -> dict:
     url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
-    request = Request(url, headers={"User-Agent": USER_AGENT, "Accept-Encoding": "gzip, deflate"})
+    request = Request(url, headers={"User-Agent": USER_AGENT})
     with urlopen(request, timeout=90) as response:
         return json.load(response)
 
@@ -66,6 +66,7 @@ def main() -> None:
                 "fiscal_year": period_end[:4],
                 "accounting_standard": "IFRS",
                 "currency": issuer["currency"],
+                "scale": "unit",
                 "metrics": metrics,
                 "sources": [{
                     "publisher": "U.S. Securities and Exchange Commission",
