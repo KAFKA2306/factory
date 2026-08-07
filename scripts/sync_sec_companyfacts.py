@@ -1,19 +1,27 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import UTC, datetime
 from pathlib import Path
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "financials.jsonl"
 USER_AGENT = "factorydb/0.1 contact=https://github.com/KAFKA2306/factory"
-ISSUERS = [{"company_id": "company:toyota-motor-corporation", "cik": "0001094517", "currency": "JPY"}]
+ISSUERS = [
+    {
+        "company_id": "company:toyota-motor-corporation",
+        "cik": "0001094517",
+        "currency": "JPY",
+    }
+]
 CONCEPTS = {
     "assets": ["Assets"],
     "liabilities": ["Liabilities"],
-    "equity": ["StockholdersEquity", "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"],
+    "equity": [
+        "StockholdersEquity",
+        "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+    ],
     "revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues"],
 }
 
@@ -36,19 +44,34 @@ def latest_fact(payload: dict, names: list[str], currency: str) -> dict | None:
             units = concept.get("units", {})
             candidates = units.get(currency, []) or next(iter(units.values()), [])
             candidates = [
-                row for row in candidates
-                if row.get("form") in {"20-F", "10-K", "6-K"} and row.get("val") is not None
+                row
+                for row in candidates
+                if row.get("form") in {"20-F", "10-K", "6-K"}
+                and row.get("val") is not None
             ]
             if candidates:
-                row = sorted(candidates, key=lambda x: (x.get("filed", ""), x.get("end", "")))[-1]
-                return {"value": row["val"], "period_end": row.get("end"), "filed": row.get("filed"), "concept": f"{taxonomy}:{name}"}
+                row = max(
+                    candidates,
+                    key=lambda item: (item.get("filed", ""), item.get("end", "")),
+                )
+                return {
+                    "value": row["val"],
+                    "period_end": row.get("end"),
+                    "filed": row.get("filed"),
+                    "concept": f"{taxonomy}:{name}",
+                }
     return None
 
 
 def main() -> None:
-    existing = [json.loads(line) for line in OUT.read_text(encoding="utf-8").splitlines() if line]
+    existing = [
+        json.loads(line)
+        for line in OUT.read_text(encoding="utf-8").splitlines()
+        if line
+    ]
     existing = [row for row in existing if not row["id"].startswith("financial:sec:")]
     generated = []
+    retrieved_at = datetime.now(UTC).date().isoformat()
     for issuer in ISSUERS:
         payload = fetch(issuer["cik"])
         metrics = {}
@@ -59,24 +82,37 @@ def main() -> None:
                 metrics[key] = fact["value"]
                 period_end = max(filter(None, [period_end, fact["period_end"]]))
         if metrics and period_end:
-            generated.append({
-                "id": f"financial:sec:{issuer['cik']}:{period_end}",
-                "company_id": issuer["company_id"],
-                "period_end": period_end,
-                "fiscal_year": period_end[:4],
-                "accounting_standard": "IFRS",
-                "currency": issuer["currency"],
-                "scale": "unit",
-                "metrics": metrics,
-                "sources": [{
-                    "publisher": "U.S. Securities and Exchange Commission",
-                    "url": f"https://data.sec.gov/api/xbrl/companyfacts/CIK{issuer['cik']}.json",
-                    "retrieved_at": date.today().isoformat(),
-                    "evidence": "SEC EDGAR Companyfacts XBRL API; latest filed annual or current facts",
-                }],
-            })
+            generated.append(
+                {
+                    "id": f"financial:sec:{issuer['cik']}:{period_end}",
+                    "company_id": issuer["company_id"],
+                    "period_end": period_end,
+                    "fiscal_year": period_end[:4],
+                    "accounting_standard": "IFRS",
+                    "currency": issuer["currency"],
+                    "scale": "unit",
+                    "metrics": metrics,
+                    "sources": [
+                        {
+                            "publisher": "U.S. Securities and Exchange Commission",
+                            "url": (
+                                "https://data.sec.gov/api/xbrl/companyfacts/"
+                                f"CIK{issuer['cik']}.json"
+                            ),
+                            "retrieved_at": retrieved_at,
+                            "evidence": (
+                                "SEC EDGAR Companyfacts XBRL API; latest filed "
+                                "annual or current facts"
+                            ),
+                        }
+                    ],
+                }
+            )
     OUT.write_text(
-        "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in existing + generated),
+        "".join(
+            json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n"
+            for row in existing + generated
+        ),
         encoding="utf-8",
     )
 
