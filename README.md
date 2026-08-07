@@ -5,18 +5,18 @@
 ## 現在の実データ
 
 - ISO 3166-1 国・地域プロファイル: **249件**
-- 実在する工場・製造拠点: **57件**
-- 工場レコード収録国・地域: **44件**
+- 実在する工場・製造拠点: **60件**
+- 工場レコード収録国・地域: **47件**
 - 公式根拠付き非該当地域: **4件**
-- カバレッジ解決済み国・地域: **48件**
-- カバレッジ未解決国・地域: **201件**
-- 工場レコード0件の国・地域: **205件**
-- 企業: **8社**
+- カバレッジ解決済み国・地域: **51件**
+- カバレッジ未解決国・地域: **198件**
+- 工場レコード0件の国・地域: **202件**
+- 企業: **10社**
 - 設備資産: **2件**
 - 投資案件: **3件**
 - 財務スナップショット: **1件**
 
-現在の収録企業は、Toyota Motor Corporation、Intel Corporation、STMicroelectronics N.V.、Bayerische Motoren Werke Aktiengesellschaft、Volvo Car AB (publ.)、NXP Semiconductors N.V.、Micron Technology, Inc.、Renault s.a.sです。各レコードは企業公式・政府機関等の一次情報を出典として保持し、架空データ、サンプル、ダミー値は含みません。
+現在の収録企業は、Toyota Motor Corporation、Intel Corporation、STMicroelectronics N.V.、Bayerische Motoren Werke Aktiengesellschaft、Volvo Car AB (publ.)、NXP Semiconductors N.V.、Micron Technology, Inc.、Renault s.a.s、Stellantis N.V.、Valmet Automotive Oyjです。各レコードは企業公式・政府機関等の一次情報を出典として保持し、架空データ、サンプル、ダミー値は含みません。
 
 ISO 3166-1には、無人の自然保護地域や科学研究に限定された地域も含まれます。実在工場を登録できない地域は、公式一次情報を複数確認し、`verified_no_qualifying_factory` として根拠付きで管理します。件数達成のために架空工場を作ることはありません。
 
