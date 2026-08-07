@@ -30,6 +30,13 @@ def get_coverage() -> dict:
     return coverage(load_all())
 
 
+@app.get("/v1/coverage-resolutions")
+def get_coverage_resolutions() -> list[dict]:
+    return [
+        row.model_dump(mode="json") for row in load_all()["coverage_resolutions"]
+    ]
+
+
 @app.get("/v1/countries")
 def get_countries() -> list[dict]:
     return [row.model_dump(mode="json") for row in load_all()["countries"]]
