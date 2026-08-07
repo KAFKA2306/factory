@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -16,12 +16,11 @@ from .models import (
     Investment,
 )
 
-T = TypeVar("T", bound=BaseModel)
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"
 
 
-def load_jsonl(pattern: str, model: type[T]) -> list[T]:
+def load_jsonl[T: BaseModel](pattern: str, model: type[T]) -> list[T]:
     paths = sorted(DATA.glob(pattern))
     if not paths:
         raise FileNotFoundError(f"no data files matched {pattern!r}")
