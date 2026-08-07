@@ -23,6 +23,7 @@ def main() -> None:
         "countries": dump(data["countries"]),
         "companies": dump(data["companies"]),
         "facilities": dump(data["facilities"]),
+        "coverage_resolutions": dump(data["coverage_resolutions"]),
         "assets": dump(data["assets"]),
         "investments": dump(data["investments"]),
         "financials": dump(data["financials"]),
