@@ -10,8 +10,10 @@ def test_coverage_endpoint_reports_real_inventory():
     assert response.status_code == 200
     payload = response.json()
     assert payload["country_profiles"] == 249
-    assert payload["factory_records"] == 30
-    assert payload["factory_covered_countries"] == 28
+    assert payload["factory_records"] >= 37
+    assert payload["factory_covered_countries"] >= 35
+    assert payload["coverage_resolved_countries"] >= 39
+    assert payload["coverage_missing_countries"] <= 210
 
 
 def test_country_filter_returns_japan_factory():
