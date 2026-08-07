@@ -7,12 +7,17 @@
 - ISO 3166-1 国・地域プロファイル: **249件**
 - 実在する工場・製造拠点: **30件**
 - 工場レコード収録国・地域: **28件**
+- 公式根拠付き非該当地域: **4件**
+- カバレッジ解決済み国・地域: **32件**
+- カバレッジ未解決国・地域: **217件**
 - 企業: **1社**
 - 設備資産: **2件**
 - 投資案件: **2件**
 - 財務スナップショット: **1件**
 
 初期工場データは、Toyota Motor Corporationが2026年5月8日時点で公開した世界生産拠点情報を正規化したものです。架空データ、サンプル、ダミー値は含みません。
+
+ISO 3166-1には、無人の自然保護地域や科学研究に限定された地域も含まれます。実在工場を登録できない地域は、公式一次情報を複数確認し、`verified_no_qualifying_factory` として根拠付きで管理します。件数達成のために架空工場を作ることはありません。
 
 ## 対象領域
 
@@ -30,6 +35,7 @@
 ```bash
 python -m pip install -e '.[dev]'
 python -m factorydb.validate
+python -m factorydb.coverage_validation
 python scripts/build_catalog.py
 uvicorn factorydb.api:app --reload
 ```
@@ -40,6 +46,7 @@ uvicorn factorydb.api:app --reload
 
 - `GET /health`
 - `GET /v1/coverage`
+- `GET /v1/coverage-resolutions`
 - `GET /v1/countries`
 - `GET /v1/companies`
 - `GET /v1/facilities?country=JP&process=vehicle_assembly`
@@ -56,6 +63,7 @@ uvicorn factorydb.api:app --reload
 python scripts/sync_worldbank.py
 python scripts/sync_sec_companyfacts.py
 python -m factorydb.validate
+python -m factorydb.coverage_validation
 python scripts/build_catalog.py
 ```
 
@@ -63,15 +71,17 @@ World Bank APIは各国の製造業付加価値等を更新し、SEC Companyfact
 
 ## 品質ゲート
 
-通常CIはスキーマ、参照整合性、全249国・地域プロファイル、架空データ禁止を検証します。
+通常CIはスキーマ、参照整合性、全249国・地域プロファイル、架空データ禁止、非該当判定と工場レコードの重複を検証します。
 
-全ての国・地域に工場が最低1件あることを要求する厳格監査:
+全249国・地域について、実在工場または公式根拠付き非該当判定のいずれかを要求する完成監査:
 
 ```bash
-python -m factorydb.validate --require-factory-every-country
+python -m factorydb.coverage_validation --require-complete
 ```
 
-この厳格ゲートが未達の間は、UIに未収録国数を表示し、完成済みとは扱いません。GitHub Pagesの本番配信も同じ厳格ゲートで停止します。
+このゲートが未達の間は、UIに未解決国数を表示し、完成済みとは扱いません。GitHub Pagesの本番配信も同じゲートで停止します。
+
+実在工場だけの不足数は `factory_missing_countries`、工場または非該当判定のどちらもない不足数は `coverage_missing_countries` として分離して表示します。
 
 FY2026財務レコードには、営業収益・利益だけでなく、総資産、負債、株主資本、営業・投資・財務キャッシュフローの公式絶対額を百万円単位で格納しています。
 
