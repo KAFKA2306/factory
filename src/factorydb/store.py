@@ -6,7 +6,15 @@ from typing import Any, TypeVar
 
 from pydantic import BaseModel
 
-from .models import Asset, Company, Country, Facility, FinancialSnapshot, Investment
+from .models import (
+    Asset,
+    Company,
+    Country,
+    CoverageResolution,
+    Facility,
+    FinancialSnapshot,
+    Investment,
+)
 
 T = TypeVar("T", bound=BaseModel)
 ROOT = Path(__file__).resolve().parents[2]
@@ -35,6 +43,9 @@ def load_all() -> dict[str, Any]:
         "countries": load_jsonl("countries/*.jsonl", Country),
         "companies": load_jsonl("companies.jsonl", Company),
         "facilities": load_jsonl("facilities/*.jsonl", Facility),
+        "coverage_resolutions": load_jsonl(
+            "coverage_resolutions.jsonl", CoverageResolution
+        ),
         "assets": load_jsonl("assets.jsonl", Asset),
         "investments": load_jsonl("investments.jsonl", Investment),
         "financials": load_jsonl("financials.jsonl", FinancialSnapshot),
@@ -47,13 +58,28 @@ def coverage(data: dict[str, Any]) -> dict[str, Any]:
     facility_counts = {code: 0 for code in country_codes}
     for facility in data["facilities"]:
         facility_counts[facility.country_code] = facility_counts.get(facility.country_code, 0) + 1
+
     covered = sorted(code for code, count in facility_counts.items() if count > 0)
-    missing = sorted(code for code, count in facility_counts.items() if count == 0)
+    zero_factory = sorted(code for code, count in facility_counts.items() if count == 0)
+    verified_no_factory = sorted(
+        row.country_code
+        for row in data["coverage_resolutions"]
+        if row.status == "verified_no_qualifying_factory"
+    )
+    resolved = sorted(set(covered) | set(verified_no_factory))
+    unresolved = sorted(country_codes - set(resolved))
+
     return {
         "country_profiles": len(country_codes),
         "factory_records": len(data["facilities"]),
         "factory_covered_countries": len(covered),
-        "factory_missing_countries": len(missing),
+        "factory_missing_countries": len(zero_factory),
+        "verified_no_qualifying_factory_countries": len(verified_no_factory),
+        "coverage_resolved_countries": len(resolved),
+        "coverage_missing_countries": len(unresolved),
         "covered_country_codes": covered,
-        "missing_country_codes": missing,
+        "zero_factory_country_codes": zero_factory,
+        "verified_no_qualifying_factory_country_codes": verified_no_factory,
+        "resolved_country_codes": resolved,
+        "missing_country_codes": unresolved,
     }
