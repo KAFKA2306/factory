@@ -62,6 +62,20 @@ class Facility(StrictModel):
         return value
 
 
+class CoverageResolution(StrictModel):
+    id: str
+    country_code: str = Field(pattern=r"^[A-Z]{2}$")
+    status: Literal["verified_no_qualifying_factory"]
+    reason_code: Literal[
+        "uninhabited_protected_territory",
+        "natural_reserve_science_only",
+        "no_permanent_population_industry_ceased",
+    ]
+    rationale: str = Field(min_length=30)
+    as_of: date
+    sources: list[SourceCitation] = Field(min_length=1)
+
+
 class Asset(StrictModel):
     id: str
     facility_id: str
