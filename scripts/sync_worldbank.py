@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
 import time
-from datetime import date
+from datetime import UTC, datetime
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
@@ -34,22 +34,40 @@ def latest_value(iso2: str, indicator: str) -> dict | None:
     row = next((item for item in payload[1] if item.get("value") is not None), None)
     if row is None:
         return None
-    return {"value": row["value"], "year": int(row["date"]), "indicator": indicator, "source_url": url}
+    return {
+        "value": row["value"],
+        "year": int(row["date"]),
+        "indicator": indicator,
+        "source_url": url,
+    }
 
 
 def main() -> None:
     files = sorted(COUNTRY_DIR.glob("*.jsonl"))
     rows_by_file = {
-        path: [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+        path: [
+            json.loads(line)
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line
+        ]
         for path in files
     }
     rows = [row for file_rows in rows_by_file.values() for row in file_rows]
+    retrieved_at = datetime.now(UTC).date().isoformat()
     for index, row in enumerate(rows, 1):
         values = {}
         for key, indicator in INDICATORS.items():
             try:
                 item = latest_value(row["iso2"], indicator)
-            except Exception as exc:
+            except (
+                HTTPError,
+                URLError,
+                TimeoutError,
+                json.JSONDecodeError,
+                KeyError,
+                TypeError,
+                ValueError,
+            ) as exc:
                 print(f"WARN {row['iso2']} {indicator}: {exc}")
                 item = None
             if item:
@@ -59,13 +77,19 @@ def main() -> None:
         row["indicator_source"] = {
             "publisher": "World Bank",
             "url": "https://api.worldbank.org/v2/",
-            "retrieved_at": date.today().isoformat(),
-            "evidence": "World Development Indicators API; latest non-null observation per indicator",
+            "retrieved_at": retrieved_at,
+            "evidence": (
+                "World Development Indicators API; latest non-null observation "
+                "per indicator"
+            ),
         }
         print(f"{index}/{len(rows)} {row['iso2']} {len(values)}")
     for path, file_rows in rows_by_file.items():
         path.write_text(
-            "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in file_rows),
+            "".join(
+                json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n"
+                for row in file_rows
+            ),
             encoding="utf-8",
         )
 
