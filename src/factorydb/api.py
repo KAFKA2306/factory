@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
 from .store import coverage, load_all
 
