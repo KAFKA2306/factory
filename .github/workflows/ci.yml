@@ -21,6 +21,7 @@ jobs:
       - run: ruff check .
       - run: pytest
       - run: python -m factorydb.validate
+      - run: python -m factorydb.coverage_validation
       - run: python scripts/build_catalog.py
       - run: test -s web/catalog.json
       - run: python -m json.tool web/catalog.json > /dev/null
