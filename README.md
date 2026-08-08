@@ -5,18 +5,18 @@
 ## 現在の実データ
 
 - ISO 3166-1 国・地域プロファイル: **249件**
-- 実在する工場・製造拠点: **84件**
-- 工場レコード収録国・地域: **71件**
+- 実在する工場・製造拠点: **89件**
+- 工場レコード収録国・地域: **76件**
 - 公式根拠付き非該当地域: **4件**
-- カバレッジ解決済み国・地域: **75件**
-- カバレッジ未解決国・地域: **174件**
-- 工場レコード0件の国・地域: **178件**
-- 企業: **33社**
+- カバレッジ解決済み国・地域: **80件**
+- カバレッジ未解決国・地域: **169件**
+- 工場レコード0件の国・地域: **173件**
+- 企業: **36社**
 - 設備資産: **2件**
 - 投資案件: **3件**
 - 財務スナップショット: **1件**
 
-現在の収録企業は、Toyota Motor Corporation、Intel Corporation、STMicroelectronics N.V.、Bayerische Motoren Werke Aktiengesellschaft、Volvo Car AB (publ.)、NXP Semiconductors N.V.、Micron Technology, Inc.、Renault s.a.s、Stellantis N.V.、Valmet Automotive Oyj、Roche Holding Ltd、Novo Nordisk A/S、Telefonaktiebolaget LM Ericsson (publ)、Liebherr-International AG、Thermo Fisher Scientific Inc.、Rimac Group d.o.o.、AS Latvijas Finieris、Alvotech hf.、SUNLIGHT GROUP ENERGY STORAGE SYSTEMS INDUSTRIAL AND COMMERCIAL SOCIETE ANONYME、Medochemie Ltd、Yara International ASA、ArcelorMittal S.A.、Qatar Fertiliser Company (Q.P.S.C)、Emirates Global Aluminium PJSC、Lucid Group, Inc.、Oman Cement Company (S.A.O.G.)、Aluminium Bahrain B.S.C.、EQUATE Petrochemical Company K.S.C.C.、Jordan Phosphate Mines Company, PLC.、Samsung Electronics Co., Ltd.、BlueScope Steel Limited、Fonterra Co-operative Group Limited、Beximco Pharmaceuticals PLC.です。各レコードは企業公式・政府機関等の一次情報を出典として保持し、架空データ、サンプル、ダミー値は含みません。
+各レコードは企業公式・政府機関・規制当局等の一次情報を出典として保持し、架空データ、サンプル、ダミー値は含みません。
 
 企業データは後方互換を維持したまま `data/companies*.jsonl` のシャード読込に対応しています。既存の `data/companies.jsonl` は引き続き有効で、新規企業を追加シャードへ分割できます。
 
