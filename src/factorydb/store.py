@@ -40,7 +40,7 @@ def load_jsonl[T: BaseModel](pattern: str, model: type[T]) -> list[T]:
 def load_all() -> dict[str, Any]:
     return {
         "countries": load_jsonl("countries/*.jsonl", Country),
-        "companies": load_jsonl("companies.jsonl", Company),
+        "companies": load_jsonl("companies*.jsonl", Company),
         "facilities": load_jsonl("facilities/*.jsonl", Facility),
         "coverage_resolutions": load_jsonl(
             "coverage_resolutions.jsonl", CoverageResolution
