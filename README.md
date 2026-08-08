@@ -5,18 +5,18 @@
 ## 現在の実データ
 
 - ISO 3166-1 国・地域プロファイル: **249件**
-- 実在する工場・製造拠点: **65件**
-- 工場レコード収録国・地域: **52件**
+- 実在する工場・製造拠点: **70件**
+- 工場レコード収録国・地域: **57件**
 - 公式根拠付き非該当地域: **4件**
-- カバレッジ解決済み国・地域: **56件**
-- カバレッジ未解決国・地域: **193件**
-- 工場レコード0件の国・地域: **197件**
-- 企業: **15社**
+- カバレッジ解決済み国・地域: **61件**
+- カバレッジ未解決国・地域: **188件**
+- 工場レコード0件の国・地域: **192件**
+- 企業: **20社**
 - 設備資産: **2件**
 - 投資案件: **3件**
 - 財務スナップショット: **1件**
 
-現在の収録企業は、Toyota Motor Corporation、Intel Corporation、STMicroelectronics N.V.、Bayerische Motoren Werke Aktiengesellschaft、Volvo Car AB (publ.)、NXP Semiconductors N.V.、Micron Technology, Inc.、Renault s.a.s、Stellantis N.V.、Valmet Automotive Oyj、Roche Holding Ltd、Novo Nordisk A/S、Telefonaktiebolaget LM Ericsson (publ)、Liebherr-International AG、Thermo Fisher Scientific Inc.です。各レコードは企業公式・政府機関等の一次情報を出典として保持し、架空データ、サンプル、ダミー値は含みません。
+現在の収録企業は、Toyota Motor Corporation、Intel Corporation、STMicroelectronics N.V.、Bayerische Motoren Werke Aktiengesellschaft、Volvo Car AB (publ.)、NXP Semiconductors N.V.、Micron Technology, Inc.、Renault s.a.s、Stellantis N.V.、Valmet Automotive Oyj、Roche Holding Ltd、Novo Nordisk A/S、Telefonaktiebolaget LM Ericsson (publ)、Liebherr-International AG、Thermo Fisher Scientific Inc.、Rimac Group d.o.o.、AS Latvijas Finieris、Alvotech hf.、SUNLIGHT GROUP ENERGY STORAGE SYSTEMS INDUSTRIAL AND COMMERCIAL SOCIETE ANONYME、Medochemie Ltdです。各レコードは企業公式・政府機関等の一次情報を出典として保持し、架空データ、サンプル、ダミー値は含みません。
 
 ISO 3166-1には、無人の自然保護地域や科学研究に限定された地域も含まれます。実在工場を登録できない地域は、公式一次情報を複数確認し、`verified_no_qualifying_factory` として根拠付きで管理します。件数達成のために架空工場を作ることはありません。
 
