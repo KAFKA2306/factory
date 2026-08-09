@@ -4,19 +4,20 @@ let catalog;
 const labels = {
   country_profiles: "国・地域プロファイル",
   factory_records: "工場・製造拠点",
-  factory_covered_countries: "工場収録国",
-  factory_missing_countries: "工場未収録国"
+  coverage_resolved_countries: "解決済み国・地域",
+  coverage_missing_countries: "未解決国・地域",
+  verified_no_qualifying_factory_countries: "公式非該当地域"
 };
 
 function renderMetrics() {
   $("#metrics").innerHTML = Object.entries(labels).map(([key, label]) =>
     `<div class="metric"><strong>${catalog.coverage[key].toLocaleString()}</strong><span>${label}</span></div>`
   ).join("");
-  const missing = catalog.coverage.factory_missing_countries;
+  const missing = catalog.coverage.coverage_missing_countries;
   if (missing > 0) {
     const warning = $("#coverage-warning");
     warning.hidden = false;
-    warning.textContent = `厳格リリースゲート未達: 工場レコードが0件の国・地域が ${missing} 件あります。国プロファイル自体は全ISOコードを収録しています。`;
+    warning.textContent = `データベースは拡充中です。公式一次情報で未解決の国・地域が ${missing} 件あります。解決済み ${catalog.coverage.coverage_resolved_countries} / ${catalog.coverage.country_profiles}、うち公式根拠付き非該当 ${catalog.coverage.verified_no_qualifying_factory_countries} 件です。`;
   }
 }
 
