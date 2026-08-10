@@ -1,9 +1,19 @@
 from __future__ import annotations
 
+import importlib.util
 import json
+import sys
 from pathlib import Path
 
-from scripts.audit_edinetdb_projection import compare_projection, validate_projection
+ROOT = Path(__file__).resolve().parents[1]
+MODULE_PATH = ROOT / "scripts" / "audit_edinetdb_projection.py"
+SPEC = importlib.util.spec_from_file_location("audit_edinetdb_projection", MODULE_PATH)
+assert SPEC and SPEC.loader
+audit_module = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = audit_module
+SPEC.loader.exec_module(audit_module)
+compare_projection = audit_module.compare_projection
+validate_projection = audit_module.validate_projection
 
 
 def projection(records: list[dict]) -> dict:
