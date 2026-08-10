@@ -85,15 +85,13 @@ def validate_projection(payload: dict[str, Any]) -> None:
         raise ValueError("projection response_sha256 is required")
     records = payload.get("records")
     if not isinstance(records, list):
-        raise ValueError("projection records must be a list")
+        raise TypeError("projection records must be a list")
 
 
 def normalize_fiscal_year(value: Any) -> str | None:
     if value is None:
         return None
-    text = str(value).upper().strip()
-    if text.startswith("FY"):
-        text = text[2:]
+    text = str(value).upper().strip().removeprefix("FY")
     digits = "".join(char for char in text if char.isdigit())
     if len(digits) >= 4:
         return f"FY{digits[:4]}"
@@ -196,7 +194,14 @@ def run(args: argparse.Namespace) -> int:
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({key: audit[key] for key in ("status", "comparison_count", "matched_count", "mismatched_count")}))
+    print(
+        json.dumps(
+            {
+                key: audit[key]
+                for key in ("status", "comparison_count", "matched_count", "mismatched_count")
+            }
+        )
+    )
 
     if args.require_match and audit["status"] != "pass":
         return 1
