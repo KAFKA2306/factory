@@ -1,22 +1,37 @@
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from .store import coverage, load_all
+from . import queries
+from .mcp_server import mcp
+
+mcp_http_app = mcp.streamable_http_app()
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    async with mcp.session_manager.run():
+        yield
+
 
 app = FastAPI(
     title="FactoryDB API",
-    version="0.1.0",
+    version="0.2.0",
     description="Official-source global factory, asset, process, investment and financial database.",
+    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["Mcp-Session-Id"],
 )
 
 
@@ -27,24 +42,22 @@ def health() -> dict[str, str]:
 
 @app.get("/v1/coverage")
 def get_coverage() -> dict:
-    return coverage(load_all())
+    return queries.coverage_summary()
 
 
 @app.get("/v1/coverage-resolutions")
 def get_coverage_resolutions() -> list[dict]:
-    return [
-        row.model_dump(mode="json") for row in load_all()["coverage_resolutions"]
-    ]
+    return queries.coverage_resolutions()
 
 
 @app.get("/v1/countries")
 def get_countries() -> list[dict]:
-    return [row.model_dump(mode="json") for row in load_all()["countries"]]
+    return queries.countries()
 
 
 @app.get("/v1/companies")
 def get_companies() -> list[dict]:
-    return [row.model_dump(mode="json") for row in load_all()["companies"]]
+    return queries.companies()
 
 
 @app.get("/v1/facilities")
@@ -53,92 +66,49 @@ def get_facilities(
     process: str | None = None,
     product: str | None = None,
 ) -> list[dict]:
-    rows = load_all()["facilities"]
-    if country:
-        rows = [row for row in rows if row.country_code == country.upper()]
-    if process:
-        rows = [row for row in rows if process in row.processes]
-    if product:
-        token = product.casefold()
-        rows = [row for row in rows if any(token in item.casefold() for item in row.products)]
-    return [row.model_dump(mode="json") for row in rows]
+    return queries.facilities(country=country, process=process, product=product)
 
 
 @app.get("/v1/facilities/{facility_id}")
 def get_facility(facility_id: str) -> dict:
-    key = facility_id if facility_id.startswith("facility:") else f"facility:{facility_id}"
-    for row in load_all()["facilities"]:
-        if row.id == key:
-            return row.model_dump(mode="json")
-    raise HTTPException(status_code=404, detail="facility not found")
+    item = queries.facility(facility_id)
+    if item is None:
+        raise HTTPException(status_code=404, detail="facility not found")
+    return item
 
 
 @app.get("/v1/products")
 def get_products() -> list[dict]:
-    facilities = load_all()["facilities"]
-    products: dict[str, dict] = {}
-    for facility in facilities:
-        for name in facility.products:
-            item = products.setdefault(
-                name,
-                {"name": name, "facility_ids": [], "country_codes": set()},
-            )
-            item["facility_ids"].append(facility.id)
-            item["country_codes"].add(facility.country_code)
-    return [
-        {
-            "name": item["name"],
-            "facility_count": len(item["facility_ids"]),
-            "country_count": len(item["country_codes"]),
-            "facility_ids": sorted(item["facility_ids"]),
-            "country_codes": sorted(item["country_codes"]),
-        }
-        for item in sorted(products.values(), key=lambda row: row["name"])
-    ]
+    return queries.products()
 
 
 @app.get("/v1/processes")
 def get_processes() -> list[dict]:
-    facilities = load_all()["facilities"]
-    processes: dict[str, dict] = {}
-    for facility in facilities:
-        for name in facility.processes:
-            item = processes.setdefault(
-                name,
-                {"name": name, "facility_ids": [], "country_codes": set()},
-            )
-            item["facility_ids"].append(facility.id)
-            item["country_codes"].add(facility.country_code)
-    return [
-        {
-            "name": item["name"],
-            "facility_count": len(item["facility_ids"]),
-            "country_count": len(item["country_codes"]),
-            "facility_ids": sorted(item["facility_ids"]),
-            "country_codes": sorted(item["country_codes"]),
-        }
-        for item in sorted(processes.values(), key=lambda row: row["name"])
-    ]
+    return queries.processes()
 
 
 @app.get("/v1/assets")
 def get_assets() -> list[dict]:
-    return [row.model_dump(mode="json") for row in load_all()["assets"]]
+    return queries.assets()
 
 
 @app.get("/v1/investments")
 def get_investments() -> list[dict]:
-    return [row.model_dump(mode="json") for row in load_all()["investments"]]
+    return queries.investments()
 
 
 @app.get("/v1/financials")
 def get_financials() -> list[dict]:
-    return [row.model_dump(mode="json") for row in load_all()["financials"]]
+    return queries.financials()
 
 
 @app.get("/v1/ontology")
 def get_ontology() -> list[dict]:
-    return load_all()["ontology"]
+    return queries.ontology()
+
+
+# Mount last: Starlette routes are matched in order and Mount("/") catches all remaining paths.
+app.mount("/", mcp_http_app)
 
 
 def main() -> None:

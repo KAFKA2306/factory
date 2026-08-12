@@ -4,71 +4,106 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="公式一次情報に基づく世界の企業・工場データベース">
-  <title>FactoryDB</title>
+  <title>FactoryDB Explorer</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <div>
-      <p class="eyebrow">OFFICIAL-SOURCE INDUSTRIAL DATA</p>
-      <h1>FactoryDB</h1>
-      <p>企業、工場、製品、工程、設備、投資、財務を、出典まで辿れる形で配信します。</p>
-    </div>
-    <a class="github" href="https://github.com/KAFKA2306/factory">GitHub</a>
+  <header class="topbar">
+    <a class="brand" href="#">FactoryDB</a>
+    <nav aria-label="主要ナビゲーション">
+      <a href="#explorer">Explorer</a>
+      <a href="#insights">Data</a>
+      <a href="#health">Coverage</a>
+      <a href="https://github.com/KAFKA2306/factory">GitHub</a>
+    </nav>
   </header>
 
   <main>
-    <section id="metrics" class="metrics" aria-label="データカバレッジ"></section>
-    <section class="controls" aria-label="検索条件">
-      <label>国
-        <select id="country"><option value="">すべて</option></select>
-      </label>
-      <label>工程
-        <select id="process"><option value="">すべて</option></select>
-      </label>
-      <label>製品検索
-        <input id="query" type="search" placeholder="battery / Hilux">
-      </label>
+    <section class="hero" id="explorer">
+      <p class="eyebrow">OFFICIAL-SOURCE GLOBAL MANUFACTURING EXPLORER</p>
+      <h1>世界の工場を、<br>製品から探す。</h1>
+      <p class="lead">国・企業・製品・工程を横断して検索。各レコードから公式一次情報まで直接辿れます。</p>
+      <div class="hero-search">
+        <label class="sr-only" for="query">工場・企業・製品・工程を検索</label>
+        <input id="query" type="search" placeholder="例: Toyota / battery / cement / brewing" autocomplete="off">
+        <button id="clear-query" type="button">クリア</button>
+      </div>
+      <div id="hero-stats" class="hero-stats" aria-label="データ概要"></div>
     </section>
-    <section>
+
+    <section class="explorer-panel" aria-label="工場検索">
+      <div class="filter-row">
+        <label>国・地域
+          <select id="country"><option value="">すべて</option></select>
+        </label>
+        <label>工程
+          <select id="process"><option value="">すべて</option></select>
+        </label>
+        <label>並び順
+          <select id="sort">
+            <option value="country">国・地域</option>
+            <option value="name">工場名</option>
+          </select>
+        </label>
+      </div>
       <div class="section-title">
-        <h2>工場・製造拠点</h2>
+        <div>
+          <p class="kicker">FACTORIES</p>
+          <h2>工場・製造拠点</h2>
+        </div>
         <span id="count"></span>
       </div>
-      <div id="facilities" class="grid"></div>
+      <div id="empty-state" class="empty-state" hidden>条件に一致する工場はありません。</div>
+      <div id="facilities" class="factory-list"></div>
     </section>
 
-    <section class="data-section">
-      <div class="section-title"><h2>設備資産</h2><span id="asset-count"></span></div>
-      <div id="assets" class="grid compact-grid"></div>
+    <section class="secondary" id="insights">
+      <div class="section-title">
+        <div>
+          <p class="kicker">RELATED DATA</p>
+          <h2>設備・投資・財務</h2>
+        </div>
+      </div>
+      <div class="secondary-grid">
+        <details open>
+          <summary>設備資産 <span id="asset-count"></span></summary>
+          <div id="assets" class="mini-list"></div>
+        </details>
+        <details>
+          <summary>投資 <span id="investment-count"></span></summary>
+          <div id="investments" class="mini-list"></div>
+        </details>
+        <details>
+          <summary>財務 <span id="financial-count"></span></summary>
+          <div id="financials" class="mini-list"></div>
+        </details>
+      </div>
     </section>
 
-    <section class="data-section">
-      <div class="section-title"><h2>投資</h2><span id="investment-count"></span></div>
-      <div id="investments" class="grid compact-grid"></div>
-    </section>
-
-    <section class="data-section">
-      <div class="section-title"><h2>財務・バランスシート</h2><span id="financial-count"></span></div>
-      <div id="financials" class="grid financial-grid"></div>
+    <section class="coverage" id="health">
+      <div>
+        <p class="kicker">DATA COVERAGE</p>
+        <h2>収録状況</h2>
+        <p>これは開発・監査情報です。一般検索を妨げないよう下位に配置しています。</p>
+      </div>
+      <section id="metrics" class="metrics" aria-label="データカバレッジ"></section>
     </section>
   </main>
 
   <template id="facility-template">
-    <article class="card">
-      <div class="card-head">
+    <article class="factory-card">
+      <div class="factory-topline">
         <span class="country"></span>
         <span class="status"></span>
       </div>
       <h3></h3>
       <p class="meta"></p>
-      <dl>
-        <div><dt>製品</dt><dd class="products"></dd></div>
-        <div><dt>工程</dt><dd class="processes"></dd></div>
-      </dl>
-      <a class="source" target="_blank" rel="noreferrer">公式出典</a>
+      <div class="fact-row"><span>製品</span><strong class="products"></strong></div>
+      <div class="fact-row"><span>工程</span><strong class="processes"></strong></div>
+      <a class="source" target="_blank" rel="noreferrer">公式一次情報を見る →</a>
     </article>
   </template>
+
   <script src="app.js" defer></script>
 </body>
 </html>
