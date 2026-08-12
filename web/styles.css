@@ -7,7 +7,6 @@
   --line: #dfe4e0;
   --accent: #145c43;
   --accent-soft: #e9f3ee;
-  --warning: #8a4b08;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -78,7 +77,6 @@ summary span { color: var(--muted); font-size: .8rem; }
 .metric { padding: 1rem; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
 .metric strong { display: block; font-size: 1.5rem; }
 .metric span { color: var(--muted); font-size: .76rem; }
-.warning { border-left: 4px solid var(--warning); padding: .8rem 1rem; background: #fff4df; color: #6b3a06; }
 .coverage > div > p:last-child { color: var(--muted); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 @media (max-width: 800px) {

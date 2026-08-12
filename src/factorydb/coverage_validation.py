@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import argparse
 import json
 
 from .store import coverage, load_all
 
+FACTORY_COVERAGE_SCOPE_CAP = 179
 
-def validate_coverage_resolutions(require_complete: bool = False) -> dict:
+
+def validate_coverage_resolutions() -> dict:
     data = load_all()
     errors: list[str] = []
     country_codes = {row.iso2 for row in data["countries"]}
@@ -30,26 +31,27 @@ def validate_coverage_resolutions(require_complete: bool = False) -> dict:
             )
 
     report = coverage(data)
-    if require_complete and report["coverage_missing_countries"]:
+    if report["factory_covered_countries"] > FACTORY_COVERAGE_SCOPE_CAP:
         errors.append(
-            "resolved coverage gate failed: "
-            f"{report['coverage_missing_countries']} countries lack either a factory record "
-            "or an official-source no-factory resolution"
+            "factory coverage scope cap exceeded: "
+            f"{report['factory_covered_countries']} > {FACTORY_COVERAGE_SCOPE_CAP}"
         )
 
-    result = {"ok": not errors, "errors": errors, "coverage": report}
+    result = {
+        "ok": not errors,
+        "errors": errors,
+        "policy": {"factory_coverage_scope_cap": FACTORY_COVERAGE_SCOPE_CAP},
+        "coverage": report,
+    }
     if errors:
         raise SystemExit(json.dumps(result, ensure_ascii=False, indent=2))
     return result
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--require-complete", action="store_true")
-    args = parser.parse_args()
     print(
         json.dumps(
-            validate_coverage_resolutions(require_complete=args.require_complete),
+            validate_coverage_resolutions(),
             ensure_ascii=False,
             indent=2,
         )

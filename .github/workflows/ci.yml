@@ -21,7 +21,56 @@ jobs:
       - run: ruff check .
       - run: pytest
       - run: python -m factorydb.validate
-      - run: python -m factorydb.coverage_validation
+      - name: Build auditable coverage state
+        env:
+          COVERAGE_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          COVERAGE_RUN_ID: ${{ github.run_id }}
+          COVERAGE_RUN_ATTEMPT: ${{ github.run_attempt }}
+          COVERAGE_REPOSITORY: ${{ github.repository }}
+        run: |
+          python -m factorydb.coverage_validation > coverage-report.json
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          report_path = Path("coverage-report.json")
+          payload = report_path.read_bytes()
+          report = json.loads(payload)
+          coverage = report["coverage"]
+          policy = report["policy"]
+          manifest = {
+              "schema_version": 2,
+              "repository": os.environ["COVERAGE_REPOSITORY"],
+              "source_commit": os.environ["COVERAGE_SOURCE_SHA"],
+              "github_run_id": int(os.environ["COVERAGE_RUN_ID"]),
+              "github_run_attempt": int(os.environ["COVERAGE_RUN_ATTEMPT"]),
+              "coverage_report_sha256": hashlib.sha256(payload).hexdigest(),
+              "factory_records": coverage["factory_records"],
+              "factory_covered_countries": coverage["factory_covered_countries"],
+              "factory_coverage_scope_cap": policy["factory_coverage_scope_cap"],
+              "verified_no_qualifying_factory_countries": coverage[
+                  "verified_no_qualifying_factory_countries"
+              ],
+          }
+          Path("coverage-manifest.json").write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(manifest, ensure_ascii=False, indent=2))
+          PY
+          python -m json.tool coverage-report.json > /dev/null
+          python -m json.tool coverage-manifest.json > /dev/null
+      - name: Upload coverage state evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-state-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            coverage-report.json
+            coverage-manifest.json
+          if-no-files-found: error
+          retention-days: 14
       - run: python scripts/build_catalog.py
       - run: test -s web/catalog.json
       - run: python -m json.tool web/catalog.json > /dev/null

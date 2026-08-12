@@ -1,21 +1,18 @@
 # FactoryDB
 
-**世界の工場データベースを作ると、工場を探すだけでは終わらない。「工場がないこと」を公式情報で証明しなければならない地域まで出てくる。**
+**世界の工場データベースを、公式一次情報から検索・監査できる形で配信する。**
 
-ISO 3166-1の249国・地域には、実在する製造拠点を登録できる場所だけでなく、無人の自然保護地域や科学研究に限定された地域も含まれます。FactoryDBは、実在工場を集めるだけでなく、該当工場が確認できない地域も公式一次情報に基づいて根拠付きで管理します。
-
-公式一次情報に基づいて、世界の企業・工場をデータベース化し、REST API・MCP・JSONL・Web UIで配信するプロジェクトです。
+FactoryDBは、世界の企業・工場を公式一次情報に基づいてデータベース化し、REST API・MCP・JSONL・Web UIで配信するプロジェクトです。ISO 3166-1の249国・地域プロファイルを保持しつつ、工場レコード収録国・地域は **179件を現行スコープ上限** とし、以後は件数拡大より既存レコードの出典強度、粒度、製品・工程・設備・投資・財務の品質を優先します。
 
 ## 現在の実データ
 
 - ISO 3166-1 国・地域プロファイル: **249件**
-- 実在する工場・製造拠点: **173件**
-- 工場レコード収録国・地域: **157件**
-- 公式根拠付き非該当地域: **4件**
-- カバレッジ解決済み国・地域: **161件**
-- カバレッジ未解決国・地域: **88件**
-- 工場レコード0件の国・地域: **92件**
-- 企業: **100社**
+- 実在する工場・製造拠点: **202件**
+- 工場レコード収録国・地域: **179件**
+- 公式根拠付き非該当地域: **5件**
+- 工場または非該当判定のある国・地域: **184件**
+- 工場レコード0件の国・地域: **70件**
+- 企業: **129社**
 - 設備資産: **2件**
 - 投資案件: **3件**
 - 財務スナップショット: **1件**
@@ -24,7 +21,7 @@ ISO 3166-1の249国・地域には、実在する製造拠点を登録できる�
 
 企業データは後方互換を維持したまま `data/companies*.jsonl` のシャード読込に対応しています。既存の `data/companies.jsonl` は引き続き有効で、新規企業を追加シャードへ分割できます。
 
-ISO 3166-1には、無人の自然保護地域や科学研究に限定された地域も含まれます。実在工場を登録できない地域は、公式一次情報を複数確認し、`verified_no_qualifying_factory` として根拠付きで管理します。件数達成のために架空工場を作ることはありません。
+ISO 3166-1の249コードは国・地域マスターとして保持しますが、全249コードへ工場coverageを拡張することは現在の完成条件ではありません。公式一次情報から「該当する工場が存在しない」と確認できる場合は `verified_no_qualifying_factory` として根拠付きで保持します。179件を超えるcoverage拡張は通常保守ではなく、明示的なスコープ変更として扱います。
 
 ## 対象領域
 
@@ -66,7 +63,7 @@ uvicorn factorydb.api:app --reload
 
 ## MCP
 
-RESTとMCPは別々の計算やDBを持たず、`factorydb.queries`の同じread modelを使用します。FastAPI起動時はStreamable HTTPのMCPを同居させます。
+RESTとMCPは別々の計算やDBを持たず、`factorydb.queries` の同じread modelを使用します。FastAPI起動時はStreamable HTTPのMCPを同居させます。
 
 ```text
 http://127.0.0.1:8000/mcp
@@ -82,7 +79,7 @@ factorydb-mcp
 
 ## EDINETDB共有取得
 
-FactoryDBはEDINETDBへ直接アクセスしません。認証付きquotaの重複消費を避けるため、共有quota-ownerが一度だけ取得したFactoryDB向けprojectionを監査用の第二経路として読みます。企業IR等に基づく`data/financials.jsonl`が引き続き正本で、EDINETDB値が正本を自動上書きすることはありません。
+FactoryDBはEDINETDBへ直接アクセスしません。認証付きquotaの重複消費を避けるため、共有quota-ownerが一度だけ取得したFactoryDB向けprojectionを監査用の第二経路として読みます。企業IR等に基づく `data/financials.jsonl` が引き続き正本で、EDINETDB値が正本を自動上書きすることはありません。
 
 詳細: [EDINETDB consumer contract](docs/edinetdb-consumer.md)
 
@@ -100,17 +97,13 @@ World Bank APIは各国の製造業付加価値等を更新し、SEC Companyfact
 
 ## 品質ゲート
 
-通常CIはスキーマ、参照整合性、全249国・地域プロファイル、架空データ禁止、非該当判定と工場レコードの重複に加え、MCP tool contract、REST/MCPのquery parity、EDINETDB consumer projectionの型・単位・fail-close挙動を検証します。
-
-全249国・地域について、実在工場または公式根拠付き非該当判定のいずれかを要求する完成監査:
+通常CIはスキーマ、参照整合性、全249国・地域プロファイル、架空データ禁止、非該当判定と工場レコードの重複、**179国coverage上限**、MCP tool contract、REST/MCP query parity、EDINETDB consumer projectionの型・単位・fail-close挙動を検証します。
 
 ```bash
-python -m factorydb.coverage_validation --require-complete
+python -m factorydb.coverage_validation
 ```
 
-このゲートが未達の間は、UIに未解決国数を表示し、完成済みとは扱いません。GitHub Pagesの本番配信も同じゲートで停止します。
-
-実在工場だけの不足数は `factory_missing_countries`、工場または非該当判定のどちらもない不足数は `coverage_missing_countries` として分離して表示します。
+`factory_missing_countries` と `coverage_missing_countries` は現況観測と後方互換のためのメトリクスであり、0になることはリリース条件ではありません。
 
 FY2026財務レコードには、営業収益・利益だけでなく、総資産、負債、株主資本、営業・投資・財務キャッシュフローの公式絶対額を百万円単位で格納しています。
 

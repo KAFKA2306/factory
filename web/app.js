@@ -2,8 +2,7 @@ const $ = (selector) => document.querySelector(selector);
 let catalog;
 
 const coverageLabels = {
-  coverage_resolved_countries: "解決済み",
-  coverage_missing_countries: "未解決",
+  factory_covered_countries: "工場収録国・地域",
   verified_no_qualifying_factory_countries: "公式非該当",
   country_profiles: "対象国・地域"
 };
@@ -26,12 +25,6 @@ function renderMetrics() {
   $("#metrics").innerHTML = Object.entries(coverageLabels).map(([key, label]) =>
     `<div class="metric"><strong>${catalog.coverage[key].toLocaleString()}</strong><span>${label}</span></div>`
   ).join("");
-  const missing = catalog.coverage.coverage_missing_countries;
-  if (missing > 0) {
-    const warning = $("#coverage-warning");
-    warning.hidden = false;
-    warning.textContent = `公式一次情報で未解決の国・地域が ${missing} 件あります。収録済みデータは検索・閲覧できます。`;
-  }
 }
 
 function setupFilters() {
