@@ -1,4 +1,7 @@
-from factorydb.coverage_validation import validate_coverage_resolutions
+from factorydb.coverage_validation import (
+    FACTORY_COVERAGE_SCOPE_CAP,
+    validate_coverage_resolutions,
+)
 from factorydb.store import coverage, load_all
 from factorydb.validate import validate
 
@@ -16,6 +19,12 @@ def test_coverage_resolutions_are_valid():
 def test_all_iso_country_profiles_exist():
     report = coverage(load_all())
     assert report["country_profiles"] == 249
+
+
+def test_factory_coverage_stays_within_scoped_cap():
+    report = coverage(load_all())
+    assert FACTORY_COVERAGE_SCOPE_CAP == 179
+    assert report["factory_covered_countries"] <= FACTORY_COVERAGE_SCOPE_CAP
 
 
 def test_no_factory_has_missing_source():
