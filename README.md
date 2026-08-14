@@ -1,42 +1,133 @@
 # FactoryDB
 
-**「どの会社が、どこに工場を持つか」だけでは、世界の製造拠点は比較できない。**
+**「どの会社が、どこで、何を、どう作っているか」を、出典まで戻って比較できる製造拠点データベース。**
 
-同じ企業でも拠点ごとに製品・工程・設備・投資規模が違い、公開情報の粒度も揃いません。さらに「工場レコードが0件」と「公式一次情報で該当工場なしを確認済み」は別の状態です。そこを混ぜると、coverageの数字だけが増えて中身が分からなくなります。
+企業サイト、政府資料、規制開示には工場情報があります。しかし、拠点名だけ集めても、製品・工程・設備・投資・生産能力の粒度が揃わず、「0件」と「公式確認済みで該当なし」も区別できません。
 
-FactoryDBは、企業・工場・製品・工程・設備・投資・財務を公式一次情報と結びつけ、ISO 3166-1、ISIC、JSONLを使って整理し、REST API・MCP・Web UIで配信するプロジェクトです。0件と「該当なし確認済み」を分離し、一次情報で確認できた範囲だけをデータとして保持します。
+FactoryDB は、企業・工場・製品・工程・設備・投資・財務を公式一次情報へ接続し、**世界の製造拠点を比較できる形へ正規化して配信する**プロジェクトです。
 
-ISO 3166-1の249国・地域プロファイルを保持しつつ、工場レコード収録国・地域は **179件を現行スコープ上限** とし、以後は件数拡大より既存レコードの出典強度、粒度、製品・工程・設備・投資・財務の品質を優先します。
+## Vision
 
-## 現在の実データ
+工場DBを「地図上の点」から、**企業の製造戦略を拠点単位で理解できる調査基盤**へ変えます。
 
-- ISO 3166-1 国・地域プロファイル: **249件**
-- 実在する工場・製造拠点: **202件**
-- 工場レコード収録国・地域: **179件**
-- 公式根拠付き非該当地域: **5件**
-- 工場または非該当判定のある国・地域: **184件**
-- 工場レコード0件の国・地域: **70件**
-- 企業: **129社**
-- 設備資産: **2件**
-- 投資案件: **3件**
-- 財務スナップショット: **1件**
+利用者が知りたいのは、工場が存在するかだけではありません。
 
-各レコードは企業公式・政府機関・規制当局等の一次情報を出典として保持し、架空データ、サンプル、ダミー値は含みません。
+- その拠点で何を作っているか
+- どの工程を担っているか
+- 生産能力・設備・従業員・面積はどの程度か
+- どの投資案件と結びついているか
+- その情報は企業公式・政府・規制開示のどれに基づくか
+- 情報がないのか、本当に該当拠点がないのか
 
-企業データは後方互換を維持したまま `data/companies*.jsonl` のシャード読込に対応しています。既存の `data/companies.jsonl` は引き続き有効で、新規企業を追加シャードへ分割できます。
+FactoryDB は、この判断を一つの検索・API・MCPから行える状態を目指します。
 
-ISO 3166-1の249コードは国・地域マスターとして保持しますが、全249コードへ工場coverageを拡張することは現在の完成条件ではありません。公式一次情報から「該当する工場が存在しない」と確認できる場合は `verified_no_qualifying_factory` として根拠付きで保持します。179件を超えるcoverage拡張は通常保守ではなく、明示的なスコープ変更として扱います。
+## Design philosophy
 
-## 対象領域
+- **coverageより意味を優先する。** 国数を増やすためのダミー工場や推測値を入れない。
+- **0件と確認済み非該当を分ける。** `verified_no_qualifying_factory` を独立stateとして保持する。
+- **一次情報へ戻れることを必須にする。** 企業IR、政府機関、規制当局等のsourceをrecordと結びつける。
+- **企業・工場・製品・工程を混ぜない。** entity間の関係として保持し、1行の説明へ潰さない。
+- **REST / MCP / Webで別の真実を作らない。** `factorydb.queries` の同じread modelを共有する。
+- **取得できない情報を“それらしく”補完しない。** 未取得・未確認・非開示を状態として残す。
 
-- 資産: 生産ライン、製造装置、工場建屋、ユーティリティ
+## Why / 差別化
+
+一般的な工場一覧は「会社名・工場名・所在地」で終わりがちです。FactoryDB は、**拠点を企業戦略・製品・工程・設備・投資・財務へ接続し、さらに各主張の一次情報まで逆引きできること**を差別化の中心に置きます。
+
+ISO 3166-1、ISIC、FastAPI、MCP、JSONL は価値そのものではありません。これらは、国や企業をまたいでも比較条件を揃え、出典・未確認state・関係性を失わないための手段です。
+
+## 現在のcoverage
+
+現在のmainでは次を正準データとして扱います。
+
+- ISO 3166-1 国・地域プロファイル: 249
+- 実在する工場・製造拠点: 202
+- 工場レコード収録国・地域: 179
+- 公式根拠付き非該当地域: 5
+- 企業: 129
+
+179国・地域は現行スコープ上限です。以後の通常改善は国数の拡張より、**既存recordのsource強度、製品・工程・設備・投資・財務の粒度**を優先します。
+
+現在値はvalidationと生成catalogを優先し、READMEの数字を正本とはしません。
+
+## 利用者ができること
+
+- 国・企業・工程で工場を検索する
+- 工場と製品・工程・設備を辿る
+- 投資案件から対象工場へ戻る
+- coverage未解決国と公式非該当地域を区別する
+- source evidenceを確認する
+- REST / MCPの同じread modelから再利用する
+
+## Domain model
+
+```text
+Company
+  └─ Facility
+       ├─ Product
+       ├─ Process
+       ├─ Asset
+       ├─ Capacity / Scale
+       └─ Investment
+
+Company
+  └─ Financial Snapshot
+
+Every claim
+  └─ Source evidence
+```
+
+対象領域:
+
+- 資産: 生産ライン、製造装置、建屋、ユーティリティ
 - 製品: 完成品、部材、中間体
-- 製造工程: 組立、加工、成膜、鋳造、鍛造、プレス、電池製造等
+- 工程: 組立、加工、成膜、鋳造、鍛造、プレス、電池製造等
 - 規模: 生産能力、面積、従業員、稼働開始
-- バランスシート: 総資産、負債、資本、設備投資
 - 投資: 金額、通貨、発表日、対象工場、目的、進捗
-- オントロジー: ISICと独自工程・設備語彙
-- 配信: FastAPI、MCP、GitHub Pages、JSONL
+- 財務: 資産、負債、資本、CF、設備投資
+
+## REST API
+
+主なendpoint:
+
+```text
+GET /health
+GET /v1/coverage
+GET /v1/coverage-resolutions
+GET /v1/countries
+GET /v1/companies
+GET /v1/facilities?country=JP&process=vehicle_assembly
+GET /v1/products
+GET /v1/processes
+GET /v1/assets
+GET /v1/investments
+GET /v1/financials
+GET /v1/ontology
+```
+
+## MCP
+
+RESTとMCPは別々のDBや計算を持ちません。
+
+```text
+http://127.0.0.1:8000/mcp
+```
+
+MCP単体:
+
+```bash
+factorydb-mcp
+```
+
+source不明・coverage未解決をMCP側で推測補完しません。
+
+## EDINETDB consumer boundary
+
+FactoryDBはEDINETDBへ直接アクセスせず、共有quota-ownerが取得したprojectionを第二経路として読みます。
+
+`data/financials.jsonl` の企業IR等に基づく値が正本で、EDINETDB projectionは自動上書きしません。
+
+詳細: [docs/edinetdb-consumer.md](docs/edinetdb-consumer.md)
 
 ## 実行
 
@@ -48,44 +139,7 @@ python scripts/build_catalog.py
 uvicorn factorydb.api:app --reload
 ```
 
-静的UIは `web/index.html` を配信してください。
-
-## REST API
-
-- `GET /health`
-- `GET /v1/coverage`
-- `GET /v1/coverage-resolutions`
-- `GET /v1/countries`
-- `GET /v1/companies`
-- `GET /v1/facilities?country=JP&process=vehicle_assembly`
-- `GET /v1/products`
-- `GET /v1/processes`
-- `GET /v1/assets`
-- `GET /v1/investments`
-- `GET /v1/financials`
-- `GET /v1/ontology`
-
-## MCP
-
-RESTとMCPは別々の計算やDBを持たず、`factorydb.queries` の同じread modelを使用します。FastAPI起動時はStreamable HTTPのMCPを同居させます。
-
-```text
-http://127.0.0.1:8000/mcp
-```
-
-MCPだけをlocalhostで起動する場合:
-
-```bash
-factorydb-mcp
-```
-
-主要toolは企業・工場検索、工場batch取得、国別coverage、製品・工程・設備・投資・財務、ontology、source evidence、data healthです。source不明・coverage未解決を推測で埋めません。
-
-## EDINETDB共有取得
-
-FactoryDBはEDINETDBへ直接アクセスしません。認証付きquotaの重複消費を避けるため、共有quota-ownerが一度だけ取得したFactoryDB向けprojectionを監査用の第二経路として読みます。企業IR等に基づく `data/financials.jsonl` が引き続き正本で、EDINETDB値が正本を自動上書きすることはありません。
-
-詳細: [EDINETDB consumer contract](docs/edinetdb-consumer.md)
+静的UIは `web/index.html` を配信します。
 
 ## データ更新
 
@@ -97,18 +151,44 @@ python -m factorydb.coverage_validation
 python scripts/build_catalog.py
 ```
 
-World Bank APIは各国の製造業付加価値等を更新し、SEC Companyfacts APIは法定開示の財務値を更新します。
+World Bank / SEC由来値もsource・単位・期間を持つ入力として扱い、既存一次情報を無条件で上書きしません。
 
-## 品質ゲート
+## Quality gate
 
-通常CIはスキーマ、参照整合性、全249国・地域プロファイル、架空データ禁止、非該当判定と工場レコードの重複、**179国coverage上限**、MCP tool contract、REST/MCP query parity、EDINETDB consumer projectionの型・単位・fail-close挙動を検証します。
+CIでは少なくとも次を検証します。
+
+- schema / reference integrity
+- ISO 3166-1 249 profile
+- 架空・sample・dummy data禁止
+- 工場recordと`verified_no_qualifying_factory`の矛盾禁止
+- 179国coverage scope contract
+- REST / MCP query parity
+- MCP tool contract
+- EDINETDB projectionの型・単位・fail-close behavior
 
 ```bash
 python -m factorydb.coverage_validation
 ```
 
-`factory_missing_countries` と `coverage_missing_countries` は現況観測と後方互換のためのメトリクスであり、0になることはリリース条件ではありません。
+`factory_missing_countries == 0` は完成条件ではありません。
 
-FY2026財務レコードには、営業収益・利益だけでなく、総資産、負債、株主資本、営業・投資・財務キャッシュフローの公式絶対額を百万円単位で格納しています。
+## Repository map
 
-詳細: [アーキテクチャ](docs/architecture.md) / [データポリシー](docs/data-policy.md) / [EDINETDB consumer contract](docs/edinetdb-consumer.md)
+```text
+factorydb/        domain model / queries / API / MCP
+data/             canonical JSONL data
+scripts/          sync / build / validation
+web/              static UI
+docs/             architecture / policy / consumer contracts
+tests/            deterministic contracts
+```
+
+- [Architecture](docs/architecture.md)
+- [Data policy](docs/data-policy.md)
+- [EDINETDB consumer contract](docs/edinetdb-consumer.md)
+
+## Done
+
+FactoryDB の成功指標は「世界何か国に点を置いたか」ではありません。
+
+**利用者が、ある企業の製造拠点について「何を作る・どう作る・どの投資と結びつく・何を根拠にそう言える」を同じ証拠線上で確認できること**をDoneとします。
