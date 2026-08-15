@@ -27,6 +27,7 @@ dev = [
 factorydb-api = "factorydb.api:main"
 factorydb-mcp = "factorydb.mcp_server:main"
 factorydb-validate = "factorydb.validate:main"
+factorydb-verification-pack = "factorydb.verification_pack:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
