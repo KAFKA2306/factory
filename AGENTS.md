@@ -43,7 +43,7 @@ A change must remain auditable, observable, and reversible:
 - Keep source evidence in the canonical record and verification evidence in CI/PR history.
 - Preserve CI output for lint, tests, repository validation, coverage-state validation, catalog generation, and JSON validation.
 - A rollback must be possible by reverting the change commit without hand-editing generated or remote state. Rebuild `web/catalog.json` from the reverted canonical checkout when needed.
-- PR #11 is the canonical continuation line for this checkpoint. Its completion is governed by the scoped Contract and CI, not by driving country coverage to 249.
+- No historical PR number is permanently canonical. Continue an existing open workline when one exists; otherwise create one scoped to the current Contract.
 
 ## 2. Falsification
 
