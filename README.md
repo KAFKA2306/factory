@@ -1,5 +1,9 @@
 # FactoryDB
 
+[![CI](https://github.com/KAFKA2306/factory/actions/workflows/ci.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/ci.yml)
+[![Deploy Pages](https://github.com/KAFKA2306/factory/actions/workflows/pages.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/pages.yml)
+[![Refresh official data](https://github.com/KAFKA2306/factory/actions/workflows/refresh.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/refresh.yml)
+
 **「どの会社が、どこで、何を、どう作っているか」を、出典まで戻って比較できる製造拠点データベース。**
 
 企業サイト、政府資料、規制開示には工場情報があります。しかし、拠点名だけ集めても、製品・工程・設備・投資・生産能力の粒度が揃わず、「0件」と「公式確認済みで該当なし」も区別できません。
