@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-
 REQUIRED = {"company", "factory", "country", "equipment_type", "status", "observed_at", "source_url"}
 VALID_STATUS = {"planned", "ordered", "installed", "operational", "retired"}
 
