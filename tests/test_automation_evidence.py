@@ -19,9 +19,6 @@ REQUIRED = {
     "observed_at",
     "description",
     "source_id",
-    "source_publisher",
-    "source_url",
-    "source_retrieved_at",
 }
 VALID_STATUS = {"planned", "ordered", "installed", "operational", "retired"}
 
@@ -42,7 +39,6 @@ def test_automation_evidence_contract_and_coverage() -> None:
     for row in rows:
         assert REQUIRED <= row.keys()
         assert row["status"] in VALID_STATUS
-        assert str(row["source_url"]).startswith("https://")
         assert str(row["company_id"]).startswith("company:")
         assert str(row["facility_id"]).startswith("facility:")
         assert row["description"]
@@ -54,16 +50,15 @@ def test_automation_evidence_contract_and_coverage() -> None:
             assert row.get("quantity_qualifier")
 
 
-def test_sources_are_primary_and_exactly_joined_to_records() -> None:
+def test_sources_are_primary_and_referenced_by_id() -> None:
     source_doc = json.loads(SOURCES.read_text(encoding="utf-8"))
     source_rows = source_doc["sources"]
     sources = {row["source_id"]: row for row in source_rows}
     assert len(sources) == len(source_rows)
     assert len(sources) >= 10
-    for row in load_rows():
-        source = sources[row["source_id"]]
-        assert row["source_url"] == source["source_url"]
-        assert row["source_publisher"] == source["publisher"]
+    assert all(str(row["source_url"]).startswith("https://") for row in source_rows)
+    assert all(row["publisher"] and row["required_markers"] for row in source_rows)
+    assert all(row["source_id"] in sources for row in load_rows())
 
 
 def test_planned_and_installed_states_remain_distinct() -> None:
