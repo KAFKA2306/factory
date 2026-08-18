@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import {MAX_COMPARE, readFactoryDbState, updateFactoryDbSearch} from "../web/url-state.js";
+import {MAX_COMPARE, readFactoryDbState, updateFactoryDbSearch} from "../web/url-state.mjs";
 
 test("filter and comparison state round-trips through the URL", () => {
   const search = updateFactoryDbSearch("", {
