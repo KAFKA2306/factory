@@ -17,16 +17,13 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: List candidate canonical identities
+      - name: List canonical companies and facility counts
         run: |
           python - <<'PY'
           import json
+          from collections import Counter
           from pathlib import Path
 
-          keywords = [
-              'toyota','honda','bmw','volkswagen','hyundai','mercedes','ford',
-              'general motors','abb','siemens','bosch','catl','amperex','panasonic'
-          ]
           companies = []
           for path in sorted(Path('data').glob('companies*.jsonl')):
               for line in path.read_text(encoding='utf-8').splitlines():
@@ -35,16 +32,11 @@ jobs:
           for path in sorted(Path('data/facilities').glob('*.jsonl')):
               for line in path.read_text(encoding='utf-8').splitlines():
                   if line.strip(): facilities.append(json.loads(line))
-
-          seen = set()
-          for key in keywords:
-              matched = [c for c in companies if key in c['legal_name'].lower() or key in c['id'].lower()]
-              for company in matched:
-                  if company['id'] in seen: continue
-                  seen.add(company['id'])
-                  print('COMPANY', company['id'], '|', company['legal_name'])
-                  for facility in facilities:
-                      if facility['company_id'] == company['id']:
-                          print('  FACILITY', facility['id'], '|', facility['name'], '|', facility['country_code'])
-          print('TOTAL_COMPANIES', len(companies), 'TOTAL_FACILITIES', len(facilities))
+          counts = Counter(row['company_id'] for row in facilities)
+          by_id = {}
+          for company in companies:
+              by_id.setdefault(company['id'], company)
+          for company_id, company in sorted(by_id.items(), key=lambda item: item[1]['legal_name'].lower()):
+              print('COMPANY', company_id, '|', company['legal_name'], '| facilities', counts[company_id])
+          print('TOTAL_COMPANIES', len(by_id), 'TOTAL_FACILITIES', len(facilities))
           PY
