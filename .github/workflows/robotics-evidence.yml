@@ -1,0 +1,125 @@
+name: Robotics evidence
+
+on:
+  pull_request:
+    paths:
+      - data/automation.jsonl
+      - data/robotics-sources.json
+      - scripts/build_robotics_evidence.py
+      - tests/test_automation_evidence.py
+      - README.md
+      - .github/workflows/robotics-evidence.yml
+  push:
+    branches: [main]
+    paths:
+      - data/automation.jsonl
+      - data/robotics-sources.json
+      - scripts/build_robotics_evidence.py
+      - tests/test_automation_evidence.py
+      - README.md
+      - .github/workflows/robotics-evidence.yml
+  schedule:
+    - cron: '35 18 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: robotics-evidence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Compile evidence builder
+        run: python -m py_compile scripts/build_robotics_evidence.py
+
+      - name: Collect primary-source evidence
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python scripts/build_robotics_evidence.py \
+              --data-root build/data/robotics \
+              --api-dir build/api/v1/robotics
+          else
+            python scripts/build_robotics_evidence.py
+          fi
+
+      - name: Audit robotics coverage and source boundaries
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          if '${{ github.event_name }}' == 'pull_request':
+              data_root = Path('build/data/robotics')
+              api = Path('build/api/v1/robotics')
+          else:
+              data_root = Path('data/robotics')
+              api = Path('api/v1/robotics')
+
+          index = json.loads((api / 'index.json').read_text())
+          records = json.loads((api / 'records.json').read_text())['records']
+          provenance = json.loads((api / 'provenance.json').read_text())
+          coverage = index['coverage']
+
+          assert coverage['company_count'] >= 10, coverage
+          assert coverage['factory_count'] >= 30, coverage
+          assert coverage['observation_count'] >= coverage['factory_count'], coverage
+          assert coverage['primary_source_count'] >= 10, coverage
+          assert set(coverage['status_counts']) >= {'planned','ordered','installed','operational'}, coverage
+          assert all(row['source_sha256'] and row['source_evidence_path'] for row in records)
+          assert all(row['status'] != 'planned' or row['deployment_stage'] not in {'production','series_operation'} for row in records)
+          for row in records:
+              if 'quantity' in row:
+                  assert row['quantity'] > 0 and row['quantity_unit'] and row['quantity_qualifier']
+          for source in provenance['sources']:
+              raw = (data_root / source['evidence_path']).read_bytes()
+              assert hashlib.sha256(raw).hexdigest() == source['sha256']
+          print(json.dumps(coverage, indent=2, sort_keys=True))
+          PY
+
+      - name: Rebuild API offline from raw evidence
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            DATA_ROOT=build/data/robotics
+            API_ROOT=build/api/v1/robotics
+          else
+            DATA_ROOT=data/robotics
+            API_ROOT=api/v1/robotics
+          fi
+          rm -rf build/rebuilt-robotics
+          python scripts/build_robotics_evidence.py \
+            --offline \
+            --data-root "$DATA_ROOT" \
+            --api-dir build/rebuilt-robotics
+          diff -ru "$API_ROOT" build/rebuilt-robotics
+
+      - name: Upload pull-request evidence
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: robotics-evidence
+          path: build
+          retention-days: 30
+
+      - name: Commit changed evidence and views
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add data/robotics api/v1/robotics
+          if git diff --cached --quiet; then
+            echo 'No robotics evidence change.'
+            exit 0
+          fi
+          git commit -m 'data: update factory robotics evidence'
+          git push
