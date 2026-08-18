@@ -2,9 +2,19 @@ from __future__ import annotations
 
 from typing import Any
 
+from .provenance import PROVENANCE_SCHEMA_VERSION, citation_provenance
 from .store import coverage, load_all
 
 MAX_RESULTS = 100
+SOURCE_COLLECTIONS = (
+    "countries",
+    "companies",
+    "facilities",
+    "coverage_resolutions",
+    "assets",
+    "investments",
+    "financials",
+)
 
 
 def _bounded_limit(limit: int) -> int:
@@ -15,6 +25,16 @@ def _bounded_limit(limit: int) -> int:
 
 def _dump(rows: list[Any]) -> list[dict[str, Any]]:
     return [row.model_dump(mode="json") for row in rows]
+
+
+def _citations(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    citations: list[dict[str, Any]] = []
+    if payload.get("source"):
+        citations.append(payload["source"])
+    if payload.get("indicator_source"):
+        citations.append(payload["indicator_source"])
+    citations.extend(payload.get("sources", []))
+    return citations
 
 
 def coverage_summary() -> dict[str, Any]:
@@ -197,53 +217,39 @@ def country_coverage(country: str | None = None) -> dict[str, Any]:
 
 def source_evidence(entity_id: str) -> dict[str, Any]:
     data = load_all()
-    for collection in (
-        "countries",
-        "companies",
-        "facilities",
-        "coverage_resolutions",
-        "assets",
-        "investments",
-        "financials",
-    ):
+    for collection in SOURCE_COLLECTIONS:
         for row in data[collection]:
             if row.id != entity_id:
                 continue
             payload = row.model_dump(mode="json")
-            citations: list[dict[str, Any]] = []
-            if payload.get("source"):
-                citations.append(payload["source"])
-            if payload.get("indicator_source"):
-                citations.append(payload["indicator_source"])
-            citations.extend(payload.get("sources", []))
+            citations = _citations(payload)
             return {
+                "schema_version": PROVENANCE_SCHEMA_VERSION,
                 "found": True,
                 "entity_id": entity_id,
                 "collection": collection,
                 "citations": citations,
+                "provenance": [citation_provenance(entity_id, item) for item in citations],
             }
-    return {"found": False, "entity_id": entity_id, "collection": None, "citations": []}
+    return {
+        "schema_version": PROVENANCE_SCHEMA_VERSION,
+        "found": False,
+        "entity_id": entity_id,
+        "collection": None,
+        "citations": [],
+        "provenance": [],
+    }
 
 
 def data_health() -> dict[str, Any]:
     data = load_all()
     source_dates: list[str] = []
-    for collection in (
-        "countries",
-        "companies",
-        "facilities",
-        "coverage_resolutions",
-        "assets",
-        "investments",
-        "financials",
-    ):
+    citation_count = 0
+    for collection in SOURCE_COLLECTIONS:
         for row in data[collection]:
-            payload = row.model_dump(mode="json")
-            if payload.get("source"):
-                source_dates.append(payload["source"]["retrieved_at"])
-            if payload.get("indicator_source"):
-                source_dates.append(payload["indicator_source"]["retrieved_at"])
-            source_dates.extend(item["retrieved_at"] for item in payload.get("sources", []))
+            citations = _citations(row.model_dump(mode="json"))
+            citation_count += len(citations)
+            source_dates.extend(item["retrieved_at"] for item in citations)
 
     return {
         "schema_version": "factorydb.data-health.v1",
@@ -258,5 +264,16 @@ def data_health() -> dict[str, Any]:
             "ontology_terms": len(data["ontology"]),
         },
         "source_retrieved_through": max(source_dates) if source_dates else None,
+        "provenance": {
+            "schema_version": PROVENANCE_SCHEMA_VERSION,
+            "citation_count": citation_count,
+            "source_content_hash_count": 0,
+            "freshness_policy": "not_defined",
+            "limitations": [
+                "core citations retain source URL, publisher, retrieval date, and evidence text but not the raw source body",
+                "source_hash and stale therefore remain explicit null/unknown values in provenance responses",
+                "Robotics raw evidence keeps separate SHA-256 snapshots and is not relabelled as a core citation hash",
+            ],
+        },
         "coverage": coverage(data),
     }
