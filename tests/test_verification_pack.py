@@ -1,5 +1,7 @@
 import json
+from html import unescape
 from pathlib import Path
+from urllib.parse import unquote
 
 from factorydb.verification_pack import (
     build_facility_verification_pack,
@@ -44,11 +46,12 @@ def test_pack_is_deterministic_json_and_markdown():
 
 def test_public_site_links_sample_and_qualified_inquiry():
     html = Path("web/index.html").read_text(encoding="utf-8")
+    decoded = unquote(unescape(html))
 
     assert 'href="facility-verification-pack.md"' in html
     assert 'href="facility-verification-pack.json"' in html
-    assert "issues/new?title=" in html
+    assert "github.com/KAFKA2306/factory/issues/new?title=" in html
     for field in ("組織・役割", "対象企業数", "対象企業・地域", "用途", "希望時期", "相談内容"):
-        assert field in html or field.encode().hex() not in html
-    assert "vendor master" in html
-    assert "非公開サプライヤー情報" in html
+        assert f"{field}:" in decoded
+    assert "vendor master" in decoded
+    assert "非公開サプライヤー情報" in decoded
