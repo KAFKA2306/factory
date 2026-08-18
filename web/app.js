@@ -1,7 +1,7 @@
+import {MAX_COMPARE, readFactoryDbState, updateFactoryDbSearch} from "./url-state.js";
+
 const $ = (selector) => document.querySelector(selector);
 let catalog;
-
-const MAX_COMPARE = 4;
 const selectedFacilityIds = new Set();
 
 const coverageLabels = {
@@ -67,32 +67,24 @@ function setSelectValue(id, value) {
 }
 
 function restoreUrlState() {
-  const params = new URLSearchParams(location.search);
-  setSelectValue("country", params.get("country"));
-  setSelectValue("process", params.get("process"));
-  setSelectValue("sort", params.get("sort"));
-  $("#query").value = params.get("q") || "";
-
-  const requested = (params.get("compare") || "").split(",").filter(Boolean);
-  requested.forEach(id => {
-    if (selectedFacilityIds.size < MAX_COMPARE && facilityById(id)) selectedFacilityIds.add(id);
+  const state = readFactoryDbState(location.search);
+  setSelectValue("country", state.country);
+  setSelectValue("process", state.process);
+  setSelectValue("sort", state.sort);
+  $("#query").value = state.q;
+  state.compare.forEach(id => {
+    if (facilityById(id)) selectedFacilityIds.add(id);
   });
 }
 
 function syncUrlState() {
-  const params = new URLSearchParams(location.search);
-  const values = {
+  const query = updateFactoryDbSearch(location.search, {
     country: $("#country").value,
     process: $("#process").value,
-    q: $("#query").value.trim(),
-    sort: $("#sort").value === "country" ? "" : $("#sort").value,
-    compare: [...selectedFacilityIds].join(",")
-  };
-  Object.entries(values).forEach(([key, value]) => {
-    if (value) params.set(key, value);
-    else params.delete(key);
+    q: $("#query").value,
+    sort: $("#sort").value,
+    compare: [...selectedFacilityIds]
   });
-  const query = params.toString();
   history.replaceState(null, "", `${location.pathname}${query ? `?${query}` : ""}${location.hash}`);
 }
 
@@ -240,7 +232,7 @@ function renderComparison() {
     ? "あと1拠点選ぶと比較できます。"
     : `${rows.length}拠点を比較中。URLを共有すると同じ比較状態を復元できます。`;
 
-  const column = (row, html) => `<td>${html}</td>`;
+  const column = html => `<td>${html}</td>`;
   const facilitySource = row => facilityClaim(row, `${row.country_code} / ${row.status}`);
   const companyCell = row => {
     const item = company(row.company_id);
@@ -259,7 +251,7 @@ function renderComparison() {
 
   target.innerHTML = `<table class="comparison-table">
     <thead><tr><th scope="col">項目</th>${rows.map(row => `<th scope="col">${escapeHtml(row.name)}</th>`).join("")}</tr></thead>
-    <tbody>${bodyRows.map(([label, render]) => `<tr><th scope="row">${label}</th>${rows.map(row => column(row, render(row))).join("")}</tr>`).join("")}</tbody>
+    <tbody>${bodyRows.map(([label, render]) => `<tr><th scope="row">${label}</th>${rows.map(row => column(render(row))).join("")}</tr>`).join("")}</tbody>
   </table>`;
 }
 
