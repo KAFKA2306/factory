@@ -8,9 +8,12 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import queries
-from .mcp_server import mcp
+from .mcp_server import MCP_MAX_REQUEST_BODY_SIZE, mcp, transport_security_from_env
 
-mcp_http_app = mcp.streamable_http_app()
+mcp_http_app = mcp.streamable_http_app(
+    max_request_body_size=MCP_MAX_REQUEST_BODY_SIZE,
+    transport_security=transport_security_from_env(),
+)
 
 
 @asynccontextmanager
