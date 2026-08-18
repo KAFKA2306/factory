@@ -51,7 +51,14 @@ def test_public_site_links_sample_and_qualified_inquiry():
     assert 'href="facility-verification-pack.md"' in html
     assert 'href="facility-verification-pack.json"' in html
     assert "github.com/KAFKA2306/factory/issues/new?title=" in html
-    for field in ("組織・役割", "対象企業数", "対象企業・地域", "用途", "希望時期", "相談内容"):
+    for field in (
+        "組織・役割",
+        "対象企業数",
+        "対象企業・地域（公開情報のみ）",
+        "用途",
+        "希望時期",
+        "相談内容",
+    ):
         assert f"{field}:" in decoded
     assert "vendor master" in decoded
     assert "非公開サプライヤー情報" in decoded
