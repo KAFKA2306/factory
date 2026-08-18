@@ -1,4 +1,4 @@
-import {MAX_COMPARE, readFactoryDbState, updateFactoryDbSearch} from "./url-state.js";
+import {MAX_COMPARE, readFactoryDbState, updateFactoryDbSearch} from "./url-state.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 let catalog;
