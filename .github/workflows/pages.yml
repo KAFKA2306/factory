@@ -25,6 +25,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - run: python -m pip install -e .
       - run: python -m factorydb.validate
       - run: python -m factorydb.coverage_validation
@@ -38,9 +41,59 @@ jobs:
             --company company:toyota-motor-corporation \
             --format markdown > web/facility-verification-pack.md
           python -m json.tool web/facility-verification-pack.json > /dev/null
+      - name: Stamp deployment identity into the artifact
+        env:
+          SOURCE_COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          Path("web/deployment.json").write_text(
+              json.dumps(
+                  {
+                      "source_commit": os.environ["SOURCE_COMMIT"],
+                      "github_run_id": int(os.environ["RUN_ID"]),
+                  },
+                  indent=2,
+              ) + "\n",
+              encoding="utf-8",
+          )
+          PY
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify exact production artifact and browser journey
+        run: node scripts/browser_smoke.mjs "${{ steps.deployment.outputs.page_url }}" "${{ github.sha }}"
+      - name: Verify the public procurement sample
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import time
+          from urllib.parse import urljoin
+          from urllib.request import urlopen
+
+          url = urljoin(os.environ["PAGE_URL"], "facility-verification-pack.json")
+          last_error = None
+          for _ in range(60):
+              try:
+                  with urlopen(url, timeout=10) as response:
+                      payload = json.load(response)
+                  if payload.get("decision_status") != "VERIFIED":
+                      raise RuntimeError(f"unexpected decision status: {payload.get('decision_status')}")
+                  print(f"verified {url}")
+                  break
+              except Exception as exc:
+                  last_error = exc
+                  time.sleep(1)
+          else:
+              raise SystemExit(f"public sample verification failed: {last_error}")
+          PY
