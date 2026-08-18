@@ -48,9 +48,7 @@ def test_factory_records_are_not_empty():
 def test_coverage_partition_is_complete_and_disjoint():
     report = coverage(load_all())
     covered = set(report["covered_country_codes"])
-    resolved_no_factory = set(
-        report["verified_no_qualifying_factory_country_codes"]
-    )
+    resolved_no_factory = set(report["verified_no_qualifying_factory_country_codes"])
     missing = set(report["missing_country_codes"])
 
     assert covered.isdisjoint(resolved_no_factory)

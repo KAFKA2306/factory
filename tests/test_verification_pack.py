@@ -16,13 +16,15 @@ def test_toyota_pack_is_source_backed_and_decision_ready():
     assert pack.decision_status == "VERIFIED"
     assert any(claim.entity_id == "facility:toyota-motomachi" for claim in pack.claims)
     assert any(claim.entity_id == "investment:toyota-texas-2026-3.6b" for claim in pack.claims)
-    assert all(
-        claim.source_urls
-        for claim in pack.claims
-        if claim.evidence_status == "VERIFIED"
+    assert all(claim.source_urls for claim in pack.claims if claim.evidence_status == "VERIFIED")
+    assert any(
+        state.country_code == "JP" and state.status == "factory_present"
+        for state in pack.coverage_states
     )
-    assert any(state.country_code == "JP" and state.status == "factory_present" for state in pack.coverage_states)
-    assert any(state.country_code == "US" and state.status == "factory_present" for state in pack.coverage_states)
+    assert any(
+        state.country_code == "US" and state.status == "factory_present"
+        for state in pack.coverage_states
+    )
 
 
 def test_unknown_company_fails_closed_without_claiming_nonexistence():

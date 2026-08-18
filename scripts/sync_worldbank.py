@@ -45,11 +45,7 @@ def latest_value(iso2: str, indicator: str) -> dict | None:
 def main() -> None:
     files = sorted(COUNTRY_DIR.glob("*.jsonl"))
     rows_by_file = {
-        path: [
-            json.loads(line)
-            for line in path.read_text(encoding="utf-8").splitlines()
-            if line
-        ]
+        path: [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
         for path in files
     }
     rows = [row for file_rows in rows_by_file.values() for row in file_rows]
@@ -79,16 +75,14 @@ def main() -> None:
             "url": "https://api.worldbank.org/v2/",
             "retrieved_at": retrieved_at,
             "evidence": (
-                "World Development Indicators API; latest non-null observation "
-                "per indicator"
+                "World Development Indicators API; latest non-null observation per indicator"
             ),
         }
         print(f"{index}/{len(rows)} {row['iso2']} {len(values)}")
     for path, file_rows in rows_by_file.items():
         path.write_text(
             "".join(
-                json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n"
-                for row in file_rows
+                json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in file_rows
             ),
             encoding="utf-8",
         )

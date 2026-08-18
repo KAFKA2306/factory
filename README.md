@@ -148,12 +148,12 @@ FactoryDBはEDINETDBへ直接アクセスせず、共有quota-ownerが取得し�
 
 ## 実行
 
+fresh cloneでは `uv` でlockfileどおりの環境を作り、同じ入口をlocal/CIで使います。Node.js 22は静的Webの小さなJavaScript検査にだけ使います。
+
 ```bash
-python -m pip install -e '.[dev]'
-python -m factorydb.validate
-python -m factorydb.coverage_validation
-python scripts/build_catalog.py
-uvicorn factorydb.api:app --reload
+make bootstrap
+make check
+uv run factorydb-api
 ```
 
 静的UIは `web/index.html` を配信します。
@@ -161,32 +161,26 @@ uvicorn factorydb.api:app --reload
 ## データ更新
 
 ```bash
-python scripts/sync_worldbank.py
-python scripts/sync_sec_companyfacts.py
-python -m factorydb.validate
-python -m factorydb.coverage_validation
-python scripts/build_catalog.py
+uv run python scripts/sync_worldbank.py
+uv run python scripts/sync_sec_companyfacts.py
+make check
 ```
 
 World Bank / SEC由来値もsource・単位・期間を持つ入力として扱い、既存一次情報を無条件で上書きしません。
 
 ## Quality gate
 
-CIでは少なくとも次を検証します。
+`make check` がlocalとCIの共通入口です。役割を重複させません。
 
-- schema / reference integrity
-- ISO 3166-1 249 profile
-- 架空・sample・dummy data禁止
-- 工場recordと`verified_no_qualifying_factory`の矛盾禁止
-- 179国coverage scope contract
-- REST / MCP query parity
-- MCP tool contract
-- EDINETDB projectionの型・単位・fail-close behavior
-- Roboticsの10社・30工場以上のcoverage、source hash、status分離、offline rebuild
+- **uv**: Python環境と`uv.lock`整合性
+- **Ruff**: Python format / lint
+- **Pyrefly**: `src/factorydb` のstatic type check
+- **Pydantic**: 外部JSONL/API入力を読むruntime boundaryのvalidation
+- **Node.js標準機能**: dependencyを持たないPages JavaScriptのsyntax / URL-state test
 
-```bash
-python -m factorydb.coverage_validation
-```
+Biome / Oxlint / tsc / Zodは、現在TypeScript/npm dependency graphがないため導入しません。Nxはmulti-project monorepoではないため不要です。prekも別のhook実行系を増やさず、`make check`を単一のlocal gateとして使います。
+
+CIではさらにcoverage evidenceとFacility Verification Packをartifactとして残します。`make check`はschema/reference integrity、249 profile、架空data禁止、coverage state、REST/MCP parity、Robotics evidence、生成catalogまで検証します。
 
 `factory_missing_countries == 0` は完成条件ではありません。
 

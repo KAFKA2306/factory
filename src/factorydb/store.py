@@ -42,9 +42,7 @@ def load_all() -> dict[str, Any]:
         "countries": load_jsonl("countries/*.jsonl", Country),
         "companies": load_jsonl("companies*.jsonl", Company),
         "facilities": load_jsonl("facilities/*.jsonl", Facility),
-        "coverage_resolutions": load_jsonl(
-            "coverage_resolutions.jsonl", CoverageResolution
-        ),
+        "coverage_resolutions": load_jsonl("coverage_resolutions.jsonl", CoverageResolution),
         "assets": load_jsonl("assets.jsonl", Asset),
         "investments": load_jsonl("investments.jsonl", Investment),
         "financials": load_jsonl("financials.jsonl", FinancialSnapshot),

@@ -187,7 +187,13 @@ def build_facility_verification_pack(company_id: str) -> FacilityVerificationPac
 
     if financials:
         for snapshot in financials:
-            for field in ("period_end", "fiscal_year", "accounting_standard", "currency", "metrics"):
+            for field in (
+                "period_end",
+                "fiscal_year",
+                "accounting_standard",
+                "currency",
+                "metrics",
+            ):
                 claims.append(_claim(snapshot, field))
 
     relevant_codes = sorted({company.country_code, *(row.country_code for row in facilities)})
@@ -270,7 +276,15 @@ def render_markdown(pack: FacilityVerificationPack) -> str:
             f"| `{claim.entity_id}` | `{claim.field}` | **{claim.evidence_status}**{note} | `{value}` | {sources} |"
         )
 
-    lines.extend(["", "## Coverage state", "", "| Country | State | Facility records | Sources |", "|---|---|---:|---|"])
+    lines.extend(
+        [
+            "",
+            "## Coverage state",
+            "",
+            "| Country | State | Facility records | Sources |",
+            "|---|---|---:|---|",
+        ]
+    )
     for state in pack.coverage_states:
         sources = "<br>".join(str(url) for url in state.source_urls) or "—"
         lines.append(
