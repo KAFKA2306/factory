@@ -1,0 +1,56 @@
+{
+  "companies_not_in_core": [
+    "company:catl",
+    "company:dongfeng-honda-automobile-co-ltd",
+    "company:hyundai-motor-company",
+    "company:hyundai-motor-group",
+    "company:mercedes-benz-group-ag",
+    "company:panasonic-cycle-technology-co-ltd",
+    "company:panasonic-energy-co-ltd",
+    "company:robert-bosch-gmbh",
+    "company:siemens-ag",
+    "company:volkswagen-ag"
+  ],
+  "core_company_matches": [
+    "company:bmw-ag",
+    "company:general-motors-company",
+    "company:toyota-motor-corporation"
+  ],
+  "core_factory_matches": [
+    "facility:bmw-plant-debrecen",
+    "facility:bmw-plant-munich",
+    "facility:bmw-plant-steyr",
+    "facility:toyota-motomachi"
+  ],
+  "factories_not_in_core": [
+    "facility:bmw-plant-dingolfing",
+    "facility:bmw-plant-leipzig",
+    "facility:bmw-plant-oxford",
+    "facility:bmw-plant-regensburg",
+    "facility:bmw-plant-spartanburg",
+    "facility:bosch-stuttgart-feuerbach",
+    "facility:catl-guiyang",
+    "facility:catl-liyang",
+    "facility:catl-ningde",
+    "facility:catl-yibin",
+    "facility:dongfeng-honda-nev-wuhan",
+    "facility:gm-factory-zero",
+    "facility:gm-flint",
+    "facility:gm-spring-hill",
+    "facility:hmgics-singapore",
+    "facility:hyundai-hmgma",
+    "facility:hyundai-ulsan",
+    "facility:hyundai-ulsan-ev-dedicated",
+    "facility:mercedes-factory-56-sindelfingen",
+    "facility:panasonic-energy-kansas",
+    "facility:panasonic-kashiwara",
+    "facility:siemens-amberg-future-factory",
+    "facility:siemens-haguenau",
+    "facility:toyota-teiho",
+    "facility:volkswagen-chattanooga",
+    "facility:volkswagen-emden",
+    "facility:volkswagen-hanover"
+  ],
+  "rule": "A false core match is explicit; robotics identity is never silently claimed to exist in the FactoryDB core tables.",
+  "schema_version": 1
+}

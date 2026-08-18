@@ -1,0 +1,338 @@
+{
+  "retrieved_at": "2026-08-18T22:52:55.740332+00:00",
+  "schema_version": 1,
+  "sources": [
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/68991d98d1443c1446fcbe7827216197880a0b7e60a611dbb3be0cb3ec02a7c6.html",
+      "published_at": "2023-09-19",
+      "publisher": "Toyota Motor Corporation",
+      "sha256": "68991d98d1443c1446fcbe7827216197880a0b7e60a611dbb3be0cb3ec02a7c6",
+      "size_bytes": 34553,
+      "source_id": "toyota-monozukuri-2023",
+      "source_url": "https://global.toyota/en/newsroom/corporate/39758451.html",
+      "verified_markers": [
+        "Motomachi Plant",
+        "Teiho Plant",
+        "Vehicle Logistics Robot",
+        "digital twin"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/9f03fe686b960f470d9a1215a695bb368b8385c3db55d3c34bf54e1b85dae199.html",
+      "published_at": "2024-10-11",
+      "publisher": "Honda Motor Co., Ltd.",
+      "sha256": "9f03fe686b960f470d9a1215a695bb368b8385c3db55d3c34bf54e1b85dae199",
+      "size_bytes": 69956,
+      "source_id": "honda-dongfeng-nev-2024",
+      "source_url": "https://global.honda/en/newsroom/news/2024/c241011eng.html",
+      "verified_markers": [
+        "Dongfeng Honda NEV production plant",
+        "multi-level automated warehouse",
+        "automation of parts logistics"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/90c82fbd557341262da5bbfc6ba958cf8247dd39950b54caf0d34577be3eaa5a.html",
+      "published_at": "2024-11-25",
+      "publisher": "BMW Group",
+      "sha256": "90c82fbd557341262da5bbfc6ba958cf8247dd39950b54caf0d34577be3eaa5a",
+      "size_bytes": 70597,
+      "source_id": "bmw-afw-2024",
+      "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0446493EN?forceSitePreference=DESKTOP",
+      "verified_markers": [
+        "Dingolfing",
+        "Leipzig",
+        "Regensburg",
+        "Oxford",
+        "Debrecen"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/c0806a53568eb8fdf4499167bb01e64d8c4fb04df2e6d427dc8dc722f44244a1.html",
+      "published_at": "2025-06-04",
+      "publisher": "BMW Group",
+      "sha256": "c0806a53568eb8fdf4499167bb01e64d8c4fb04df2e6d427dc8dc722f44244a1",
+      "size_bytes": 69955,
+      "source_id": "bmw-regensburg-afw-2025",
+      "source_url": "https://www.press.bmwgroup.com/deutschland/article/detail/T0450566DE?forceSitePreference=DESKTOP",
+      "verified_markers": [
+        "Werk Regensburg",
+        "Seit Jahresbeginn",
+        "fahrerlos"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/9fb8cbf24f867798334dea4fe35f15461a0df8d71e5141f7e871eef8a026badc.html",
+      "published_at": "2026-02-27",
+      "publisher": "BMW Group",
+      "sha256": "9fb8cbf24f867798334dea4fe35f15461a0df8d71e5141f7e871eef8a026badc",
+      "size_bytes": 81410,
+      "source_id": "bmw-humanoid-2026",
+      "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0455864EN/bmw-group-to-deploy-humanoid-robots-in-production-in-germany-for-the-first-time?language=en",
+      "verified_markers": [
+        "Plant Spartanburg",
+        "Figure 02",
+        "30,000 BMW X3"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/94dbbe923380be731097223f76ad1327f3fadc5209c65664bdea53ba5910d59e.html",
+      "published_at": "2026-04-02",
+      "publisher": "BMW Group",
+      "sha256": "94dbbe923380be731097223f76ad1327f3fadc5209c65664bdea53ba5910d59e",
+      "size_bytes": 86738,
+      "source_id": "bmw-munich-2026",
+      "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0456664EN/the-new-bmw-group-plant-munich%3A-more-efficient-more-flexible-and-more-digital-for-production-of-the-neue-klasse?language=en",
+      "verified_markers": [
+        "Plant Munich",
+        "800 new industrial robots",
+        "automation rate of around 98 per cent"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/9a25c654cfbeaeed0e752a0d670c4d5c4a297484169f0d52d3c9a2aefd7a2cac.html",
+      "published_at": "2024-02-01",
+      "publisher": "BMW Group",
+      "sha256": "9a25c654cfbeaeed0e752a0d670c4d5c4a297484169f0d52d3c9a2aefd7a2cac",
+      "size_bytes": 62663,
+      "source_id": "bmw-steyr-2024",
+      "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0439491EN/milestone-at-bmw-group-plant-steyr%3A-production-facilities-for-next-gen-electric-drives-completed?showMedia=photo",
+      "verified_markers": [
+        "Plant Steyr",
+        "300 items of plant and equipment",
+        "four robots"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/98a251d1e40a09f65f4eead24cad219754217f72373e1244ba647b4f34d71d59.html",
+      "published_at": "2020-10-14",
+      "publisher": "Volkswagen Group",
+      "sha256": "98a251d1e40a09f65f4eead24cad219754217f72373e1244ba647b4f34d71d59",
+      "size_bytes": 77519,
+      "source_id": "vw-robots-2020",
+      "source_url": "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-invests-in-automation-for-emden-hanover-and-chattanooga-plants-17101",
+      "verified_markers": [
+        "Emden",
+        "Hanover",
+        "Chattanooga",
+        "2,200 new robots"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/27effe3d4909e31a54ca5cbaf67eefc0a10e9c063873839470bcc9500724b07f.html",
+      "published_at": "2025-02-26",
+      "publisher": "Hyundai Motor Company",
+      "sha256": "27effe3d4909e31a54ca5cbaf67eefc0a10e9c063873839470bcc9500724b07f",
+      "size_bytes": 172629,
+      "source_id": "hyundai-redcap-2025",
+      "source_url": "https://www.hyundai.com/worldwide/en/newsroom/detail/hyundai-motor-and-samsung-unveil-breakthrough-private-5g-redcap-technology-for-smart-manufacturing-0000000907",
+      "verified_markers": [
+        "Ulsan",
+        "dozens of automated guided vehicles",
+        "over 200 autonomous mobile robots"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/5c13148faae9bc71d37b6e9598aca3d16366326206a46ec7899ca68b7c203d6d.html",
+      "published_at": "2023-11-21",
+      "publisher": "Hyundai Motor Group",
+      "sha256": "5c13148faae9bc71d37b6e9598aca3d16366326206a46ec7899ca68b7c203d6d",
+      "size_bytes": 462504,
+      "source_id": "hyundai-hmgics-2023",
+      "source_url": "https://www.hyundai.com/worldwide/en/newsroom/detail/new-hyundai-motor-group-innovation-center-singapore-set-to-transform-production%2C-r%26d-and-customer-experience-0000000363",
+      "verified_markers": [
+        "HMGICS",
+        "50 percent of all tasks",
+        "200 robots"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/8a3d4c15d7e00005029920d9e906dedc184cc5749fbc3e74fe53e94c1987b2ce.html",
+      "published_at": "2023-11-13",
+      "publisher": "Hyundai Motor Company",
+      "sha256": "8a3d4c15d7e00005029920d9e906dedc184cc5749fbc3e74fe53e94c1987b2ce",
+      "size_bytes": 384664,
+      "source_id": "hyundai-ulsan-ev-2023",
+      "source_url": "https://www.hyundai.com/worldwide/en/newsroom/detail/0000000353",
+      "verified_markers": [
+        "EV-dedicated plant in Ulsan",
+        "automated parts logistics",
+        "automate assembly facilities"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/bc3b70fabf2632953f74615f420347279871a3fb5ac7405f9d9bf21630d44640.html",
+      "published_at": "2026-05-01",
+      "publisher": "Mercedes-Benz",
+      "sha256": "bc3b70fabf2632953f74615f420347279871a3fb5ac7405f9d9bf21630d44640",
+      "size_bytes": 196057,
+      "source_id": "mercedes-factory56-2026",
+      "source_url": "https://media.mercedes-benz.com/article/40d1e2eb-b956-4105-a9a9-6999ff7fd63f",
+      "verified_markers": [
+        "Factory 56",
+        "400 FTS",
+        "Sindelfingen"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/f8669bb98897405d01ac807fadc50b6729c4a983893ff1196ca24bf67c02e37c.html",
+      "published_at": "2026-05-05",
+      "publisher": "General Motors",
+      "sha256": "f8669bb98897405d01ac807fadc50b6729c4a983893ff1196ca24bf67c02e37c",
+      "size_bytes": 69379,
+      "source_id": "gm-smart-tools-2026",
+      "source_url": "https://news.gm.com/home.detail.html/Pages/topic/us/en/2026/may/0505-smarterAItoolsbuildvehicles.html",
+      "verified_markers": [
+        "Factory ZERO",
+        "Spring Hill",
+        "Flint",
+        "WeldBrAIn"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/4b7fd79c419be9e0fe761e0f038050106a2908654043b0b1a976169521a7f99b.html",
+      "published_at": "2026-03-04",
+      "publisher": "Siemens AG",
+      "sha256": "4b7fd79c419be9e0fe761e0f038050106a2908654043b0b1a976169521a7f99b",
+      "size_bytes": 81530,
+      "source_id": "siemens-amberg-2026",
+      "source_url": "https://press.siemens.com/global/en/pressrelease/siemens-invest-over-eu200-million-build-factory-future-amberg-germany",
+      "verified_markers": [
+        "Amberg",
+        "driverless transport systems",
+        "humanoid robotics"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/c912e21b92ec6e9a1cde4dee20b1e1d35812a90b1d603773aafabd0bd48b7d97.html",
+      "published_at": "2019-11-20",
+      "publisher": "Siemens France",
+      "sha256": "c912e21b92ec6e9a1cde4dee20b1e1d35812a90b1d603773aafabd0bd48b7d97",
+      "size_bytes": 69799,
+      "source_id": "siemens-haguenau-2019",
+      "source_url": "https://press.siemens.com/fr/fr/communiquedepresse/siemens-obtient-le-label-vitrines-industrie-du-futur",
+      "verified_markers": [
+        "Haguenau",
+        "robots et cobots",
+        "AMR"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/ac8bc9c822fd812f74ffb22f2bc2297be052fddd261cad8a66edb3024ff732fd.html",
+      "published_at": "2020-11-26",
+      "publisher": "Robert Bosch GmbH",
+      "sha256": "ac8bc9c822fd812f74ffb22f2bc2297be052fddd261cad8a66edb3024ff732fd",
+      "size_bytes": 85163,
+      "source_id": "bosch-feuerbach-2020",
+      "source_url": "https://www.bosch-presse.de/pressportal/de/en/bosch-puts-first-5g-campus-network-into-operation-221632.html",
+      "verified_markers": [
+        "Stuttgart-Feuerbach",
+        "ActiveShuttle",
+        "autonomous transport systems"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/ac2e2cb07ab495c713be4cc45db4f22e6fdf534c89b2b8ae6c75fe75d55c0a8c.html",
+      "published_at": "2024-02-02",
+      "publisher": "CATL",
+      "sha256": "ac2e2cb07ab495c713be4cc45db4f22e6fdf534c89b2b8ae6c75fe75d55c0a8c",
+      "size_bytes": 48877,
+      "source_id": "catl-ningde-2024",
+      "source_url": "https://www.catl.com/en/news/6209.html",
+      "verified_markers": [
+        "Ningde plant",
+        "digitalization and automation technologies"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/8137c529f11c093cae65865f094fecee4b64351114e97a214fdbfc62968f9495.html",
+      "published_at": "2022-10-11",
+      "publisher": "CATL",
+      "sha256": "8137c529f11c093cae65865f094fecee4b64351114e97a214fdbfc62968f9495",
+      "size_bytes": 51582,
+      "source_id": "catl-yibin-2022",
+      "source_url": "https://www.catl.com/en/news/1030.html",
+      "verified_markers": [
+        "Yibin city",
+        "AI, IoT and flexible automation"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/2a887437816fec03b6e44b521153e3427c8eb1565d54f520b5e95a5d086f06da.html",
+      "published_at": "2023-12-14",
+      "publisher": "CATL",
+      "sha256": "2a887437816fec03b6e44b521153e3427c8eb1565d54f520b5e95a5d086f06da",
+      "size_bytes": 53542,
+      "source_id": "catl-liyang-2023",
+      "source_url": "https://www.catl.com/en/news/6176.html",
+      "verified_markers": [
+        "Liyang plant",
+        "computer vision",
+        "micron-level quality inspection"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/50e0b4e2fe417d0bae17e9b8dac26ec01337480db3f6e9b667664c24c4dcbf84.html",
+      "published_at": "2023-10-29",
+      "publisher": "CATL",
+      "sha256": "50e0b4e2fe417d0bae17e9b8dac26ec01337480db3f6e9b667664c24c4dcbf84",
+      "size_bytes": 50034,
+      "source_id": "catl-guiyang-2023",
+      "source_url": "https://www.catl.com/en/news/6131.html",
+      "verified_markers": [
+        "Guiyang plant",
+        "automation rate of up to 95%"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/8277357da5ab8603be56ffd26fa0c83bdc9d1d8a57506834faf2d1b6714a4083.html",
+      "published_at": "2025-11-17",
+      "publisher": "Panasonic Holdings Corporation",
+      "sha256": "8277357da5ab8603be56ffd26fa0c83bdc9d1d8a57506834faf2d1b6714a4083",
+      "size_bytes": 139723,
+      "source_id": "panasonic-kansas-2025",
+      "source_url": "https://news.panasonic.com/global/stories/18073",
+      "verified_markers": [
+        "Kansas factory",
+        "smart automation",
+        "20%"
+      ]
+    },
+    {
+      "content_type": "text/html",
+      "evidence_path": "raw/objects/938e30f699aa57049cd86c48efec792cd65e1badc6e3e75ee016c6166a4b9688.html",
+      "published_at": "2021-10-04",
+      "publisher": "Panasonic Cycle Technology Co., Ltd.",
+      "sha256": "938e30f699aa57049cd86c48efec792cd65e1badc6e3e75ee016c6166a4b9688",
+      "size_bytes": 138346,
+      "source_id": "panasonic-kashiwara-2021",
+      "source_url": "https://news.panasonic.com/jp/press/jn211004-1",
+      "verified_markers": [
+        "柏原工場",
+        "ロボット",
+        "自動溶接"
+      ]
+    }
+  ]
+}
