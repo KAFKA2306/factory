@@ -85,6 +85,39 @@ async function navigate(url) {
   })()`);
 }
 
+async function verifyErrorState(url) {
+  await rpc("Network.setCacheDisabled", {cacheDisabled: true});
+  await rpc("Fetch.enable", {
+    patterns: [{urlPattern: "*catalog.json*", requestStage: "Request"}],
+  });
+  const paused = waitForEvent("Fetch.requestPaused");
+  const loaded = waitForEvent("Page.loadEventFired");
+  await rpc("Page.navigate", {url});
+  const request = await paused;
+  await rpc("Fetch.failRequest", {requestId: request.requestId, errorReason: "Failed"});
+  await loaded;
+  const errorState = await evaluate(`(async () => {
+    for (let i = 0; i < 100; i += 1) {
+      const status = document.querySelector("#page-status")?.textContent || "";
+      if (status.includes("データ読み込みに失敗しました")) {
+        return {
+          status,
+          emptyVisible: !document.querySelector("#empty-state").hidden,
+          facilityCount: document.querySelectorAll(".factory-card").length,
+        };
+      }
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    throw new Error("error state did not become visible");
+  })()`);
+  await rpc("Fetch.disable");
+  await rpc("Network.setCacheDisabled", {cacheDisabled: false});
+  if (!errorState.emptyVisible || errorState.facilityCount !== 0) {
+    throw new Error(`error state retained stale results: ${JSON.stringify(errorState)}`);
+  }
+  return errorState;
+}
+
 try {
   const version = await retry(async () => {
     const response = await fetch(`http://127.0.0.1:${port}/json/version`);
@@ -118,6 +151,7 @@ try {
 
   await rpc("Page.enable");
   await rpc("Runtime.enable");
+  await rpc("Network.enable");
   await rpc("Input.setIgnoreInputEvents", {ignore: false});
 
   if (expectedCommit) {
@@ -134,6 +168,11 @@ try {
 
   await navigate(targetUrl);
 
+  const freshness = await evaluate(`(() => document.querySelector("#freshness-state")?.textContent || "")()`);
+  if (!freshness.includes("freshness policyは未定義") || !freshness.includes("stale / fresh は断定しません")) {
+    throw new Error(`freshness uncertainty is not explicit: ${freshness}`);
+  }
+
   const journey = await evaluate(`(() => {
     const query = document.querySelector("#query");
     query.value = "Toyota";
@@ -142,11 +181,17 @@ try {
     if (cards.length < 2) throw new Error("search returned fewer than two facilities");
     cards[0].querySelector(".compare-button").click();
     cards[1].querySelector(".compare-button").click();
-    const status = document.querySelector("#comparison-status").textContent;
-    const table = document.querySelector("#comparison-table").textContent;
-    return {status, table, href: location.href, count: cards.length};
+    const comparison = document.querySelector("#comparison-table");
+    return {
+      status: document.querySelector("#comparison-status").textContent,
+      table: comparison.textContent,
+      sourceLinks: comparison.querySelectorAll('a[href^="http"]').length,
+      href: location.href,
+      count: cards.length,
+    };
   })()`);
   if (!journey.status.includes("2拠点を比較中")) throw new Error(journey.status);
+  if (journey.sourceLinks < 2) throw new Error("comparison does not expose enough primary-source links");
   if (!journey.href.includes("compare=")) throw new Error("comparison state was not written to the URL");
   if (!journey.href.includes("q=Toyota")) throw new Error("search state was not written to the URL");
 
@@ -160,6 +205,22 @@ try {
     throw new Error("shared URL did not restore the comparison/search state");
   }
 
+  const emptyState = await evaluate(`(() => {
+    const query = document.querySelector("#query");
+    query.value = "__factorydb_no_result__";
+    query.dispatchEvent(new Event("input", {bubbles: true}));
+    const empty = document.querySelector("#empty-state");
+    return {
+      visible: !empty.hidden,
+      text: empty.textContent,
+      cards: document.querySelectorAll(".factory-card").length,
+    };
+  })()`);
+  if (!emptyState.visible || emptyState.cards !== 0 || !emptyState.text.includes("現在の検索結果が0件")) {
+    throw new Error(`empty result semantics are unclear: ${JSON.stringify(emptyState)}`);
+  }
+
+  await navigate(journey.href);
   await rpc("Input.dispatchKeyEvent", {type: "keyDown", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9});
   await rpc("Input.dispatchKeyEvent", {type: "keyUp", key: "Tab", code: "Tab", windowsVirtualKeyCode: 9});
   const keyboard = await evaluate(`(() => {
@@ -187,12 +248,20 @@ try {
     throw new Error(`page overflows at 320px/200%: ${JSON.stringify(reflow)}`);
   }
 
+  await rpc("Emulation.clearDeviceMetricsOverride");
+  await rpc("Emulation.setPageScaleFactor", {pageScaleFactor: 1});
+  const errorState = await verifyErrorState(new URL("?browser_error_state=1", targetUrl).href);
+
   console.log(JSON.stringify({
     browser: version.Browser,
     target: targetUrl,
     expectedCommit: expectedCommit || null,
     searchResults: journey.count,
+    comparisonSourceLinks: journey.sourceLinks,
     shareRestore: true,
+    emptyState,
+    errorState,
+    freshnessState: freshness,
     keyboardFocus: keyboard,
     narrowZoom: reflow,
   }, null, 2));

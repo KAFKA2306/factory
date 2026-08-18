@@ -9,6 +9,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   group: pages
@@ -97,3 +98,30 @@ jobs:
           else:
               raise SystemExit(f"public sample verification failed: {last_error}")
           PY
+      - name: Record production acceptance evidence on Issue 20
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          SOURCE_COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          if [ "$(gh issue view 20 --repo "$GITHUB_REPOSITORY" --json state --jq .state)" = "OPEN" ]; then
+            cat > /tmp/production-evidence.md <<EOF
+          <!-- factorydb-pages-production-evidence -->
+          Production acceptance verified for exact main commit \`$SOURCE_COMMIT\`.
+
+          - Pages URL: $PAGE_URL
+          - GitHub Actions run: https://github.com/$GITHUB_REPOSITORY/actions/runs/$RUN_ID
+          - \`deployment.json\` on Pages matched exact \`$SOURCE_COMMIT\`
+          - real Chrome journey passed: load → search → select 2 facilities → compare → source links → URL share/restore
+          - empty-result state passed and explicitly says 0 search results do not prove nonexistence
+          - forced \`catalog.json\` network failure passed the visible error-state check and cleared stale cards
+          - freshness/staleness is explicitly unresolved rather than fabricated
+          - keyboard focus is visible
+          - 320px viewport at 200% page scale has no page-level horizontal overflow; the wide comparison table remains inside its own scroll container
+          - public Facility Verification Pack JSON was reachable and retained \`decision_status=VERIFIED\`
+
+          This comment is emitted only after every production check above succeeds.
+          EOF
+            gh issue comment 20 --repo "$GITHUB_REPOSITORY" --body-file /tmp/production-evidence.md
+          fi
