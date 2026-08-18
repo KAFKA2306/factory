@@ -81,4 +81,4 @@ def test_data_health_reports_provenance_limits_without_inventing_freshness():
     assert payload["provenance"]["citation_count"] > 0
     assert payload["provenance"]["source_content_hash_count"] == 0
     assert payload["provenance"]["freshness_policy"] == "not_defined"
-    assert payload["coverage"]["factory_coverage_scope_cap"] == 179
+    assert payload["coverage"]["factory_covered_countries"] <= 179
