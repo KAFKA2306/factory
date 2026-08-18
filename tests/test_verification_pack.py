@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from factorydb.verification_pack import (
     build_facility_verification_pack,
@@ -39,3 +40,15 @@ def test_pack_is_deterministic_json_and_markdown():
     assert first_json == second_json
     assert render_markdown(first) == render_markdown(second)
     assert "not a certification" in render_markdown(first)
+
+
+def test_public_site_links_sample_and_qualified_inquiry():
+    html = Path("web/index.html").read_text(encoding="utf-8")
+
+    assert 'href="facility-verification-pack.md"' in html
+    assert 'href="facility-verification-pack.json"' in html
+    assert "issues/new?title=" in html
+    for field in ("組織・役割", "対象企業数", "対象企業・地域", "用途", "希望時期", "相談内容"):
+        assert field in html or field.encode().hex() not in html
+    assert "vendor master" in html
+    assert "非公開サプライヤー情報" in html
