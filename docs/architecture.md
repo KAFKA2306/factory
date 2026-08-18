@@ -52,6 +52,25 @@ Robotics evidenceは別途raw source snapshotのSHA-256を保持します。そ�
 
 RESTとMCPは`factorydb.queries`を共有します。会社・工場検索、coverage、source evidence、data healthを別DBへ複製しません。
 
+RESTでは、従来のcollection endpointに加えて `GET /v1/source-evidence/{entity_id}` と `GET /v1/data-health` を提供します。`/v1/companies` と `/v1/facilities` のfilter/limitもMCPと同じquery関数へ委譲します。
+
+MCPのread-only tool catalogは次です。`tools/list`で同じ一覧を発見でき、CIでも代表tool callを実行します。
+
+- `search_companies`
+- `search_facilities`
+- `get_facility`
+- `get_facilities_batch`
+- `get_country_coverage`
+- `get_coverage_resolution`
+- `get_products`
+- `get_processes`
+- `get_assets`
+- `get_investments`
+- `get_financials`
+- `get_ontology`
+- `get_source_evidence`
+- `get_data_health`
+
 MCP standaloneは`127.0.0.1`へbindし、SDKのlocalhost DNS-rebinding protectionを使います。実ホストへ出す場合は `FACTORYDB_MCP_ALLOWED_HOSTS` と、browser clientを許可する場合のみ `FACTORYDB_MCP_ALLOWED_ORIGINS` を明示します。HostなしでOriginだけ設定した場合は起動時に失敗します。MCP request bodyは1 MiBを上限とし、tool側も一覧・batchを最大100件に制限します。
 
 ## 更新
