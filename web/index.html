@@ -12,6 +12,7 @@
     <a class="brand" href="#">FactoryDB</a>
     <nav aria-label="主要ナビゲーション">
       <a href="#explorer">Explorer</a>
+      <a href="#comparison">Compare</a>
       <a href="#insights">Data</a>
       <a href="#verification">Supplier review</a>
       <a href="#health">Coverage</a>
@@ -22,14 +23,15 @@
   <main>
     <section class="hero" id="explorer">
       <p class="eyebrow">OFFICIAL-SOURCE GLOBAL MANUFACTURING EXPLORER</p>
-      <h1>世界の工場を、<br>製品から探す。</h1>
-      <p class="lead">国・企業・製品・工程を横断して検索。各レコードから公式一次情報まで直接辿れます。</p>
+      <h1>世界の工場を、<br>証拠まで比較する。</h1>
+      <p class="lead">国・企業・製品・工程を横断して検索し、最大4拠点を同じ項目で比較。各レコードから公式一次情報まで直接辿れます。</p>
       <div class="hero-search">
         <label class="sr-only" for="query">工場・企業・製品・工程を検索</label>
         <input id="query" type="search" placeholder="例: Toyota / battery / cement / brewing" autocomplete="off">
         <button id="clear-query" type="button">クリア</button>
       </div>
       <div id="hero-stats" class="hero-stats" aria-label="データ概要"></div>
+      <p id="page-status" class="status-line" aria-live="polite">データを読み込んでいます。</p>
     </section>
 
     <section class="explorer-panel" aria-label="工場検索">
@@ -54,8 +56,22 @@
         </div>
         <span id="count"></span>
       </div>
-      <div id="empty-state" class="empty-state" hidden>条件に一致する工場はありません。</div>
+      <div id="empty-state" class="empty-state" hidden>条件に一致する工場はありません。これは「該当工場が存在しない」という意味ではなく、現在の検索結果が0件という意味です。</div>
       <div id="facilities" class="factory-list"></div>
+    </section>
+
+    <section class="comparison" id="comparison" aria-labelledby="comparison-title">
+      <div class="section-title">
+        <div>
+          <p class="kicker">COMPARE</p>
+          <h2 id="comparison-title">製造拠点を比較</h2>
+        </div>
+        <button id="clear-comparison" class="quiet-button" type="button" hidden>比較をクリア</button>
+      </div>
+      <p class="comparison-help">各カードの「比較に追加」から最大4拠点を選べます。選択中の拠点と検索条件はURLに保存され、同じURLから復元できます。</p>
+      <p id="comparison-status" class="status-line" aria-live="polite">比較する拠点を2件以上選んでください。</p>
+      <div id="comparison-empty" class="empty-state">まだ比較対象がありません。</div>
+      <div id="comparison-table" class="comparison-scroll" hidden></div>
     </section>
 
     <section class="secondary" id="insights">
@@ -101,7 +117,8 @@
       <div>
         <p class="kicker">DATA COVERAGE</p>
         <h2>収録状況</h2>
-        <p>これは開発・監査情報です。一般検索を妨げないよう下位に配置しています。</p>
+        <p>未確認の国・地域は <strong>unresolved</strong> として扱い、公式一次情報で「該当する工場なし」と確認した <strong>verified_no_qualifying_factory</strong> とは区別します。</p>
+        <p id="coverage-state" class="status-line"></p>
       </div>
       <section id="metrics" class="metrics" aria-label="データカバレッジ"></section>
     </section>
@@ -117,10 +134,13 @@
       <p class="meta"></p>
       <div class="fact-row"><span>製品</span><strong class="products"></strong></div>
       <div class="fact-row"><span>工程</span><strong class="processes"></strong></div>
-      <a class="source" target="_blank" rel="noreferrer">公式一次情報を見る →</a>
+      <div class="card-actions">
+        <button class="compare-button quiet-button" type="button" aria-pressed="false">比較に追加</button>
+        <a class="source" target="_blank" rel="noreferrer">公式一次情報を見る →</a>
+      </div>
     </article>
   </template>
 
-  <script src="app.js" defer></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
