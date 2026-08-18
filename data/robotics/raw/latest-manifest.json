@@ -1,13 +1,13 @@
 {
-  "retrieved_at": "2026-08-18T22:52:55.740332+00:00",
+  "retrieved_at": "2026-08-18T23:20:30.184950+00:00",
   "schema_version": 1,
   "sources": [
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/68991d98d1443c1446fcbe7827216197880a0b7e60a611dbb3be0cb3ec02a7c6.html",
+      "evidence_path": "raw/objects/46b520c54a5a513892cb18820c58907b5495c0131f0be9f9a65bb174bd919d53.html",
       "published_at": "2023-09-19",
       "publisher": "Toyota Motor Corporation",
-      "sha256": "68991d98d1443c1446fcbe7827216197880a0b7e60a611dbb3be0cb3ec02a7c6",
+      "sha256": "46b520c54a5a513892cb18820c58907b5495c0131f0be9f9a65bb174bd919d53",
       "size_bytes": 34553,
       "source_id": "toyota-monozukuri-2023",
       "source_url": "https://global.toyota/en/newsroom/corporate/39758451.html",
@@ -35,11 +35,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/90c82fbd557341262da5bbfc6ba958cf8247dd39950b54caf0d34577be3eaa5a.html",
+      "evidence_path": "raw/objects/af5eac18d63297b4b6750e855ddc767165d08f46b80cc6089940cbc382ae77ac.html",
       "published_at": "2024-11-25",
       "publisher": "BMW Group",
-      "sha256": "90c82fbd557341262da5bbfc6ba958cf8247dd39950b54caf0d34577be3eaa5a",
-      "size_bytes": 70597,
+      "sha256": "af5eac18d63297b4b6750e855ddc767165d08f46b80cc6089940cbc382ae77ac",
+      "size_bytes": 70594,
       "source_id": "bmw-afw-2024",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0446493EN?forceSitePreference=DESKTOP",
       "verified_markers": [
@@ -52,11 +52,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/c0806a53568eb8fdf4499167bb01e64d8c4fb04df2e6d427dc8dc722f44244a1.html",
+      "evidence_path": "raw/objects/aa64c2ffd3875862a30182dc8b1f221dcda80426af3b5a96c960796362206e0c.html",
       "published_at": "2025-06-04",
       "publisher": "BMW Group",
-      "sha256": "c0806a53568eb8fdf4499167bb01e64d8c4fb04df2e6d427dc8dc722f44244a1",
-      "size_bytes": 69955,
+      "sha256": "aa64c2ffd3875862a30182dc8b1f221dcda80426af3b5a96c960796362206e0c",
+      "size_bytes": 69952,
       "source_id": "bmw-regensburg-afw-2025",
       "source_url": "https://www.press.bmwgroup.com/deutschland/article/detail/T0450566DE?forceSitePreference=DESKTOP",
       "verified_markers": [
@@ -67,11 +67,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/9fb8cbf24f867798334dea4fe35f15461a0df8d71e5141f7e871eef8a026badc.html",
+      "evidence_path": "raw/objects/e8f0565001456d64231a8110312937d9ca6ce0396335f722ea374179b1ea6f15.html",
       "published_at": "2026-02-27",
       "publisher": "BMW Group",
-      "sha256": "9fb8cbf24f867798334dea4fe35f15461a0df8d71e5141f7e871eef8a026badc",
-      "size_bytes": 81410,
+      "sha256": "e8f0565001456d64231a8110312937d9ca6ce0396335f722ea374179b1ea6f15",
+      "size_bytes": 81407,
       "source_id": "bmw-humanoid-2026",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0455864EN/bmw-group-to-deploy-humanoid-robots-in-production-in-germany-for-the-first-time?language=en",
       "verified_markers": [
@@ -82,11 +82,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/94dbbe923380be731097223f76ad1327f3fadc5209c65664bdea53ba5910d59e.html",
+      "evidence_path": "raw/objects/5e0274a7ce733474da6a128a9a5e9cb9fbfd78a7533226b9f9a3ef8edd5a803e.html",
       "published_at": "2026-04-02",
       "publisher": "BMW Group",
-      "sha256": "94dbbe923380be731097223f76ad1327f3fadc5209c65664bdea53ba5910d59e",
-      "size_bytes": 86738,
+      "sha256": "5e0274a7ce733474da6a128a9a5e9cb9fbfd78a7533226b9f9a3ef8edd5a803e",
+      "size_bytes": 86735,
       "source_id": "bmw-munich-2026",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0456664EN/the-new-bmw-group-plant-munich%3A-more-efficient-more-flexible-and-more-digital-for-production-of-the-neue-klasse?language=en",
       "verified_markers": [
@@ -97,11 +97,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/9a25c654cfbeaeed0e752a0d670c4d5c4a297484169f0d52d3c9a2aefd7a2cac.html",
+      "evidence_path": "raw/objects/f1e2c0eeb32910f805d93f7db4fb2c8fe65d42a9be75f71fdfe90c66e022fbf4.html",
       "published_at": "2024-02-01",
       "publisher": "BMW Group",
-      "sha256": "9a25c654cfbeaeed0e752a0d670c4d5c4a297484169f0d52d3c9a2aefd7a2cac",
-      "size_bytes": 62663,
+      "sha256": "f1e2c0eeb32910f805d93f7db4fb2c8fe65d42a9be75f71fdfe90c66e022fbf4",
+      "size_bytes": 62660,
       "source_id": "bmw-steyr-2024",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0439491EN/milestone-at-bmw-group-plant-steyr%3A-production-facilities-for-next-gen-electric-drives-completed?showMedia=photo",
       "verified_markers": [
@@ -188,10 +188,10 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/f8669bb98897405d01ac807fadc50b6729c4a983893ff1196ca24bf67c02e37c.html",
+      "evidence_path": "raw/objects/e65348a67bed643273c76791e57d50dc0c4eb39023268ffb0e97b2dacfe0272c.html",
       "published_at": "2026-05-05",
       "publisher": "General Motors",
-      "sha256": "f8669bb98897405d01ac807fadc50b6729c4a983893ff1196ca24bf67c02e37c",
+      "sha256": "e65348a67bed643273c76791e57d50dc0c4eb39023268ffb0e97b2dacfe0272c",
       "size_bytes": 69379,
       "source_id": "gm-smart-tools-2026",
       "source_url": "https://news.gm.com/home.detail.html/Pages/topic/us/en/2026/may/0505-smarterAItoolsbuildvehicles.html",

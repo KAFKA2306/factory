@@ -35,7 +35,7 @@
     }
   },
   "dataset": "Factory-level robotics and automation primary evidence",
-  "retrieved_at": "2026-08-18T22:52:55.740332+00:00",
+  "retrieved_at": "2026-08-18T23:20:30.184950+00:00",
   "rules": [
     "planned, ordered, installed and operational are distinct states",
     "quantities are present only when explicitly disclosed by the primary source",
