@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import asyncio
 
+import pytest
 from mcp import Client
 
 from factorydb import queries
-from factorydb.mcp_server import mcp
+from factorydb.mcp_server import mcp, transport_security_from_env
 
 EXPECTED_TOOLS = {
     "search_companies",
@@ -90,7 +91,7 @@ def test_mcp_country_coverage_does_not_invent_missing_factory() -> None:
     asyncio.run(run())
 
 
-def test_mcp_evidence_matches_canonical_record() -> None:
+def test_mcp_evidence_matches_canonical_record_and_exposes_limits() -> None:
     canonical = queries.facility("toyota-motomachi")
     assert canonical is not None
 
@@ -106,5 +107,53 @@ def test_mcp_evidence_matches_canonical_record() -> None:
             assert evidence["found"] is True
             assert evidence["collection"] == "facilities"
             assert evidence["citations"] == canonical["sources"]
+            provenance = evidence["provenance"][0]
+            assert provenance["source_hash"] is None
+            assert provenance["freshness"] == "unknown"
+            assert provenance["stale"] is None
+            assert provenance["basis"] == canonical["sources"][0]["evidence"]
 
     asyncio.run(run())
+
+
+def test_mcp_data_health_matches_shared_query_layer() -> None:
+    expected = queries.data_health()
+
+    async def run() -> None:
+        async with Client(mcp) as client:
+            result = await client.call_tool("get_data_health", {})
+            assert result.structured_content == expected
+
+    asyncio.run(run())
+
+
+def test_transport_security_keeps_sdk_localhost_default_without_deployment_env(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("FACTORYDB_MCP_ALLOWED_HOSTS", raising=False)
+    monkeypatch.delenv("FACTORYDB_MCP_ALLOWED_ORIGINS", raising=False)
+    assert transport_security_from_env() is None
+
+
+def test_transport_security_requires_hosts_when_origins_are_configured(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("FACTORYDB_MCP_ALLOWED_HOSTS", raising=False)
+    monkeypatch.setenv("FACTORYDB_MCP_ALLOWED_ORIGINS", "https://factory.example")
+    with pytest.raises(ValueError, match="ALLOWED_HOSTS"):
+        transport_security_from_env()
+
+
+def test_transport_security_uses_explicit_host_and_origin_allowlists(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(
+        "FACTORYDB_MCP_ALLOWED_HOSTS",
+        "factory.example,factory.example:*",
+    )
+    monkeypatch.setenv("FACTORYDB_MCP_ALLOWED_ORIGINS", "https://factory.example")
+    settings = transport_security_from_env()
+    assert settings is not None
+    assert settings.enable_dns_rebinding_protection is True
+    assert settings.allowed_hosts == ["factory.example", "factory.example:*"]
+    assert settings.allowed_origins == ["https://factory.example"]

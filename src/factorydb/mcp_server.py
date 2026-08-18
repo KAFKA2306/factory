@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from mcp.server import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
 
 from . import queries
 
 MCP_SCHEMA_VERSION = "factorydb.mcp.v1"
+MCP_MAX_REQUEST_BODY_SIZE = 1_048_576
 
 mcp = MCPServer(
     "FactoryDB",
@@ -17,6 +20,25 @@ mcp = MCPServer(
         "Do not infer missing facts; use source evidence and coverage status as returned."
     ),
 )
+
+
+def _csv_env(name: str) -> list[str]:
+    return [item.strip() for item in os.getenv(name, "").split(",") if item.strip()]
+
+
+def transport_security_from_env() -> TransportSecuritySettings | None:
+    """Configure a real deployment explicitly; otherwise keep the SDK localhost default."""
+    allowed_hosts = _csv_env("FACTORYDB_MCP_ALLOWED_HOSTS")
+    allowed_origins = _csv_env("FACTORYDB_MCP_ALLOWED_ORIGINS")
+    if not allowed_hosts and not allowed_origins:
+        return None
+    if not allowed_hosts:
+        raise ValueError("FACTORYDB_MCP_ALLOWED_HOSTS is required when MCP origins are configured")
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=allowed_hosts,
+        allowed_origins=allowed_origins,
+    )
 
 
 def _collection(name: str, items: list[dict[str, Any]]) -> dict[str, Any]:
@@ -142,7 +164,7 @@ def get_ontology() -> dict[str, Any]:
 
 @mcp.tool()
 def get_source_evidence(entity_id: str) -> dict[str, Any]:
-    """Return source citations for one canonical entity without recomputing the entity."""
+    """Return source citations and explicit provenance limits for one canonical entity."""
     return {
         "schema_version": MCP_SCHEMA_VERSION,
         "evidence": queries.source_evidence(entity_id),
@@ -151,10 +173,16 @@ def get_source_evidence(entity_id: str) -> dict[str, Any]:
 
 @mcp.tool()
 def get_data_health() -> dict[str, Any]:
-    """Return collection counts, latest source retrieval date, and coverage health."""
+    """Return collection counts, source retrieval/provenance limits, and coverage health."""
     return queries.data_health()
 
 
 def main() -> None:
     """Run the MCP server standalone on localhost for development."""
-    mcp.run("streamable-http", host="127.0.0.1", port=8001)
+    mcp.run(
+        "streamable-http",
+        host="127.0.0.1",
+        port=8001,
+        max_request_body_size=MCP_MAX_REQUEST_BODY_SIZE,
+        transport_security=transport_security_from_env(),
+    )
