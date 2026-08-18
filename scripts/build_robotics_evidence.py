@@ -45,7 +45,6 @@ def validate_ledger(rows: list[dict[str, Any]], sources: dict[str, dict[str, Any
     required = {
         "company_id", "facility_id", "company", "factory", "country", "equipment_type",
         "status", "deployment_stage", "observed_at", "description", "source_id",
-        "source_publisher", "source_url", "source_retrieved_at",
     }
     for row in rows:
         missing = required - row.keys()
@@ -53,11 +52,8 @@ def validate_ledger(rows: list[dict[str, Any]], sources: dict[str, dict[str, Any
             raise ValueError(f"automation record missing {sorted(missing)}: {row}")
         if row["status"] not in VALID_STATUS:
             raise ValueError(f"invalid automation status: {row['status']}")
-        source = sources.get(row["source_id"])
-        if not source:
+        if row["source_id"] not in sources:
             raise ValueError(f"unknown source_id {row['source_id']}")
-        if row["source_url"] != source["source_url"] or row["source_publisher"] != source["publisher"]:
-            raise ValueError(f"source contract drift for {row['facility_id']}")
         if "quantity" in row:
             if not isinstance(row["quantity"], (int, float)) or row["quantity"] <= 0:
                 raise ValueError(f"invalid disclosed quantity: {row}")
@@ -161,9 +157,12 @@ def build_views(rows: list[dict[str, Any]], manifest: dict[str, Any], api_dir: P
         source = source_map[row["source_id"]]
         enriched.append({
             **row,
+            "source_publisher": source["publisher"],
+            "source_url": source["source_url"],
+            "source_published_at": source["published_at"],
             "source_sha256": source["sha256"],
             "source_evidence_path": source["evidence_path"],
-            "source_live_retrieved_at": manifest["retrieved_at"],
+            "source_retrieved_at": manifest["retrieved_at"],
             "factorydb_core_company_match": row["company_id"] in company_ids,
             "factorydb_core_facility_match": row["facility_id"] in facility_ids,
         })
