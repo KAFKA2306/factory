@@ -56,8 +56,12 @@ def get_countries() -> list[dict]:
 
 
 @app.get("/v1/companies")
-def get_companies() -> list[dict]:
-    return queries.companies()
+def get_companies(
+    query: str | None = None,
+    country: str | None = Query(default=None, min_length=2, max_length=2),
+    limit: int = Query(default=100, ge=1, le=queries.MAX_RESULTS),
+) -> list[dict]:
+    return queries.search_companies(query=query, country=country, limit=limit)
 
 
 @app.get("/v1/facilities")
@@ -65,8 +69,16 @@ def get_facilities(
     country: str | None = Query(default=None, min_length=2, max_length=2),
     process: str | None = None,
     product: str | None = None,
+    query: str | None = None,
+    limit: int = Query(default=100, ge=1, le=queries.MAX_RESULTS),
 ) -> list[dict]:
-    return queries.facilities(country=country, process=process, product=product)
+    return queries.facilities(
+        country=country,
+        process=process,
+        product=product,
+        query=query,
+        limit=limit,
+    )
 
 
 @app.get("/v1/facilities/{facility_id}")
@@ -105,6 +117,19 @@ def get_financials() -> list[dict]:
 @app.get("/v1/ontology")
 def get_ontology() -> list[dict]:
     return queries.ontology()
+
+
+@app.get("/v1/source-evidence/{entity_id}")
+def get_source_evidence(entity_id: str) -> dict:
+    evidence = queries.source_evidence(entity_id)
+    if not evidence["found"]:
+        raise HTTPException(status_code=404, detail="entity not found")
+    return evidence
+
+
+@app.get("/v1/data-health")
+def get_data_health() -> dict:
+    return queries.data_health()
 
 
 # Mount last: Starlette routes are matched in order and Mount("/") catches all remaining paths.
