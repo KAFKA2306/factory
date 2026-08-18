@@ -27,7 +27,14 @@ def validate(require_factory_every_country: bool = False) -> dict:
     if len(countries) != 249:
         errors.append(f"country shards must contain 249 ISO entries; got {len(countries)}")
 
-    for collection_name in ("countries", "companies", "facilities", "assets", "investments", "financials"):
+    for collection_name in (
+        "countries",
+        "companies",
+        "facilities",
+        "assets",
+        "investments",
+        "financials",
+    ):
         ids = [row.id for row in data[collection_name]]
         duplicates = sorted({item for item in ids if ids.count(item) > 1})
         if duplicates:

@@ -46,8 +46,7 @@ def latest_fact(payload: dict, names: list[str], currency: str) -> dict | None:
             candidates = [
                 row
                 for row in candidates
-                if row.get("form") in {"20-F", "10-K", "6-K"}
-                and row.get("val") is not None
+                if row.get("form") in {"20-F", "10-K", "6-K"} and row.get("val") is not None
             ]
             if candidates:
                 row = max(
@@ -64,11 +63,7 @@ def latest_fact(payload: dict, names: list[str], currency: str) -> dict | None:
 
 
 def main() -> None:
-    existing = [
-        json.loads(line)
-        for line in OUT.read_text(encoding="utf-8").splitlines()
-        if line
-    ]
+    existing = [json.loads(line) for line in OUT.read_text(encoding="utf-8").splitlines() if line]
     existing = [row for row in existing if not row["id"].startswith("financial:sec:")]
     generated = []
     retrieved_at = datetime.now(UTC).date().isoformat()

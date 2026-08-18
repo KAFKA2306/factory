@@ -22,13 +22,9 @@ def validate_coverage_resolutions() -> dict:
 
     for resolution in data["coverage_resolutions"]:
         if resolution.country_code not in country_codes:
-            errors.append(
-                f"{resolution.id}: unknown country_code {resolution.country_code}"
-            )
+            errors.append(f"{resolution.id}: unknown country_code {resolution.country_code}")
         if resolution.country_code in facility_country_codes:
-            errors.append(
-                f"{resolution.id}: country already has a qualifying facility record"
-            )
+            errors.append(f"{resolution.id}: country already has a qualifying facility record")
 
     report = coverage(data)
     if report["factory_covered_countries"] > FACTORY_COVERAGE_SCOPE_CAP:

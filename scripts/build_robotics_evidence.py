@@ -31,7 +31,9 @@ def sha256(raw: bytes) -> str:
 
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    return [
+        json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()
+    ]
 
 
 def normalized_text(raw: bytes) -> str:
@@ -43,8 +45,17 @@ def normalized_text(raw: bytes) -> str:
 
 def validate_ledger(rows: list[dict[str, Any]], sources: dict[str, dict[str, Any]]) -> None:
     required = {
-        "company_id", "facility_id", "company", "factory", "country", "equipment_type",
-        "status", "deployment_stage", "observed_at", "description", "source_id",
+        "company_id",
+        "facility_id",
+        "company",
+        "factory",
+        "country",
+        "equipment_type",
+        "status",
+        "deployment_stage",
+        "observed_at",
+        "description",
+        "source_id",
     }
     for row in rows:
         missing = required - row.keys()
@@ -59,7 +70,10 @@ def validate_ledger(rows: list[dict[str, Any]], sources: dict[str, dict[str, Any
                 raise ValueError(f"invalid disclosed quantity: {row}")
             if not row.get("quantity_unit") or not row.get("quantity_qualifier"):
                 raise ValueError(f"quantity lacks unit/qualifier: {row}")
-        if row.get("status") == "planned" and row.get("deployment_stage") in {"production", "series_operation"}:
+        if row.get("status") == "planned" and row.get("deployment_stage") in {
+            "production",
+            "series_operation",
+        }:
             raise ValueError(f"planned record mislabeled as production: {row}")
     if len({row["company_id"] for row in rows}) < 10:
         raise ValueError("robotics evidence must cover at least 10 companies")
@@ -149,23 +163,27 @@ def load_core_ids() -> tuple[set[str], set[str]]:
     return company_ids, facility_ids
 
 
-def build_views(rows: list[dict[str, Any]], manifest: dict[str, Any], api_dir: Path) -> dict[str, Any]:
+def build_views(
+    rows: list[dict[str, Any]], manifest: dict[str, Any], api_dir: Path
+) -> dict[str, Any]:
     source_map = {row["source_id"]: row for row in manifest["sources"]}
     company_ids, facility_ids = load_core_ids()
     enriched = []
     for row in rows:
         source = source_map[row["source_id"]]
-        enriched.append({
-            **row,
-            "source_publisher": source["publisher"],
-            "source_url": source["source_url"],
-            "source_published_at": source["published_at"],
-            "source_sha256": source["sha256"],
-            "source_evidence_path": source["evidence_path"],
-            "source_retrieved_at": manifest["retrieved_at"],
-            "factorydb_core_company_match": row["company_id"] in company_ids,
-            "factorydb_core_facility_match": row["facility_id"] in facility_ids,
-        })
+        enriched.append(
+            {
+                **row,
+                "source_publisher": source["publisher"],
+                "source_url": source["source_url"],
+                "source_published_at": source["published_at"],
+                "source_sha256": source["sha256"],
+                "source_evidence_path": source["evidence_path"],
+                "source_retrieved_at": manifest["retrieved_at"],
+                "factorydb_core_company_match": row["company_id"] in company_ids,
+                "factorydb_core_facility_match": row["facility_id"] in facility_ids,
+            }
+        )
 
     by_company: dict[str, list[dict[str, Any]]] = defaultdict(list)
     by_country: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -183,17 +201,31 @@ def build_views(rows: list[dict[str, Any]], manifest: dict[str, Any], api_dir: P
         "factory_count": len({row["facility_id"] for row in enriched}),
         "country_count": len({row["country"] for row in enriched}),
         "primary_source_count": len(manifest["sources"]),
-        "core_company_match_count": len({row["company_id"] for row in enriched if row["factorydb_core_company_match"]}),
-        "core_factory_match_count": len({row["facility_id"] for row in enriched if row["factorydb_core_facility_match"]}),
+        "core_company_match_count": len(
+            {row["company_id"] for row in enriched if row["factorydb_core_company_match"]}
+        ),
+        "core_factory_match_count": len(
+            {row["facility_id"] for row in enriched if row["factorydb_core_facility_match"]}
+        ),
         "status_counts": dict(sorted(Counter(row["status"] for row in enriched).items())),
-        "equipment_type_counts": dict(sorted(Counter(row["equipment_type"] for row in enriched).items())),
+        "equipment_type_counts": dict(
+            sorted(Counter(row["equipment_type"] for row in enriched).items())
+        ),
     }
     identity = {
         "schema_version": 1,
-        "core_company_matches": sorted({row["company_id"] for row in enriched if row["factorydb_core_company_match"]}),
-        "core_factory_matches": sorted({row["facility_id"] for row in enriched if row["factorydb_core_facility_match"]}),
-        "companies_not_in_core": sorted({row["company_id"] for row in enriched if not row["factorydb_core_company_match"]}),
-        "factories_not_in_core": sorted({row["facility_id"] for row in enriched if not row["factorydb_core_facility_match"]}),
+        "core_company_matches": sorted(
+            {row["company_id"] for row in enriched if row["factorydb_core_company_match"]}
+        ),
+        "core_factory_matches": sorted(
+            {row["facility_id"] for row in enriched if row["factorydb_core_facility_match"]}
+        ),
+        "companies_not_in_core": sorted(
+            {row["company_id"] for row in enriched if not row["factorydb_core_company_match"]}
+        ),
+        "factories_not_in_core": sorted(
+            {row["facility_id"] for row in enriched if not row["factorydb_core_facility_match"]}
+        ),
         "rule": "A false core match is explicit; robotics identity is never silently claimed to exist in the FactoryDB core tables.",
     }
     api_dir.mkdir(parents=True, exist_ok=True)
@@ -202,7 +234,10 @@ def build_views(rows: list[dict[str, Any]], manifest: dict[str, Any], api_dir: P
         "by-company.json": {"schema_version": 1, "groups": dict(sorted(by_company.items()))},
         "by-country.json": {"schema_version": 1, "groups": dict(sorted(by_country.items()))},
         "by-status.json": {"schema_version": 1, "groups": dict(sorted(by_status.items()))},
-        "by-equipment-type.json": {"schema_version": 1, "groups": dict(sorted(by_equipment.items()))},
+        "by-equipment-type.json": {
+            "schema_version": 1,
+            "groups": dict(sorted(by_equipment.items())),
+        },
         "identity-coverage.json": identity,
         "provenance.json": manifest,
     }
@@ -239,7 +274,9 @@ def main() -> None:
     if len(source_map) != len(source_list):
         raise ValueError("duplicate robotics source_id")
     validate_ledger(rows, source_map)
-    manifest = verify_manifest(args.data_root) if args.offline else collect(source_list, args.data_root)
+    manifest = (
+        verify_manifest(args.data_root) if args.offline else collect(source_list, args.data_root)
+    )
     build_views(rows, manifest, args.api_dir)
 
 

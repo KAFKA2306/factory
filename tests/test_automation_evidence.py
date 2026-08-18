@@ -25,9 +25,7 @@ VALID_STATUS = {"planned", "ordered", "installed", "operational", "retired"}
 
 def load_rows() -> list[dict[str, object]]:
     return [
-        json.loads(line)
-        for line in DATA.read_text(encoding="utf-8").splitlines()
-        if line.strip()
+        json.loads(line) for line in DATA.read_text(encoding="utf-8").splitlines() if line.strip()
     ]
 
 
