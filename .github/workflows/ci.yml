@@ -27,6 +27,12 @@ jobs:
       - run: uv sync --locked --extra dev
       - name: Run repository checks
         run: COVERAGE_REPORT=coverage-report.json make check
+      - name: Exercise the public search/compare/share journey in Chrome
+        run: |
+          python -m http.server 8765 --directory web > /tmp/factorydb-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" || true' EXIT
+          node scripts/browser_smoke.mjs http://127.0.0.1:8765/
       - name: Build auditable coverage state
         env:
           COVERAGE_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
