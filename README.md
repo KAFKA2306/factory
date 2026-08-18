@@ -3,6 +3,7 @@
 [![CI](https://github.com/KAFKA2306/factory/actions/workflows/ci.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/ci.yml)
 [![Deploy Pages](https://github.com/KAFKA2306/factory/actions/workflows/pages.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/pages.yml)
 [![Refresh official data](https://github.com/KAFKA2306/factory/actions/workflows/refresh.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/refresh.yml)
+[![Robotics evidence](https://github.com/KAFKA2306/factory/actions/workflows/robotics-evidence.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/robotics-evidence.yml)
 
 **「どの会社が、どこで、何を、どう作っているか」を、出典まで戻って比較できる製造拠点データベース。**
 
@@ -53,6 +54,18 @@ ISO 3166-1、ISIC、FastAPI、MCP、JSONL は価値そのものではありま�
 179国・地域は現行スコープ上限です。以後の通常改善は国数の拡張より、**既存recordのsource強度、製品・工程・設備・投資・財務の粒度**を優先します。
 
 現在値はvalidationと生成catalogを優先し、READMEの数字を正本とはしません。
+
+## Robotics evidence
+
+ARK Big Ideas 2026 の Robotics を、工場単位の一次情報で検証する正準layerです。
+
+- 入力ledger: [`data/automation.jsonl`](data/automation.jsonl)
+- 一次source registry: [`data/robotics-sources.json`](data/robotics-sources.json)
+- API index: [`api/v1/robotics/index.json`](api/v1/robotics/index.json)
+- 全record: [`api/v1/robotics/records.json`](api/v1/robotics/records.json)
+- FactoryDB coreとのidentity照合: [`api/v1/robotics/identity-coverage.json`](api/v1/robotics/identity-coverage.json)
+
+`planned / ordered / installed / operational` は別statusです。robot数・automation率などは一次sourceが明示した場合だけ保持し、企業全体や複数工場の合計を個別工場へ配分しません。一次ページはworkflowでlive検証してSHA-256 evidenceとして保存し、APIをraw evidenceだけからoffline再生成して差分検証します。
 
 ## 利用者ができること
 
@@ -169,6 +182,7 @@ CIでは少なくとも次を検証します。
 - REST / MCP query parity
 - MCP tool contract
 - EDINETDB projectionの型・単位・fail-close behavior
+- Roboticsの10社・30工場以上のcoverage、source hash、status分離、offline rebuild
 
 ```bash
 python -m factorydb.coverage_validation
