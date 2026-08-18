@@ -75,20 +75,20 @@ jobs:
         run: |
           factorydb-verification-pack \
             --company company:toyota-motor-corporation \
-            --format json > facility-verification-pack.json
+            --format json > web/facility-verification-pack.json
           factorydb-verification-pack \
             --company company:toyota-motor-corporation \
-            --format markdown > facility-verification-pack.md
-          python -m json.tool facility-verification-pack.json > /dev/null
-          grep -q '"decision_status": "VERIFIED"' facility-verification-pack.json
-          grep -q 'not a certification' facility-verification-pack.md
+            --format markdown > web/facility-verification-pack.md
+          python -m json.tool web/facility-verification-pack.json > /dev/null
+          grep -q '"decision_status": "VERIFIED"' web/facility-verification-pack.json
+          grep -q 'not a certification' web/facility-verification-pack.md
       - name: Upload Facility Verification Pack evidence
         uses: actions/upload-artifact@v4
         with:
           name: facility-verification-pack-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
-            facility-verification-pack.json
-            facility-verification-pack.md
+            web/facility-verification-pack.json
+            web/facility-verification-pack.md
           if-no-files-found: error
           retention-days: 14
       - run: python scripts/build_catalog.py

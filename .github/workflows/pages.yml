@@ -29,6 +29,15 @@ jobs:
       - run: python -m factorydb.validate
       - run: python -m factorydb.coverage_validation
       - run: python scripts/build_catalog.py
+      - name: Build public Facility Verification Pack sample
+        run: |
+          factorydb-verification-pack \
+            --company company:toyota-motor-corporation \
+            --format json > web/facility-verification-pack.json
+          factorydb-verification-pack \
+            --company company:toyota-motor-corporation \
+            --format markdown > web/facility-verification-pack.md
+          python -m json.tool web/facility-verification-pack.json > /dev/null
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
