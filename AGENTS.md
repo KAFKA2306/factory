@@ -29,6 +29,14 @@ This file applies to the whole repository. Use it as a short index; detailed rul
 
 Do not execute trades, procurement, transfers or account actions. Unobserved source, CI, deployment or real-world operational outcomes remain unverified.
 
+## Branch lifecycle
+
+- Aside from the default branch and unavoidable platform-managed/protected branches, a persistent branch is permitted only while it is the head branch of a currently open PR.
+- Creating a work branch creates an obligation to open or reuse its canonical PR immediately; do not use branches as backlog, continuation state, backup, archive, or evidence storage.
+- After a PR is merged or closed, delete its head branch after verifying PR/main state. A branch with no open PR is an orphan and must be deleted.
+- Before and after work, compare repository branches with open PR heads. Do not report cleanup/fixed point while an orphan task branch remains.
+- If the available tool cannot delete a branch, record that as a tooling blocker and do not claim cleanup complete. Never create another orphan branch as a workaround.
+
 ## Merge and release are separate
 
 ### PR merge conditions
@@ -63,4 +71,4 @@ Keep pull requests focused, keep generated output reproducible from canonical in
 
 ## Completion report
 
-Report verified factory/robotics evidence or user capability Before -> After, primary/canonical evidence, Issue/PR/commit/check evidence, then report `merged` and `released` separately with direct evidence for each. Include duplicate/manual work removed and the remaining verified blocker.
+Report verified factory/robotics evidence or user capability Before -> After, primary/canonical evidence, Issue/PR/commit/check evidence, then report `merged` and `released` separately with direct evidence for each. Include branch cleanup state, duplicate/manual work removed and the remaining verified blocker.
