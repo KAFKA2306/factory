@@ -29,6 +29,20 @@ This file applies to the whole repository. Use it as a short index; detailed rul
 
 Do not execute trades, procurement, transfers or account actions. Unobserved source, CI, deployment or real-world operational outcomes remain unverified.
 
+## Merge and release are separate
+
+### PR merge conditions
+
+A PR may merge when the bounded repository-local change is correct on the exact reviewed revision: canonical data/source rules hold, relevant validation/tests pass, generated catalog/output is reproducible when affected, and no unresolved review or correctness blocker remains.
+
+A production Pages URL, a future factory/robotics observation, live source refresh after merge, or real-world installation/operation evidence is **not** a merge condition unless the PR specifically changes the release mechanism and pre-merge validation of that mechanism belongs to the bounded change.
+
+### Product/data release conditions
+
+Release is a separate post-merge decision. Treat factory data/catalog/API as released only after the merged `main` revision is read back and every release surface in scope is actually verified, including generated catalog consistency, REST/MCP/public Pages when applicable, deployment identity, fresh source acquisition when required, and rollback/rebuild path.
+
+A merged PR does not prove production release or real-world adoption. A release/deployment/source blocker may block release without invalidating a correctly merged repository change. Report merge and release independently.
+
 ## Verify changes
 
 Run the checks that apply to the change; repository CI runs the full set:
@@ -43,10 +57,10 @@ test -s web/catalog.json
 python -m json.tool web/catalog.json > /dev/null
 ```
 
-Do not weaken validation to make a change pass. If a required check cannot run, record the blocker and leave that result unverified.
+These checks are merge evidence for repository correctness. Production/public read-back is separate release evidence. Do not weaken validation to make a change pass. If a required check cannot run, record the blocker and leave that result unverified.
 
 Keep pull requests focused, keep generated output reproducible from canonical inputs, and prefer deleting duplication over adding another source of truth.
 
 ## Completion report
 
-Report verified factory/robotics evidence or user capability Before -> After, primary/canonical evidence, Issue/PR/commit/check/public evidence when applicable, duplicate/manual work removed, and the remaining verified blocker.
+Report verified factory/robotics evidence or user capability Before -> After, primary/canonical evidence, Issue/PR/commit/check evidence, then report `merged` and `released` separately with direct evidence for each. Include duplicate/manual work removed and the remaining verified blocker.
