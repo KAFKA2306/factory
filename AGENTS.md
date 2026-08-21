@@ -18,6 +18,17 @@ This file applies to the whole repository. Use it as a short index; detailed rul
 - Keep source URL, publisher, retrieval date, and evidence attached to accepted factual records.
 - REST, MCP, and the public catalog must read the same canonical data rather than creating separate truths.
 
+## Autonomous execution
+
+1. Re-read current `main`, README, open Issues/PRs, canonical factory/robotics data, workflows/tests and public interfaces before choosing work.
+2. Continue one existing canonical workline for the same outcome before creating another collector, dataset, branch or Issue.
+3. Prefer newly verified factory/robotics records, identity/status corrections, reproducible adoption/coverage views, public task completion, then simplification that removes duplicate/manual work.
+4. Require source, identity, status and period comparability before aggregating. Announced, ordered, installed, commissioned and operating automation are distinct states.
+5. Cross-repository ARK or investment forecast comparison belongs in `investor2`; do not copy forecast authority here or infer installed fleets/productivity/ROI from announcements.
+6. Stop at the fixed point. If no new primary evidence or executable user/data delta exists, make no repository change.
+
+Do not execute trades, procurement, transfers or account actions. Unobserved source, CI, deployment or real-world operational outcomes remain unverified.
+
 ## Verify changes
 
 Run the checks that apply to the change; repository CI runs the full set:
@@ -35,3 +46,7 @@ python -m json.tool web/catalog.json > /dev/null
 Do not weaken validation to make a change pass. If a required check cannot run, record the blocker and leave that result unverified.
 
 Keep pull requests focused, keep generated output reproducible from canonical inputs, and prefer deleting duplication over adding another source of truth.
+
+## Completion report
+
+Report verified factory/robotics evidence or user capability Before -> After, primary/canonical evidence, Issue/PR/commit/check/public evidence when applicable, duplicate/manual work removed, and the remaining verified blocker.
