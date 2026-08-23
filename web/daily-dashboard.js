@@ -59,23 +59,23 @@ function injectDashboard() {
   section.innerHTML = `
     <div class="daily-heading">
       <div>
-        <p class="eyebrow">FACTORY AUTOMATION · VERIFIED PRIMARY EVIDENCE</p>
-        <h1 id="today-title">工場automationで、<br>最後に何が変わった？</h1>
-        <p class="lead">計画・発注・導入・実運用を混ぜず、企業や政府の一次情報で最後に確認できた変化から見ます。</p>
+        <p class="eyebrow">工場で進むロボット導入</p>
+        <h1 id="today-title">工場でロボット導入は、<br>どこまで進んでいる？</h1>
+        <p class="lead">計画・発注・導入・実運用を分けて、企業や政府の公表から現在確認できる動きを追います。</p>
       </div>
-      <p id="daily-asof" class="daily-asof">canonical robotics dataを読み込んでいます。</p>
+      <p id="daily-asof" class="daily-asof">情報を読み込んでいます。</p>
     </div>
 
     <div id="daily-latest" class="daily-latest" aria-live="polite">
-      <p class="daily-loading">最新の確認事実を読み込んでいます。</p>
+      <p class="daily-loading">最新の動きを読み込んでいます。</p>
     </div>
 
-    <div id="daily-counts" class="daily-counts" aria-label="automation evidence status"></div>
+    <div id="daily-counts" class="daily-counts" aria-label="ロボット導入状況"></div>
 
     <div class="daily-history">
       <div class="section-title">
         <div>
-          <p class="kicker">LATEST VERIFIED CHANGES</p>
+          <p class="kicker">最近の動き</p>
           <h2>最近確認された変化</h2>
         </div>
         <a class="daily-explore-link" href="#explorer">全工場を探す ↓</a>
@@ -91,7 +91,7 @@ function injectDashboard() {
   if (nav && !nav.querySelector('a[href="#today"]')) {
     const link = document.createElement("a");
     link.href = "#today";
-    link.textContent = "Today";
+    link.textContent = "最新動向";
     nav.insertBefore(link, nav.firstChild);
   }
 }
@@ -111,7 +111,7 @@ function renderLatest(record) {
   document.querySelector("#daily-latest").innerHTML = `
     <article class="daily-feature">
       <div class="daily-feature-topline">
-        <span class="daily-label">Latest verified · ${escapeHtml(statusLabel[record.status] || record.status)}</span>
+        <span class="daily-label">最新確認 · ${escapeHtml(statusLabel[record.status] || record.status)}</span>
         <time datetime="${escapeHtml(record.observed_at)}">${escapeHtml(formatDate(record.observed_at))}</time>
       </div>
       <h2>${escapeHtml(record.company)}</h2>
@@ -144,7 +144,7 @@ function renderEvents(records) {
       </div>
       <h3>${escapeHtml(record.company)} · ${escapeHtml(record.factory)}</h3>
       <p>${escapeHtml(humanize(record.equipment_type))}</p>
-      ${record.source_url ? `<a href="${escapeHtml(record.source_url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(record.company)} ${escapeHtml(record.factory)} の一次情報を見る">Evidence ↗</a>` : ""}
+      ${record.source_url ? `<a href="${escapeHtml(record.source_url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(record.company)} ${escapeHtml(record.factory)} の一次情報を見る">一次情報 ↗</a>` : ""}
     </article>
   `).join("");
 }
@@ -166,15 +166,16 @@ async function loadDailyDashboard() {
     renderLatest(records[0]);
     renderCounts(index);
     renderEvents(records);
-    document.querySelector("#daily-asof").textContent = `Source evidence retrieved ${formatTimestamp(index.retrieved_at)}`;
-    document.querySelector("#daily-status").textContent = `${index.coverage.observation_count.toLocaleString("ja-JP")}件の工場automation観測 · ${index.coverage.primary_source_count.toLocaleString("ja-JP")}件の一次source。最新eventが今日とは限らないため、日付をそのまま表示しています。`;
+    document.querySelector("#daily-asof").textContent = `一次情報の最終取得: ${formatTimestamp(index.retrieved_at)}`;
+    document.querySelector("#daily-status").textContent = `${index.coverage.observation_count.toLocaleString("ja-JP")}件の公開情報を収録。表示日付は各事実が確認された日です。`;
   } catch (error) {
-    document.querySelector("#daily-latest").innerHTML = '<div class="empty-state">最新のrobotics evidenceを表示できません。</div>';
+    console.error("Failed to load robotics dashboard", error);
+    document.querySelector("#daily-latest").innerHTML = '<div class="empty-state">ロボット導入の最新情報を表示できません。</div>';
     document.querySelector("#daily-counts").innerHTML = "";
     document.querySelector("#daily-events").innerHTML = "";
-    document.querySelector("#daily-asof").textContent = "canonical robotics data unavailable";
+    document.querySelector("#daily-asof").textContent = "最新情報の取得状況を確認できません。";
     document.querySelector("#daily-status").className = "status-line error";
-    document.querySelector("#daily-status").textContent = `データ読み込みに失敗しました: ${error.message}`;
+    document.querySelector("#daily-status").textContent = "データを読み込めませんでした。ページを再読み込みしてください。";
   }
 }
 
