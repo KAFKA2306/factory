@@ -33,6 +33,13 @@ jobs:
       - run: python -m factorydb.validate
       - run: python -m factorydb.coverage_validation
       - run: python scripts/build_catalog.py
+      - name: Publish canonical robotics API with Pages artifact
+        run: |
+          mkdir -p web/api/v1
+          rm -rf web/api/v1/robotics
+          cp -R api/v1/robotics web/api/v1/robotics
+          python -m json.tool web/api/v1/robotics/index.json > /dev/null
+          python -m json.tool web/api/v1/robotics/records.json > /dev/null
       - name: Build public Facility Verification Pack sample
         run: |
           factorydb-verification-pack \
