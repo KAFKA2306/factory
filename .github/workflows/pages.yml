@@ -33,6 +33,12 @@ jobs:
       - run: python -m factorydb.validate
       - run: python -m factorydb.coverage_validation
       - run: python scripts/build_catalog.py
+      - name: Check Pages JavaScript
+        run: |
+          node --check web/app.js
+          node --check web/daily-dashboard.js
+          node --check scripts/browser_smoke.mjs
+          node --check scripts/daily_dashboard_smoke.mjs
       - name: Publish canonical robotics API with Pages artifact
         run: |
           mkdir -p web/api/v1
@@ -76,8 +82,10 @@ jobs:
           path: web
       - id: deployment
         uses: actions/deploy-pages@v4
-      - name: Verify exact production artifact and browser journey
+      - name: Verify exact production artifact and explorer journey
         run: node scripts/browser_smoke.mjs "${{ steps.deployment.outputs.page_url }}" "${{ github.sha }}"
+      - name: Verify daily robotics production surface
+        run: node scripts/daily_dashboard_smoke.mjs "${{ steps.deployment.outputs.page_url }}"
       - name: Verify the public procurement sample
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
@@ -121,6 +129,7 @@ jobs:
           - GitHub Actions run: https://github.com/$GITHUB_REPOSITORY/actions/runs/$RUN_ID
           - \`deployment.json\` on Pages matched exact \`$SOURCE_COMMIT\`
           - real Chrome journey passed: load → search → select 2 facilities → compare → source links → URL share/restore
+          - daily robotics surface loaded canonical API, latest verified event, status counts, as-of, and evidence links in real Chrome
           - empty-result state passed and explicitly says 0 search results do not prove nonexistence
           - forced \`catalog.json\` network failure passed the visible error-state check and cleared stale cards
           - freshness/staleness is explicitly unresolved rather than fabricated
@@ -131,4 +140,26 @@ jobs:
           This comment is emitted only after every production check above succeeds.
           EOF
             gh issue comment 20 --repo "$GITHUB_REPOSITORY" --body-file /tmp/production-evidence.md
+          fi
+      - name: Record Daily Robotics acceptance evidence on Issue 22
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          SOURCE_COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          if [ "$(gh issue view 22 --repo "$GITHUB_REPOSITORY" --json state --jq .state)" = "OPEN" ]; then
+            cat > /tmp/daily-production-evidence.md <<EOF
+          <!-- factorydb-daily-robotics-production-evidence -->
+          Daily Robotics production acceptance passed for exact main commit \`$SOURCE_COMMIT\`.
+
+          - Pages URL: $PAGE_URL
+          - Actions run: https://github.com/$GITHUB_REPOSITORY/actions/runs/$RUN_ID
+          - canonical \`api/v1/robotics/index.json\` and \`records.json\` were included in the Pages artifact
+          - real Chrome rendered the latest verified event, status counts, retrieval as-of, recent verified changes, and primary-source links
+          - existing Explorer browser journey and accessibility/reflow checks also passed
+
+          This comment is emitted only after deployment and both browser smoke suites succeed.
+          EOF
+            gh issue comment 22 --repo "$GITHUB_REPOSITORY" --body-file /tmp/daily-production-evidence.md
           fi
