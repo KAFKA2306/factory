@@ -59,9 +59,9 @@ function injectDashboard() {
   section.innerHTML = `
     <div class="daily-heading">
       <div>
-        <p class="eyebrow">工場で進むロボット導入</p>
-        <h1 id="today-title">工場でロボット導入は、<br>どこまで進んでいる？</h1>
-        <p class="lead">計画・発注・導入・実運用を分けて、企業や政府の公表から現在確認できる動きを追います。</p>
+        <p class="eyebrow">世界の工場で進む自動化</p>
+        <h1 id="today-title">工場の自動化は、<br>どこまで進んでいる？</h1>
+        <p class="lead">ロボット、無人搬送、画像検査などの導入を、計画・発注・導入・実運用に分けて、企業や政府の公表から追います。</p>
       </div>
       <p id="daily-asof" class="daily-asof">情報を読み込んでいます。</p>
     </div>
@@ -70,7 +70,7 @@ function injectDashboard() {
       <p class="daily-loading">最新の動きを読み込んでいます。</p>
     </div>
 
-    <div id="daily-counts" class="daily-counts" aria-label="ロボット導入状況"></div>
+    <div id="daily-counts" class="daily-counts" aria-label="工場の自動化状況"></div>
 
     <div class="daily-history">
       <div class="section-title">
@@ -170,7 +170,7 @@ async function loadDailyDashboard() {
     document.querySelector("#daily-status").textContent = `${index.coverage.observation_count.toLocaleString("ja-JP")}件の公開情報を収録。表示日付は各事実が確認された日です。`;
   } catch (error) {
     console.error("Failed to load robotics dashboard", error);
-    document.querySelector("#daily-latest").innerHTML = '<div class="empty-state">ロボット導入の最新情報を表示できません。</div>';
+    document.querySelector("#daily-latest").innerHTML = '<div class="empty-state">工場自動化の最新情報を表示できません。</div>';
     document.querySelector("#daily-counts").innerHTML = "";
     document.querySelector("#daily-events").innerHTML = "";
     document.querySelector("#daily-asof").textContent = "最新情報の取得状況を確認できません。";
