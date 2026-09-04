@@ -1,3 +1,5 @@
+https://kafka2306.github.io/factory/
+
 # FactoryDB
 
 [![CI](https://github.com/KAFKA2306/factory/actions/workflows/ci.yml/badge.svg)](https://github.com/KAFKA2306/factory/actions/workflows/ci.yml)
@@ -46,7 +48,7 @@ ISO 3166-1、ISIC、FastAPI、MCP、JSONL は価値そのものではありま�
 現在のmainでは次を正準データとして扱います。
 
 - ISO 3166-1 国・地域プロファイル: 249
-- 実在する工場・製造拠点: 202
+- 実在する工場・製造拠点: 209
 - 工場レコード収録国・地域: 179
 - 公式根拠付き非該当地域: 5
 - 企業: 129
