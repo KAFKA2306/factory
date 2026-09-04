@@ -49,8 +49,7 @@ const requiredFragments = [
   latest.factory,
   latest.observed_at,
   "一次情報を見る",
-  `${index.coverage.observation_count}件の工場automation観測`,
-  `${index.coverage.primary_source_count}件の一次source`,
+  `${index.coverage.observation_count}件の公開情報を収録`,
 ];
 for (const fragment of requiredFragments) {
   if (!dom.includes(fragment)) throw new Error(`daily dashboard DOM missing: ${fragment}`);
