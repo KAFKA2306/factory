@@ -102,9 +102,7 @@ def _automation_claims(company_id: str, facility_ids: set[str]) -> list[Evidence
                 )
             source_url = source.get("source_url")
             if not source_url:
-                raise ValueError(
-                    f"robotics source {source_id!r} has no source_url"
-                )
+                raise ValueError(f"robotics source {source_id!r} has no source_url")
             value = {
                 key: observation[key]
                 for key in (
