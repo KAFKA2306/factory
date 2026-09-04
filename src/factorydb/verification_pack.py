@@ -75,7 +75,7 @@ def _automation_claims(company_id: str, facility_ids: set[str]) -> list[Evidence
     source_doc = json.loads((DATA / "robotics-sources.json").read_text(encoding="utf-8"))
     sources = source_doc.get("sources")
     if not isinstance(sources, list):
-        raise ValueError("robotics-sources.json must contain a sources list")
+        raise TypeError("robotics-sources.json must contain a sources list")
     source_map = {source["source_id"]: source for source in sources}
     if len(source_map) != len(sources):
         raise ValueError("duplicate robotics source_id")
