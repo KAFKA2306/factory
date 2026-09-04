@@ -24,7 +24,7 @@ const browser = spawn(chrome, [
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function retry(fn, attempts = 200) {
+async function retry(fn, attempts = 400) {
   let lastError;
   for (let index = 0; index < attempts; index += 1) {
     try {
