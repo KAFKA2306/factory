@@ -6,7 +6,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
-from .store import load_all
+from .store import DATA, load_all
 
 EvidenceStatus = Literal["VERIFIED", "PARTIAL", "NOT_FOUND", "CONFLICT"]
 CoverageStatus = Literal["factory_present", "verified_no_qualifying_factory", "unresolved"]
@@ -69,6 +69,67 @@ def _claim(row: Any, field: str, value: Any | None = None) -> EvidenceClaim:
         source_urls=urls,
         note=None if urls else "Canonical record exists but has no source citation.",
     )
+
+
+def _automation_claims(company_id: str, facility_ids: set[str]) -> list[EvidenceClaim]:
+    source_doc = json.loads((DATA / "robotics-sources.json").read_text(encoding="utf-8"))
+    sources = source_doc.get("sources")
+    if not isinstance(sources, list):
+        raise ValueError("robotics-sources.json must contain a sources list")
+    source_map = {source["source_id"]: source for source in sources}
+    if len(source_map) != len(sources):
+        raise ValueError("duplicate robotics source_id")
+
+    claims: list[EvidenceClaim] = []
+    with (DATA / "automation.jsonl").open(encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, 1):
+            if not line.strip():
+                continue
+            try:
+                observation = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"automation.jsonl:{line_number}: {exc}") from exc
+            if observation.get("company_id") != company_id:
+                continue
+            facility_id = observation.get("facility_id")
+            if facility_id not in facility_ids:
+                continue
+            source_id = observation.get("source_id")
+            source = source_map.get(source_id)
+            if source is None:
+                raise ValueError(
+                    f"automation.jsonl:{line_number}: unknown robotics source_id {source_id!r}"
+                )
+            source_url = source.get("source_url")
+            if not source_url:
+                raise ValueError(
+                    f"robotics source {source_id!r} has no source_url"
+                )
+            value = {
+                key: observation[key]
+                for key in (
+                    "equipment_type",
+                    "status",
+                    "deployment_stage",
+                    "observed_at",
+                    "description",
+                    "quantity",
+                    "quantity_unit",
+                    "quantity_qualifier",
+                    "performance_metric",
+                )
+                if key in observation
+            }
+            claims.append(
+                EvidenceClaim(
+                    entity_id=facility_id,
+                    field="automation_observation",
+                    value=value,
+                    evidence_status="VERIFIED",
+                    source_urls=[source_url],
+                )
+            )
+    return claims
 
 
 def build_facility_verification_pack(company_id: str) -> FacilityVerificationPack:
@@ -142,6 +203,8 @@ def build_facility_verification_pack(company_id: str) -> FacilityVerificationPac
             value = facility.model_dump(mode="json").get(field)
             if value not in (None, {}, []):
                 claims.append(_claim(facility, field))
+
+    claims.extend(_automation_claims(key, facility_ids))
 
     if assets:
         for asset in assets:
@@ -250,6 +313,7 @@ def build_facility_verification_pack(company_id: str) -> FacilityVerificationPac
         caveats=[
             "This pack summarizes canonical FactoryDB evidence for pre-screening; it is not a certification, audit pass, or supplier recommendation.",
             "NOT_FOUND means FactoryDB has no linked canonical record; it must not be interpreted as proof that the real-world fact is absent.",
+            "Automation observations are included only when the robotics facility ID exactly matches a canonical FactoryDB facility ID; unmatched company or facility observations are excluded rather than inferred.",
             "Source URLs identify the evidence used by the canonical record; verify the source again for time-sensitive decisions.",
         ],
     )
