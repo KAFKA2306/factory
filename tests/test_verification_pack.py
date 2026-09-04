@@ -17,6 +17,14 @@ def test_toyota_pack_is_source_backed_and_decision_ready():
     assert any(claim.entity_id == "facility:toyota-motomachi" for claim in pack.claims)
     assert any(claim.entity_id == "investment:toyota-texas-2026-3.6b" for claim in pack.claims)
     assert all(claim.source_urls for claim in pack.claims if claim.evidence_status == "VERIFIED")
+    automation_claims = [claim for claim in pack.claims if claim.field == "automation_observation"]
+    assert len(automation_claims) == 1
+    assert automation_claims[0].entity_id == "facility:toyota-motomachi"
+    assert automation_claims[0].value["equipment_type"] == "vehicle_logistics_robot"
+    assert automation_claims[0].value["status"] == "operational"
+    assert str(automation_claims[0].source_urls[0]).startswith(
+        "https://global.toyota/en/newsroom/corporate/39758451.html"
+    )
     assert any(
         state.country_code == "JP" and state.status == "factory_present"
         for state in pack.coverage_states
@@ -25,6 +33,20 @@ def test_toyota_pack_is_source_backed_and_decision_ready():
         state.country_code == "US" and state.status == "factory_present"
         for state in pack.coverage_states
     )
+
+
+def test_robotics_observations_require_exact_core_facility_identity():
+    pack = build_facility_verification_pack("company:bmw-ag")
+    automation_claims = [claim for claim in pack.claims if claim.field == "automation_observation"]
+
+    assert {claim.entity_id for claim in automation_claims} == {
+        "facility:bmw-plant-debrecen",
+        "facility:bmw-plant-munich",
+        "facility:bmw-plant-steyr",
+    }
+    assert not any(claim.entity_id == "facility:bmw-plant-leipzig" for claim in automation_claims)
+    assert all(claim.evidence_status == "VERIFIED" for claim in automation_claims)
+    assert all(claim.source_urls for claim in automation_claims)
 
 
 def test_unknown_company_fails_closed_without_claiming_nonexistence():
