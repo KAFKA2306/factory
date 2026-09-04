@@ -16,6 +16,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: Inter, "Noto Sans JP", system-ui, sans-serif;
+  overflow-wrap: anywhere;
 }
 a { color: inherit; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
