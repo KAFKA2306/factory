@@ -47,10 +47,15 @@ function humanize(value) {
   return String(value ?? "").replaceAll("_", " ");
 }
 
+function explorerHref(record) {
+  const query = record.company || record.factory || "";
+  return `?q=${encodeURIComponent(query)}#explorer`;
+}
+
 function injectDashboard() {
-  const main = document.querySelector("main");
   const explorer = document.querySelector("#explorer");
-  if (!main || !explorer || document.querySelector("#today")) return;
+  const heroSearch = explorer?.querySelector(".hero-search");
+  if (!explorer || !heroSearch || document.querySelector("#today")) return;
 
   const section = document.createElement("section");
   section.id = "today";
@@ -60,7 +65,7 @@ function injectDashboard() {
     <div class="daily-heading">
       <div>
         <p class="eyebrow">世界の工場で進む自動化</p>
-        <h1 id="today-title">工場の自動化は、<br>どこまで進んでいる？</h1>
+        <h2 id="today-title">最新確認</h2>
         <p class="lead">ロボット、無人搬送、画像検査などの導入を、計画・発注・導入・実運用に分けて、企業や政府の公表から追います。</p>
       </div>
       <p id="daily-asof" class="daily-asof">情報を読み込んでいます。</p>
@@ -70,7 +75,7 @@ function injectDashboard() {
       <p class="daily-loading">最新の動きを読み込んでいます。</p>
     </div>
 
-    <div id="daily-counts" class="daily-counts" aria-label="工場の自動化状況"></div>
+    <div id="daily-counts" class="daily-counts" aria-label="収録済みの工場自動化観測"></div>
 
     <div class="daily-history">
       <div class="section-title">
@@ -78,14 +83,13 @@ function injectDashboard() {
           <p class="kicker">最近の動き</p>
           <h2>最近確認された変化</h2>
         </div>
-        <a class="daily-explore-link" href="#explorer">全工場を探す ↓</a>
       </div>
       <div id="daily-events" class="daily-events"></div>
     </div>
 
     <p id="daily-status" class="status-line" aria-live="polite"></p>
   `;
-  main.insertBefore(section, explorer);
+  heroSearch.insertAdjacentElement("afterend", section);
 
   const nav = document.querySelector(".topbar nav");
   if (nav && !nav.querySelector('a[href="#today"]')) {
@@ -108,6 +112,7 @@ function renderLatest(record) {
   const source = record.source_url
     ? `<a href="${escapeHtml(record.source_url)}" target="_blank" rel="noreferrer">一次情報を見る →</a>`
     : '<span class="missing">一次情報URL未収録</span>';
+  const internal = `<a class="daily-explore-link" href="${escapeHtml(explorerHref(record))}">この企業の工場を見る →</a>`;
   document.querySelector("#daily-latest").innerHTML = `
     <article class="daily-feature">
       <div class="daily-feature-topline">
@@ -119,6 +124,7 @@ function renderLatest(record) {
       <p class="daily-description">${escapeHtml(record.description)}</p>
       <div class="daily-evidence-row">
         <span>${escapeHtml(humanize(record.equipment_type))}</span>
+        ${internal}
         ${source}
       </div>
     </article>
@@ -144,6 +150,7 @@ function renderEvents(records) {
       </div>
       <h3>${escapeHtml(record.company)} · ${escapeHtml(record.factory)}</h3>
       <p>${escapeHtml(humanize(record.equipment_type))}</p>
+      <a href="${escapeHtml(explorerHref(record))}" aria-label="${escapeHtml(record.company)} の工場をFactoryDBで見る">同社の工場 →</a>
       ${record.source_url ? `<a href="${escapeHtml(record.source_url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(record.company)} ${escapeHtml(record.factory)} の一次情報を見る">一次情報 ↗</a>` : ""}
     </article>
   `).join("");
@@ -167,7 +174,7 @@ async function loadDailyDashboard() {
     renderCounts(index);
     renderEvents(records);
     document.querySelector("#daily-asof").textContent = `一次情報の最終取得: ${formatTimestamp(index.retrieved_at)}`;
-    document.querySelector("#daily-status").textContent = `${index.coverage.observation_count.toLocaleString("ja-JP")}件の公開情報を収録。表示日付は各事実が確認された日です。`;
+    document.querySelector("#daily-status").textContent = `${index.coverage.observation_count.toLocaleString("ja-JP")}件の収録済み公開情報を集計。世界全体の件数ではありません。表示日付は各事実が確認された日です。`;
   } catch (error) {
     console.error("Failed to load robotics dashboard", error);
     document.querySelector("#daily-latest").innerHTML = '<div class="empty-state">工場自動化の最新情報を表示できません。</div>';
