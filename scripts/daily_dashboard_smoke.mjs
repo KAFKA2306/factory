@@ -42,20 +42,31 @@ const dom = execFileSync(chrome, [
   targetUrl,
 ], {encoding: "utf8", maxBuffer: 16 * 1024 * 1024});
 
+const expectedExplorerHref = `?q=${encodeURIComponent(latest.company)}#explorer`;
 const requiredFragments = [
   'id="today"',
   'class="daily-feature"',
   latest.company,
   latest.factory,
   latest.observed_at,
+  "この企業の工場を見る",
+  expectedExplorerHref,
   "一次情報を見る",
-  `${index.coverage.observation_count}件の公開情報を収録`,
+  `${index.coverage.observation_count}件の収録済み公開情報を集計`,
+  "世界全体の件数ではありません",
 ];
 for (const fragment of requiredFragments) {
   if (!dom.includes(fragment)) throw new Error(`daily dashboard DOM missing: ${fragment}`);
 }
 for (const count of Object.values(expectedCounts)) {
   if (!dom.includes(`>${count}</strong>`)) throw new Error(`daily dashboard DOM missing status count: ${count}`);
+}
+const h1Count = (dom.match(/<h1(?:\s|>)/g) || []).length;
+if (h1Count !== 1) throw new Error(`expected exactly one H1, found ${h1Count}`);
+const searchIndex = dom.indexOf('id="query"');
+const dailyIndex = dom.indexOf('id="today"');
+if (searchIndex < 0 || dailyIndex < 0 || searchIndex > dailyIndex) {
+  throw new Error("factory search must appear before the latest automation block");
 }
 if (dom.includes("canonical robotics data unavailable") || dom.includes("最新のrobotics evidenceを表示できません")) {
   throw new Error("daily dashboard rendered its unavailable state");
@@ -69,6 +80,12 @@ console.log(JSON.stringify({
     factory: latest.factory,
     status: latest.status,
     source_url: latest.source_url,
+    explorer_url: expectedExplorerHref,
+  },
+  journey: {
+    h1_count: h1Count,
+    search_before_latest: true,
+    latest_to_company_facilities_actions: 1,
   },
   coverage: index.coverage,
   retrieved_at: index.retrieved_at,
