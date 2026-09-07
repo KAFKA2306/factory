@@ -126,4 +126,4 @@ jobs:
             exit 0
           fi
           git commit -m 'data: update factory robotics evidence'
-          git push
+          git push origin "HEAD:${GITHUB_REF_NAME}"
