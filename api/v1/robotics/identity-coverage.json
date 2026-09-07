@@ -29,14 +29,14 @@
     "facility:catl-liyang",
     "facility:catl-ningde",
     "facility:catl-yibin",
+    "facility:gm-factory-zero",
+    "facility:gm-flint",
+    "facility:gm-spring-hill",
     "facility:toyota-motomachi"
   ],
   "factories_not_in_core": [
     "facility:bosch-stuttgart-feuerbach",
     "facility:dongfeng-honda-nev-wuhan",
-    "facility:gm-factory-zero",
-    "facility:gm-flint",
-    "facility:gm-spring-hill",
     "facility:hmgics-singapore",
     "facility:hyundai-hmgma",
     "facility:hyundai-ulsan",
