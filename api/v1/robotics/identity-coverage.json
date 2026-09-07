@@ -1,7 +1,6 @@
 {
   "companies_not_in_core": [
     "company:dongfeng-honda-automobile-co-ltd",
-    "company:hyundai-motor-company",
     "company:hyundai-motor-group",
     "company:mercedes-benz-group-ag",
     "company:panasonic-cycle-technology-co-ltd",
@@ -13,6 +12,7 @@
     "company:bmw-ag",
     "company:catl",
     "company:general-motors-company",
+    "company:hyundai-motor-company",
     "company:toyota-motor-corporation",
     "company:volkswagen-ag"
   ],
@@ -32,6 +32,9 @@
     "facility:gm-factory-zero",
     "facility:gm-flint",
     "facility:gm-spring-hill",
+    "facility:hyundai-hmgma",
+    "facility:hyundai-ulsan",
+    "facility:hyundai-ulsan-ev-dedicated",
     "facility:toyota-motomachi",
     "facility:volkswagen-chattanooga",
     "facility:volkswagen-emden",
@@ -41,9 +44,6 @@
     "facility:bosch-stuttgart-feuerbach",
     "facility:dongfeng-honda-nev-wuhan",
     "facility:hmgics-singapore",
-    "facility:hyundai-hmgma",
-    "facility:hyundai-ulsan",
-    "facility:hyundai-ulsan-ev-dedicated",
     "facility:mercedes-factory-56-sindelfingen",
     "facility:panasonic-energy-kansas",
     "facility:panasonic-kashiwara",
