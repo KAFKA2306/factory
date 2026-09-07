@@ -18,11 +18,16 @@ def test_toyota_pack_is_source_backed_and_decision_ready():
     assert any(claim.entity_id == "investment:toyota-texas-2026-3.6b" for claim in pack.claims)
     assert all(claim.source_urls for claim in pack.claims if claim.evidence_status == "VERIFIED")
     automation_claims = [claim for claim in pack.claims if claim.field == "automation_observation"]
-    assert len(automation_claims) == 1
-    assert automation_claims[0].entity_id == "facility:toyota-motomachi"
-    assert automation_claims[0].value["equipment_type"] == "vehicle_logistics_robot"
-    assert automation_claims[0].value["status"] == "operational"
-    assert str(automation_claims[0].source_urls[0]).startswith(
+    assert {claim.entity_id for claim in automation_claims} >= {
+        "facility:toyota-motomachi",
+        "facility:toyota-teiho",
+    }
+    motomachi = next(
+        claim for claim in automation_claims if claim.entity_id == "facility:toyota-motomachi"
+    )
+    assert motomachi.value["equipment_type"] == "vehicle_logistics_robot"
+    assert motomachi.value["status"] == "operational"
+    assert str(motomachi.source_urls[0]).startswith(
         "https://global.toyota/en/newsroom/corporate/39758451.html"
     )
     assert any(
