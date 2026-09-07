@@ -3,8 +3,6 @@
     "company:dongfeng-honda-automobile-co-ltd",
     "company:hyundai-motor-group",
     "company:mercedes-benz-group-ag",
-    "company:panasonic-cycle-technology-co-ltd",
-    "company:panasonic-energy-co-ltd",
     "company:robert-bosch-gmbh"
   ],
   "core_company_matches": [
@@ -12,6 +10,8 @@
     "company:catl",
     "company:general-motors-company",
     "company:hyundai-motor-company",
+    "company:panasonic-cycle-technology-co-ltd",
+    "company:panasonic-energy-co-ltd",
     "company:siemens-ag",
     "company:toyota-motor-corporation",
     "company:volkswagen-ag"
@@ -35,6 +35,8 @@
     "facility:hyundai-hmgma",
     "facility:hyundai-ulsan",
     "facility:hyundai-ulsan-ev-dedicated",
+    "facility:panasonic-energy-kansas",
+    "facility:panasonic-kashiwara",
     "facility:siemens-amberg-future-factory",
     "facility:siemens-haguenau",
     "facility:toyota-motomachi",
@@ -47,8 +49,6 @@
     "facility:dongfeng-honda-nev-wuhan",
     "facility:hmgics-singapore",
     "facility:mercedes-factory-56-sindelfingen",
-    "facility:panasonic-energy-kansas",
-    "facility:panasonic-kashiwara",
     "facility:toyota-teiho"
   ],
   "rule": "A false core match is explicit; robotics identity is never silently claimed to exist in the FactoryDB core tables.",
