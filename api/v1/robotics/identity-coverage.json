@@ -18,16 +18,16 @@
   ],
   "core_factory_matches": [
     "facility:bmw-plant-debrecen",
+    "facility:bmw-plant-dingolfing",
+    "facility:bmw-plant-leipzig",
     "facility:bmw-plant-munich",
+    "facility:bmw-plant-oxford",
+    "facility:bmw-plant-regensburg",
+    "facility:bmw-plant-spartanburg",
     "facility:bmw-plant-steyr",
     "facility:toyota-motomachi"
   ],
   "factories_not_in_core": [
-    "facility:bmw-plant-dingolfing",
-    "facility:bmw-plant-leipzig",
-    "facility:bmw-plant-oxford",
-    "facility:bmw-plant-regensburg",
-    "facility:bmw-plant-spartanburg",
     "facility:bosch-stuttgart-feuerbach",
     "facility:catl-guiyang",
     "facility:catl-liyang",

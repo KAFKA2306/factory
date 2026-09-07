@@ -1,13 +1,13 @@
 {
-  "retrieved_at": "2026-09-04T06:21:44.875185+00:00",
+  "retrieved_at": "2026-09-07T05:20:32.254764+00:00",
   "schema_version": 1,
   "sources": [
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/d360ead3998ac5506ce2511c19fc7514078bc43fd085764607874e2ab5990d07.html",
+      "evidence_path": "raw/objects/806384b4eaa64ddd1591c115d716b91d92672a24e44fd18d375ef1433ba69aff.html",
       "published_at": "2023-09-19",
       "publisher": "Toyota Motor Corporation",
-      "sha256": "d360ead3998ac5506ce2511c19fc7514078bc43fd085764607874e2ab5990d07",
+      "sha256": "806384b4eaa64ddd1591c115d716b91d92672a24e44fd18d375ef1433ba69aff",
       "size_bytes": 34615,
       "source_id": "toyota-monozukuri-2023",
       "source_url": "https://global.toyota/en/newsroom/corporate/39758451.html",
@@ -35,11 +35,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/1fcd11334305806b35fbda3b5949fff1b88b5940e93f842037b4034f1c4bab21.html",
+      "evidence_path": "raw/objects/66be06b6c0b4ce42d249bd4434570283c0ad109c8015b6b86d210ee57118bfc0.html",
       "published_at": "2024-11-25",
       "publisher": "BMW Group",
-      "sha256": "1fcd11334305806b35fbda3b5949fff1b88b5940e93f842037b4034f1c4bab21",
-      "size_bytes": 70597,
+      "sha256": "66be06b6c0b4ce42d249bd4434570283c0ad109c8015b6b86d210ee57118bfc0",
+      "size_bytes": 70598,
       "source_id": "bmw-afw-2024",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0446493EN?forceSitePreference=DESKTOP",
       "verified_markers": [
@@ -52,11 +52,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/b7263f56c11e908d57c2c8615880a5a07912806d130832a35fde71a7354b50b4.html",
+      "evidence_path": "raw/objects/0b49d5d7148ff30231b5613e016c5cc605c6c3eb8399f0ae48bde8abb0103e10.html",
       "published_at": "2025-06-04",
       "publisher": "BMW Group",
-      "sha256": "b7263f56c11e908d57c2c8615880a5a07912806d130832a35fde71a7354b50b4",
-      "size_bytes": 69955,
+      "sha256": "0b49d5d7148ff30231b5613e016c5cc605c6c3eb8399f0ae48bde8abb0103e10",
+      "size_bytes": 69956,
       "source_id": "bmw-regensburg-afw-2025",
       "source_url": "https://www.press.bmwgroup.com/deutschland/article/detail/T0450566DE?forceSitePreference=DESKTOP",
       "verified_markers": [
@@ -67,11 +67,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/8c4d25156641c94c2bf2ec8a2ef54c7f31d94b7e17d5694313ae31bf1c8512e1.html",
+      "evidence_path": "raw/objects/5d8c0b5b82388fd0ea6823f44df74335c14572482d3185818346fc7e6b0e6d8b.html",
       "published_at": "2026-02-27",
       "publisher": "BMW Group",
-      "sha256": "8c4d25156641c94c2bf2ec8a2ef54c7f31d94b7e17d5694313ae31bf1c8512e1",
-      "size_bytes": 81410,
+      "sha256": "5d8c0b5b82388fd0ea6823f44df74335c14572482d3185818346fc7e6b0e6d8b",
+      "size_bytes": 81411,
       "source_id": "bmw-humanoid-2026",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0455864EN/bmw-group-to-deploy-humanoid-robots-in-production-in-germany-for-the-first-time?language=en",
       "verified_markers": [
@@ -85,10 +85,10 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/90fdfeed099c653db35a24e4fdfc5e2019bc96ab0ff3aaaff491024f13d08e7c.html",
+      "evidence_path": "raw/objects/e158a8ef9d7b00089a0d9d8b386e31401828e704d36cba4d6286edad05688eb9.html",
       "published_at": "2026-06-15",
       "publisher": "Hexagon Robotics",
-      "sha256": "90fdfeed099c653db35a24e4fdfc5e2019bc96ab0ff3aaaff491024f13d08e7c",
+      "sha256": "e158a8ef9d7b00089a0d9d8b386e31401828e704d36cba4d6286edad05688eb9",
       "size_bytes": 82386,
       "source_id": "hexagon-aeon-leipzig-2026",
       "source_url": "https://robotics.hexagon.com/new-milestone-with-bmw-group-industrial-humanoid-deployment/",
@@ -100,11 +100,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/c47f13b692e22e7b9c18c2be362d761d253b7d8be0a14a8b5d54c8ad21f68a1f.html",
+      "evidence_path": "raw/objects/ca208aad3f19f2584e8de55a5bdca23d0ab4291995b64550ffafe874dfb75bb4.html",
       "published_at": "2026-04-02",
       "publisher": "BMW Group",
-      "sha256": "c47f13b692e22e7b9c18c2be362d761d253b7d8be0a14a8b5d54c8ad21f68a1f",
-      "size_bytes": 86738,
+      "sha256": "ca208aad3f19f2584e8de55a5bdca23d0ab4291995b64550ffafe874dfb75bb4",
+      "size_bytes": 86739,
       "source_id": "bmw-munich-2026",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0456664EN/the-new-bmw-group-plant-munich%3A-more-efficient-more-flexible-and-more-digital-for-production-of-the-neue-klasse?language=en",
       "verified_markers": [
@@ -115,11 +115,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/62972332009173b9aac8867865f4c9ab940d82526a25ae75038c5a91cfb92461.html",
+      "evidence_path": "raw/objects/3abe4009bc893f381d20238988c8bdaa6e44be0cd9beaff7f5ff9cb584ec3a2f.html",
       "published_at": "2024-02-01",
       "publisher": "BMW Group",
-      "sha256": "62972332009173b9aac8867865f4c9ab940d82526a25ae75038c5a91cfb92461",
-      "size_bytes": 62663,
+      "sha256": "3abe4009bc893f381d20238988c8bdaa6e44be0cd9beaff7f5ff9cb584ec3a2f",
+      "size_bytes": 62664,
       "source_id": "bmw-steyr-2024",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0439491EN/milestone-at-bmw-group-plant-steyr%3A-production-facilities-for-next-gen-electric-drives-completed?showMedia=photo",
       "verified_markers": [
@@ -191,11 +191,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/a0bf61c0e599f0146d185f84b1bf327745223c84987605efeef20d5469714d7c.html",
+      "evidence_path": "raw/objects/91e3dc2a9269bd82994c34c381c26b66dcd0456d45bf1c2398748647f431b8ce.html",
       "published_at": "2026-05-01",
       "publisher": "Mercedes-Benz",
-      "sha256": "a0bf61c0e599f0146d185f84b1bf327745223c84987605efeef20d5469714d7c",
-      "size_bytes": 195856,
+      "sha256": "91e3dc2a9269bd82994c34c381c26b66dcd0456d45bf1c2398748647f431b8ce",
+      "size_bytes": 195852,
       "source_id": "mercedes-factory56-2026",
       "source_url": "https://media.mercedes-benz.com/article/40d1e2eb-b956-4105-a9a9-6999ff7fd63f",
       "verified_markers": [
@@ -206,11 +206,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/be1512000d39f6afd32ed6efac20501dd2bb8b8df4e409ee60f14f91f823a31c.html",
+      "evidence_path": "raw/objects/a8db9c94b446903fc60f4dcfb10c61af489f0134ed271b7d2ed5c34f1ab174af.html",
       "published_at": "2026-05-05",
       "publisher": "General Motors",
-      "sha256": "be1512000d39f6afd32ed6efac20501dd2bb8b8df4e409ee60f14f91f823a31c",
-      "size_bytes": 70420,
+      "sha256": "a8db9c94b446903fc60f4dcfb10c61af489f0134ed271b7d2ed5c34f1ab174af",
+      "size_bytes": 70877,
       "source_id": "gm-smart-tools-2026",
       "source_url": "https://news.gm.com/home.detail.html/Pages/topic/us/en/2026/may/0505-smarterAItoolsbuildvehicles.html",
       "verified_markers": [
@@ -222,11 +222,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/94581448edda0e89565445111e01f120038485481b9f3e81597912c1bd6ed6a5.html",
+      "evidence_path": "raw/objects/dc9500919d0f9cc84a2554e1579510d7ab5b0a473ec867177361c9969a2e1dad.html",
       "published_at": "2026-03-04",
       "publisher": "Siemens AG",
-      "sha256": "94581448edda0e89565445111e01f120038485481b9f3e81597912c1bd6ed6a5",
-      "size_bytes": 79525,
+      "sha256": "dc9500919d0f9cc84a2554e1579510d7ab5b0a473ec867177361c9969a2e1dad",
+      "size_bytes": 79508,
       "source_id": "siemens-amberg-2026",
       "source_url": "https://press.siemens.com/global/en/pressrelease/siemens-invest-over-eu200-million-build-factory-future-amberg-germany",
       "verified_markers": [
@@ -237,10 +237,10 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/55c98f3d6e9a9742b84a14c7d5358a65973d92ccddd3d4a23bbab38c2667cb81.html",
+      "evidence_path": "raw/objects/3ac76c22ac08ca356160942b5a7879f5264a31706e65f942eed22a6c2f086d37.html",
       "published_at": "2019-11-20",
       "publisher": "Siemens France",
-      "sha256": "55c98f3d6e9a9742b84a14c7d5358a65973d92ccddd3d4a23bbab38c2667cb81",
+      "sha256": "3ac76c22ac08ca356160942b5a7879f5264a31706e65f942eed22a6c2f086d37",
       "size_bytes": 67868,
       "source_id": "siemens-haguenau-2019",
       "source_url": "https://press.siemens.com/fr/fr/communiquedepresse/siemens-obtient-le-label-vitrines-industrie-du-futur",
@@ -324,11 +324,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/2c61be79aaad521e0109c28029f7a75e564927d10e6788f37f537845421da5cc.html",
+      "evidence_path": "raw/objects/f459171f724a5131ac3360b9484aeb0fd0ff8969787b6c6379cccdfe60415f89.html",
       "published_at": "2025-11-17",
       "publisher": "Panasonic Holdings Corporation",
-      "sha256": "2c61be79aaad521e0109c28029f7a75e564927d10e6788f37f537845421da5cc",
-      "size_bytes": 140481,
+      "sha256": "f459171f724a5131ac3360b9484aeb0fd0ff8969787b6c6379cccdfe60415f89",
+      "size_bytes": 140461,
       "source_id": "panasonic-kansas-2025",
       "source_url": "https://news.panasonic.com/global/stories/18073",
       "verified_markers": [
@@ -339,11 +339,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/78b548cff4b520ed28dcd7844c0b6a09477b573bc078c0911105142b557cec34.html",
+      "evidence_path": "raw/objects/d0a94b122b770b90f1b04f3262e7299805b001ecee8c7370ac67bf42b478e7c7.html",
       "published_at": "2021-10-04",
       "publisher": "Panasonic Cycle Technology Co., Ltd.",
-      "sha256": "78b548cff4b520ed28dcd7844c0b6a09477b573bc078c0911105142b557cec34",
-      "size_bytes": 138517,
+      "sha256": "d0a94b122b770b90f1b04f3262e7299805b001ecee8c7370ac67bf42b478e7c7",
+      "size_bytes": 138132,
       "source_id": "panasonic-kashiwara-2021",
       "source_url": "https://news.panasonic.com/jp/press/jn211004-1",
       "verified_markers": [
