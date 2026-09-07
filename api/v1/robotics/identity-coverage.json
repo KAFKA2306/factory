@@ -7,14 +7,14 @@
     "company:panasonic-cycle-technology-co-ltd",
     "company:panasonic-energy-co-ltd",
     "company:robert-bosch-gmbh",
-    "company:siemens-ag",
-    "company:volkswagen-ag"
+    "company:siemens-ag"
   ],
   "core_company_matches": [
     "company:bmw-ag",
     "company:catl",
     "company:general-motors-company",
-    "company:toyota-motor-corporation"
+    "company:toyota-motor-corporation",
+    "company:volkswagen-ag"
   ],
   "core_factory_matches": [
     "facility:bmw-plant-debrecen",
@@ -32,7 +32,10 @@
     "facility:gm-factory-zero",
     "facility:gm-flint",
     "facility:gm-spring-hill",
-    "facility:toyota-motomachi"
+    "facility:toyota-motomachi",
+    "facility:volkswagen-chattanooga",
+    "facility:volkswagen-emden",
+    "facility:volkswagen-hanover"
   ],
   "factories_not_in_core": [
     "facility:bosch-stuttgart-feuerbach",
@@ -46,10 +49,7 @@
     "facility:panasonic-kashiwara",
     "facility:siemens-amberg-future-factory",
     "facility:siemens-haguenau",
-    "facility:toyota-teiho",
-    "facility:volkswagen-chattanooga",
-    "facility:volkswagen-emden",
-    "facility:volkswagen-hanover"
+    "facility:toyota-teiho"
   ],
   "rule": "A false core match is explicit; robotics identity is never silently claimed to exist in the FactoryDB core tables.",
   "schema_version": 1

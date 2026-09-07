@@ -1,13 +1,13 @@
 {
-  "retrieved_at": "2026-09-07T07:11:53.772305+00:00",
+  "retrieved_at": "2026-09-07T08:06:19.031787+00:00",
   "schema_version": 1,
   "sources": [
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/79ffc974773ef447667c10a37718bee0b19c7290f5b4baaec2062fb752f99cf2.html",
+      "evidence_path": "raw/objects/34f3c69fb579fb20306c33e808574ee230ee60416358790dc8bf1cd632105ec0.html",
       "published_at": "2023-09-19",
       "publisher": "Toyota Motor Corporation",
-      "sha256": "79ffc974773ef447667c10a37718bee0b19c7290f5b4baaec2062fb752f99cf2",
+      "sha256": "34f3c69fb579fb20306c33e808574ee230ee60416358790dc8bf1cd632105ec0",
       "size_bytes": 34615,
       "source_id": "toyota-monozukuri-2023",
       "source_url": "https://global.toyota/en/newsroom/corporate/39758451.html",
@@ -35,11 +35,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/c335428cc9bfc8d10ee7ee41adcc7214b0b555b223a30f558a28052ee40fe3ec.html",
+      "evidence_path": "raw/objects/2908f8572a7f59eca6bd6dcdb8e576b1c060b7028f7fdc97f8912f174797bb3b.html",
       "published_at": "2024-11-25",
       "publisher": "BMW Group",
-      "sha256": "c335428cc9bfc8d10ee7ee41adcc7214b0b555b223a30f558a28052ee40fe3ec",
-      "size_bytes": 70592,
+      "sha256": "2908f8572a7f59eca6bd6dcdb8e576b1c060b7028f7fdc97f8912f174797bb3b",
+      "size_bytes": 70597,
       "source_id": "bmw-afw-2024",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0446493EN?forceSitePreference=DESKTOP",
       "verified_markers": [
@@ -52,11 +52,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/30c884ef5fd8d97c698d48892c1a0585f3473fe997938fe5942c24dfa4a90b1f.html",
+      "evidence_path": "raw/objects/e2f06f5f13d38234680ea91a6a7933e0d8a4f348df13a92858ea48fdb46f5cf0.html",
       "published_at": "2025-06-04",
       "publisher": "BMW Group",
-      "sha256": "30c884ef5fd8d97c698d48892c1a0585f3473fe997938fe5942c24dfa4a90b1f",
-      "size_bytes": 69950,
+      "sha256": "e2f06f5f13d38234680ea91a6a7933e0d8a4f348df13a92858ea48fdb46f5cf0",
+      "size_bytes": 69955,
       "source_id": "bmw-regensburg-afw-2025",
       "source_url": "https://www.press.bmwgroup.com/deutschland/article/detail/T0450566DE?forceSitePreference=DESKTOP",
       "verified_markers": [
@@ -67,11 +67,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/0af5cb869b95a20e536af0bbde5a101f143b2241dd18a5223e724c1bba68e344.html",
+      "evidence_path": "raw/objects/bf03a61bead9bbccd08918314511dbee87bff1cbfe870ef7824c92c2872a803c.html",
       "published_at": "2026-02-27",
       "publisher": "BMW Group",
-      "sha256": "0af5cb869b95a20e536af0bbde5a101f143b2241dd18a5223e724c1bba68e344",
-      "size_bytes": 81408,
+      "sha256": "bf03a61bead9bbccd08918314511dbee87bff1cbfe870ef7824c92c2872a803c",
+      "size_bytes": 81410,
       "source_id": "bmw-humanoid-2026",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0455864EN/bmw-group-to-deploy-humanoid-robots-in-production-in-germany-for-the-first-time?language=en",
       "verified_markers": [
@@ -100,11 +100,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/ad1b542bf1d1dd37b9ebdbd7c6e52f70203be0d6a6545b643e840d6defdaf4e2.html",
+      "evidence_path": "raw/objects/d4de36033352ff6c79fb383b26876a11f14f1b044385819354b3a4b5c2d6d4af.html",
       "published_at": "2026-04-02",
       "publisher": "BMW Group",
-      "sha256": "ad1b542bf1d1dd37b9ebdbd7c6e52f70203be0d6a6545b643e840d6defdaf4e2",
-      "size_bytes": 86737,
+      "sha256": "d4de36033352ff6c79fb383b26876a11f14f1b044385819354b3a4b5c2d6d4af",
+      "size_bytes": 86738,
       "source_id": "bmw-munich-2026",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0456664EN/the-new-bmw-group-plant-munich%3A-more-efficient-more-flexible-and-more-digital-for-production-of-the-neue-klasse?language=en",
       "verified_markers": [
@@ -115,11 +115,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/4a84c202764ea1675fa5fa07b2ef0efe3ff41b91852c2cea415ba386f4317d48.html",
+      "evidence_path": "raw/objects/d1a3e19ecb1db862cefb99ecb1e9fca9dcfb685165ad99bc1f964a0e83bcc28e.html",
       "published_at": "2024-02-01",
       "publisher": "BMW Group",
-      "sha256": "4a84c202764ea1675fa5fa07b2ef0efe3ff41b91852c2cea415ba386f4317d48",
-      "size_bytes": 62662,
+      "sha256": "d1a3e19ecb1db862cefb99ecb1e9fca9dcfb685165ad99bc1f964a0e83bcc28e",
+      "size_bytes": 62663,
       "source_id": "bmw-steyr-2024",
       "source_url": "https://www.press.bmwgroup.com/global/article/detail/T0439491EN/milestone-at-bmw-group-plant-steyr%3A-production-facilities-for-next-gen-electric-drives-completed?showMedia=photo",
       "verified_markers": [
@@ -130,11 +130,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/0bee07db647adbcdbac9cf82c06122171f3675d1a5bb0698b244c9f5bf96ffa9.html",
+      "evidence_path": "raw/objects/bf0cd28dae3b6a40926c318ec2603e33d7be5e6cd10af92a06f67caed98e6a94.html",
       "published_at": "2020-10-14",
       "publisher": "Volkswagen Group",
-      "sha256": "0bee07db647adbcdbac9cf82c06122171f3675d1a5bb0698b244c9f5bf96ffa9",
-      "size_bytes": 77536,
+      "sha256": "bf0cd28dae3b6a40926c318ec2603e33d7be5e6cd10af92a06f67caed98e6a94",
+      "size_bytes": 77535,
       "source_id": "vw-robots-2020",
       "source_url": "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-invests-in-automation-for-emden-hanover-and-chattanooga-plants-17101",
       "verified_markers": [
@@ -176,11 +176,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/1863bb3fe952a8a7eaad6222d18000c314de8ddc602215120744fcd6c53f600f.html",
+      "evidence_path": "raw/objects/c40e8d89c845eee3fcd274193685d1ffaf333ff7dab0f39e1fa1f6af7639261f.html",
       "published_at": "2023-11-13",
       "publisher": "Hyundai Motor Company",
-      "sha256": "1863bb3fe952a8a7eaad6222d18000c314de8ddc602215120744fcd6c53f600f",
-      "size_bytes": 386924,
+      "sha256": "c40e8d89c845eee3fcd274193685d1ffaf333ff7dab0f39e1fa1f6af7639261f",
+      "size_bytes": 387065,
       "source_id": "hyundai-ulsan-ev-2023",
       "source_url": "https://www.hyundai.com/worldwide/en/newsroom/detail/0000000353",
       "verified_markers": [
@@ -206,10 +206,10 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/51bc03ad3c40b63b25ac72005d3c49938f956f814f65ddfc9ff41e78d0a8e0da.html",
+      "evidence_path": "raw/objects/68b659f750902534e5a0341f9192dbfc4828f973dbccb610fb19920f331c3e57.html",
       "published_at": "2026-05-05",
       "publisher": "General Motors",
-      "sha256": "51bc03ad3c40b63b25ac72005d3c49938f956f814f65ddfc9ff41e78d0a8e0da",
+      "sha256": "68b659f750902534e5a0341f9192dbfc4828f973dbccb610fb19920f331c3e57",
       "size_bytes": 70877,
       "source_id": "gm-smart-tools-2026",
       "source_url": "https://news.gm.com/home.detail.html/Pages/topic/us/en/2026/may/0505-smarterAItoolsbuildvehicles.html",
@@ -222,11 +222,11 @@
     },
     {
       "content_type": "text/html",
-      "evidence_path": "raw/objects/59b5d714d3833f916053f72a7a410764092c05e87ef74e348fd2a906c361cda9.html",
+      "evidence_path": "raw/objects/dc9500919d0f9cc84a2554e1579510d7ab5b0a473ec867177361c9969a2e1dad.html",
       "published_at": "2026-03-04",
       "publisher": "Siemens AG",
-      "sha256": "59b5d714d3833f916053f72a7a410764092c05e87ef74e348fd2a906c361cda9",
-      "size_bytes": 79525,
+      "sha256": "dc9500919d0f9cc84a2554e1579510d7ab5b0a473ec867177361c9969a2e1dad",
+      "size_bytes": 79508,
       "source_id": "siemens-amberg-2026",
       "source_url": "https://press.siemens.com/global/en/pressrelease/siemens-invest-over-eu200-million-build-factory-future-amberg-germany",
       "verified_markers": [
