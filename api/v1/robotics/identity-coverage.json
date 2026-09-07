@@ -34,6 +34,7 @@
     "facility:gm-factory-zero",
     "facility:gm-flint",
     "facility:gm-spring-hill",
+    "facility:hmgics-singapore",
     "facility:hyundai-hmgma",
     "facility:hyundai-ulsan",
     "facility:hyundai-ulsan-ev-dedicated",
@@ -48,9 +49,7 @@
     "facility:volkswagen-emden",
     "facility:volkswagen-hanover"
   ],
-  "factories_not_in_core": [
-    "facility:hmgics-singapore"
-  ],
+  "factories_not_in_core": [],
   "rule": "A false core match is explicit; robotics identity is never silently claimed to exist in the FactoryDB core tables.",
   "schema_version": 1
 }
