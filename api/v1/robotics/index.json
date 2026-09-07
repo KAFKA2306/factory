@@ -1,8 +1,8 @@
 {
   "coverage": {
     "company_count": 13,
-    "core_company_match_count": 9,
-    "core_factory_match_count": 26,
+    "core_company_match_count": 12,
+    "core_factory_match_count": 30,
     "country_count": 10,
     "equipment_type_counts": {
       "automated_assembly": 1,
@@ -35,7 +35,7 @@
     }
   },
   "dataset": "Factory-level robotics and automation primary evidence",
-  "retrieved_at": "2026-09-07T11:11:07.128444+00:00",
+  "retrieved_at": "2026-09-07T12:18:59.287567+00:00",
   "rules": [
     "planned, ordered, installed and operational are distinct states",
     "quantities are present only when explicitly disclosed by the primary source",
