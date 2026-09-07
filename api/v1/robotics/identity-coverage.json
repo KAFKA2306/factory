@@ -1,6 +1,5 @@
 {
   "companies_not_in_core": [
-    "company:catl",
     "company:dongfeng-honda-automobile-co-ltd",
     "company:hyundai-motor-company",
     "company:hyundai-motor-group",
@@ -13,6 +12,7 @@
   ],
   "core_company_matches": [
     "company:bmw-ag",
+    "company:catl",
     "company:general-motors-company",
     "company:toyota-motor-corporation"
   ],
@@ -25,14 +25,14 @@
     "facility:bmw-plant-regensburg",
     "facility:bmw-plant-spartanburg",
     "facility:bmw-plant-steyr",
-    "facility:toyota-motomachi"
-  ],
-  "factories_not_in_core": [
-    "facility:bosch-stuttgart-feuerbach",
     "facility:catl-guiyang",
     "facility:catl-liyang",
     "facility:catl-ningde",
     "facility:catl-yibin",
+    "facility:toyota-motomachi"
+  ],
+  "factories_not_in_core": [
+    "facility:bosch-stuttgart-feuerbach",
     "facility:dongfeng-honda-nev-wuhan",
     "facility:gm-factory-zero",
     "facility:gm-flint",
