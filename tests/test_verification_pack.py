@@ -41,10 +41,14 @@ def test_robotics_observations_require_exact_core_facility_identity():
 
     assert {claim.entity_id for claim in automation_claims} == {
         "facility:bmw-plant-debrecen",
+        "facility:bmw-plant-dingolfing",
+        "facility:bmw-plant-leipzig",
         "facility:bmw-plant-munich",
+        "facility:bmw-plant-oxford",
+        "facility:bmw-plant-regensburg",
+        "facility:bmw-plant-spartanburg",
         "facility:bmw-plant-steyr",
     }
-    assert not any(claim.entity_id == "facility:bmw-plant-leipzig" for claim in automation_claims)
     assert all(claim.evidence_status == "VERIFIED" for claim in automation_claims)
     assert all(claim.source_urls for claim in automation_claims)
 
