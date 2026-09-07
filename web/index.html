@@ -12,11 +12,11 @@
   <header class="topbar">
     <a class="brand" href="#">FactoryDB</a>
     <nav aria-label="主要ナビゲーション">
-      <a href="#explorer">Explorer</a>
-      <a href="#comparison">Compare</a>
-      <a href="#insights">Data</a>
-      <a href="#verification">Supplier review</a>
-      <a href="#health">Coverage</a>
+      <a href="#explorer">工場を探す</a>
+      <a href="#comparison">比べる</a>
+      <a href="#insights">設備・投資</a>
+      <a href="#verification">調達確認</a>
+      <a href="#health">収録範囲</a>
       <a href="https://github.com/KAFKA2306/factory">GitHub</a>
     </nav>
   </header>
@@ -57,6 +57,7 @@
         </div>
         <span id="count"></span>
       </div>
+      <p id="comparison-status" class="status-line" aria-live="polite">比較する拠点を2件以上選んでください。</p>
       <div id="empty-state" class="empty-state" hidden>条件に一致する工場はありません。これは「該当工場が存在しない」という意味ではなく、現在の検索結果が0件という意味です。</div>
       <div id="facilities" class="factory-list"></div>
     </section>
@@ -70,7 +71,6 @@
         <button id="clear-comparison" class="quiet-button" type="button" hidden>比較をクリア</button>
       </div>
       <p class="comparison-help">各カードの「比較に追加」から最大4拠点を選べます。選択中の拠点と検索条件はURLに保存され、同じURLから復元できます。</p>
-      <p id="comparison-status" class="status-line" aria-live="polite">比較する拠点を2件以上選んでください。</p>
       <div id="comparison-empty" class="empty-state">まだ比較対象がありません。</div>
       <div id="comparison-table" class="comparison-scroll" hidden></div>
     </section>
