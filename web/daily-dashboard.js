@@ -52,6 +52,10 @@ function explorerHref(record) {
   return `?q=${encodeURIComponent(query)}#explorer`;
 }
 
+function companyExplorerHref(record) {
+  return `?q=${encodeURIComponent(record.company || "")}#explorer`;
+}
+
 function injectDashboard() {
   const explorer = document.querySelector("#explorer");
   const heroSearch = explorer?.querySelector(".hero-search");
@@ -113,6 +117,7 @@ function renderLatest(record) {
     ? `<a href="${escapeHtml(record.source_url)}" target="_blank" rel="noreferrer">一次情報を見る →</a>`
     : '<span class="missing">一次情報URL未収録</span>';
   const internal = `<a class="daily-explore-link" href="${escapeHtml(explorerHref(record))}">この工場を見る →</a>`;
+  const companyInternal = `<a class="daily-explore-link" href="${escapeHtml(companyExplorerHref(record))}">この企業の工場を見る →</a>`;
   document.querySelector("#daily-latest").innerHTML = `
     <article class="daily-feature">
       <div class="daily-feature-topline">
@@ -125,6 +130,7 @@ function renderLatest(record) {
       <div class="daily-evidence-row">
         <span>${escapeHtml(humanize(record.equipment_type))}</span>
         ${internal}
+        ${companyInternal}
         ${source}
       </div>
     </article>
@@ -151,6 +157,7 @@ function renderEvents(records) {
       <h3>${escapeHtml(record.company)} · ${escapeHtml(record.factory)}</h3>
       <p>${escapeHtml(humanize(record.equipment_type))}</p>
       <a href="${escapeHtml(explorerHref(record))}" aria-label="${escapeHtml(record.factory)} をFactoryDBで見る">この工場 →</a>
+      <a href="${escapeHtml(companyExplorerHref(record))}" aria-label="${escapeHtml(record.company)} の工場をFactoryDBで見る">この企業の工場 →</a>
       ${record.source_url ? `<a href="${escapeHtml(record.source_url)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(record.company)} ${escapeHtml(record.factory)} の一次情報を見る">一次情報 ↗</a>` : ""}
     </article>
   `).join("");
