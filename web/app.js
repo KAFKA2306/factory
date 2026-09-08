@@ -114,6 +114,7 @@ function setupFilters() {
 }
 
 function toggleComparison(row, button) {
+  const previousCount = selectedFacilityIds.size;
   if (selectedFacilityIds.has(row.id)) {
     selectedFacilityIds.delete(row.id);
   } else if (selectedFacilityIds.size >= MAX_COMPARE) {
@@ -127,6 +128,9 @@ function toggleComparison(row, button) {
   button.textContent = selected ? "比較から外す" : "比較に追加";
   renderComparison();
   syncUrlState();
+  if (previousCount < 2 && selectedFacilityIds.size >= 2) {
+    $("#comparison").scrollIntoView({block: "start"});
+  }
 }
 
 function renderFacilities() {
