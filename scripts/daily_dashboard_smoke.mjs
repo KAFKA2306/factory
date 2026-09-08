@@ -42,14 +42,14 @@ const dom = execFileSync(chrome, [
   targetUrl,
 ], {encoding: "utf8", maxBuffer: 16 * 1024 * 1024});
 
-const expectedExplorerHref = `?q=${encodeURIComponent(latest.company)}#explorer`;
+const expectedExplorerHref = `?q=${encodeURIComponent(latest.factory || latest.company)}#explorer`;
 const requiredFragments = [
   'id="today"',
   'class="daily-feature"',
   latest.company,
   latest.factory,
   latest.observed_at,
-  "この企業の工場を見る",
+  "この工場を見る",
   expectedExplorerHref,
   "一次情報を見る",
   `${index.coverage.observation_count}件の収録済み公開情報を集計`,
@@ -85,7 +85,7 @@ console.log(JSON.stringify({
   journey: {
     h1_count: h1Count,
     search_before_latest: true,
-    latest_to_company_facilities_actions: 1,
+    latest_to_exact_facility_actions: 1,
   },
   coverage: index.coverage,
   retrieved_at: index.retrieved_at,
