@@ -100,10 +100,10 @@ if ! grep -q '"errors":false' "$BULK_RESPONSE"; then
 fi
 
 canonical_companies="$(
-  cat data/companies*.jsonl | sed '/^[[:space:]]*$/d' | wc -l | tr -d '[:space:]'
+  awk 'NF { count++ } END { print count }' data/companies*.jsonl
 )"
 canonical_facilities="$(
-  cat data/facilities/*.jsonl | sed '/^[[:space:]]*$/d' | wc -l | tr -d '[:space:]'
+  awk 'NF { count++ } END { print count }' data/facilities/*.jsonl
 )"
 postgres_companies="$(
   docker compose exec -T postgres psql -At -U factorydb -d factorydb \
