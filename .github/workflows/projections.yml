@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - "compose.yaml"
+      - "data/companies*.jsonl"
+      - "data/facilities/**"
+      - "src/factorydb/models.py"
       - "infra/postgres/**"
       - "infra/opensearch/**"
       - "scripts/rebuild_local_projections.sh"

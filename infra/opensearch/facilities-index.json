@@ -19,12 +19,12 @@
       "processes": {"type": "keyword", "copy_to": "search_text"},
       "notes": {"type": "text", "copy_to": "search_text"},
       "sources": {
-        "type": "object",
+        "type": "nested",
         "properties": {
           "publisher": {"type": "keyword"},
           "url": {"type": "keyword"},
           "retrieved_at": {"type": "date"},
-          "evidence": {"type": "text", "copy_to": "search_text"}
+          "evidence": {"type": "text"}
         }
       },
       "search_text": {"type": "text"}
