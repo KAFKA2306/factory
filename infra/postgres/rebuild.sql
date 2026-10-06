@@ -33,7 +33,7 @@ WITH company_docs AS (
     SELECT line::jsonb AS doc
     FROM regexp_split_to_table(
         pg_read_file('/tmp/factorydb-companies.jsonl'),
-        E'\\n'
+        E'\n'
     ) AS t(line)
     WHERE btrim(line) <> ''
 )
@@ -59,7 +59,7 @@ WITH facility_docs AS (
     SELECT line::jsonb AS doc
     FROM regexp_split_to_table(
         pg_read_file('/tmp/factorydb-facilities.jsonl'),
-        E'\\n'
+        E'\n'
     ) AS t(line)
     WHERE btrim(line) <> ''
 )
