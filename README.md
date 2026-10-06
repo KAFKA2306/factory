@@ -206,3 +206,27 @@ tests/            deterministic contracts
 FactoryDB の成功指標は「世界何か国に点を置いたか」ではありません。
 
 **利用者が、ある企業の製造拠点について「何を作る・どう作る・どの投資と結びつく・何を根拠にそう言える」を同じ証拠線上で確認できること**をDoneとします。
+
+
+## Local PostgreSQL / OpenSearch projection
+
+FactoryDB can rebuild two local read/search projections from the canonical JSONL without any cloud or SaaS contract.
+
+- **PostgreSQL 15**: normalized company/facility tables, foreign keys, B-tree indexes and JSONB/GIN indexes.
+- **OpenSearch 3.9.0**: full-text and faceted facility search over the same canonical facility records.
+- **Authority stays in JSONL**: both stores are disposable projections. Rebuilding drops/recreates them instead of creating another source of truth.
+- **Local only by default**: Docker ports bind to `127.0.0.1`; OpenSearch security is disabled only for this local development stack.
+
+Prerequisites are Docker, `curl`, and the repository's existing `uv` toolchain.
+
+```bash
+make projection-rebuild
+```
+
+The rebuild verifies that canonical company/facility counts exactly match PostgreSQL and that facility counts exactly match OpenSearch. To destroy the derived stores:
+
+```bash
+make projection-down
+```
+
+On Linux/WSL, OpenSearch may require `sudo sysctl -w vm.max_map_count=262144` before the first run.

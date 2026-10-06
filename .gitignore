@@ -9,3 +9,4 @@ coverage-manifest.json
 web/catalog.json
 web/facility-verification-pack.json
 web/facility-verification-pack.md
+.local/

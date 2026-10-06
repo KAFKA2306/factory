@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: factorydb
+      POSTGRES_USER: factorydb
+      POSTGRES_PASSWORD: factorydb-local
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - factorydb-postgres:/var/lib/postgresql/data
+      - ./data:/canonical:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U factorydb -d factorydb"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  opensearch:
+    image: opensearchproject/opensearch:3.9.0
+    environment:
+      discovery.type: single-node
+      DISABLE_SECURITY_PLUGIN: "true"
+      OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:9600:9600"
+    volumes:
+      - factorydb-opensearch:/usr/share/opensearch/data
+
+volumes:
+  factorydb-postgres:
+  factorydb-opensearch:

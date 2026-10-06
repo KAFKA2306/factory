@@ -81,3 +81,22 @@ MCP standaloneは`127.0.0.1`へbindし、SDKのlocalhost DNS-rebinding protectio
 4. 参照整合性とcoverage scopeを監査
 5. 静的カタログを生成
 6. 差分をPull Requestとしてレビュー
+
+
+## Local PostgreSQL / OpenSearch projections
+
+PostgreSQL and OpenSearch are **derived local projections**, not canonical stores.
+
+```text
+data/*.jsonl + data/facilities/*.jsonl
+        │
+        ├─ rebuild.sql ───────────> PostgreSQL 15
+        │                           relational + JSONB indexes
+        │
+        └─ bulk NDJSON ──────────> OpenSearch 3.9.0
+                                    search index
+```
+
+`scripts/rebuild_local_projections.sh` always rebuilds from canonical files and verifies row/document counts against those files. PostgreSQL uses a disposable `factorydb_projection` schema; OpenSearch uses a disposable `factorydb-facilities-v1` index. Neither is allowed to write facts back into `data/`.
+
+This layer exists to exercise production-style relational/search responsibilities while preserving the existing REST/MCP/Web canonical authority. No managed database, cloud account, paid API, or SaaS contract is required.
