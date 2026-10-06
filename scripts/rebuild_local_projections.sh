@@ -62,7 +62,7 @@ docker compose exec -T postgres \
 
 : > "$BULK_FILE"
 while IFS= read -r file; do
-  while IFS= read -r line; do
+  while IFS= read -r line || [[ -n "$line" ]]; do
     [[ -z "$line" ]] && continue
     printf '{"index":{"_index":"%s"}}\n%s\n' "$INDEX" "$line" >> "$BULK_FILE"
   done < "$file"
