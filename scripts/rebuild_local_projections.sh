@@ -54,7 +54,7 @@ if [[ "$opensearch_ready" != "1" ]]; then
 fi
 
 docker compose exec -T postgres sh -lc \
-  'cat /canonical/companies*.jsonl > /tmp/factorydb-companies.jsonl && cat /canonical/facilities/*.jsonl > /tmp/factorydb-facilities.jsonl'
+  'for file in /canonical/companies*.jsonl; do cat "$file"; printf "\\n"; done > /tmp/factorydb-companies.jsonl; for file in /canonical/facilities/*.jsonl; do cat "$file"; printf "\\n"; done > /tmp/factorydb-facilities.jsonl'
 
 docker compose exec -T postgres \
   psql -v ON_ERROR_STOP=1 -U factorydb -d factorydb \
