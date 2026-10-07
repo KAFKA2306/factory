@@ -18,6 +18,7 @@ mcp_http_app = mcp.streamable_http_app(
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    runtime.initialize_runtime()
     async with mcp.session_manager.run():
         yield
 
@@ -40,7 +41,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return runtime.health_status()
 
 
 @app.get("/v1/coverage")
