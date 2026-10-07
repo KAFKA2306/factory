@@ -7,7 +7,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import queries
+from . import queries, runtime
 from .mcp_server import MCP_MAX_REQUEST_BODY_SIZE, mcp, transport_security_from_env
 
 mcp_http_app = mcp.streamable_http_app(
