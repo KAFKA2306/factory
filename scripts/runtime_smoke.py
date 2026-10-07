@@ -17,7 +17,7 @@ assert health == {"status": "ok", "storage": "postgresql", "search": "opensearch
 companies = get("/v1/companies", {"country": "JP", "limit": "20"})
 assert any(row["id"] == "company:toyota-motor-corporation" for row in companies)
 
-facilities = get("/v1/facilities", {"query": "Toyota", "limit": "20"})
+facilities = get("/v1/facilities", {"query": "Motomachi", "limit": "20"})
 assert any(row["id"] == "facility:toyota-motomachi" for row in facilities)
 
 facility = get("/v1/facilities/toyota-motomachi")
