@@ -101,3 +101,18 @@ jobs:
             web/facility-verification-pack.md
           if-no-files-found: error
           retention-days: 14
+
+  runtime-stack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start local PostgreSQL, OpenSearch and FastAPI
+        run: docker compose up -d --build --wait
+      - name: Exercise PostgreSQL and OpenSearch through FastAPI
+        run: python scripts/runtime_smoke.py
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose logs
+      - name: Stop local stack
+        if: always()
+        run: docker compose down -v

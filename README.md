@@ -158,6 +158,15 @@ make check
 uv run factorydb-api
 ```
 
+ローカルの実運用read pathは、追加契約なしでPostgreSQL 15 + OpenSearch + FastAPIをDocker Composeから起動できます。
+
+```bash
+docker compose up --build --wait
+python scripts/runtime_smoke.py
+```
+
+この経路では `data/*.jsonl` を正準データのまま保持し、起動時にPostgreSQLへread modelを同期します。工場の文字検索はOpenSearchでIDを検索し、その結果をPostgreSQLのJSONBレコードから返します。RESTとMCPは引き続き同じ `factorydb.queries` を共有します。
+
 静的UIは `web/index.html` を配信します。
 
 ## データ更新

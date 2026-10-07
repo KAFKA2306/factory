@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from . import runtime
 from .provenance import PROVENANCE_SCHEMA_VERSION, citation_provenance
 from .store import coverage, load_all
 
@@ -41,16 +42,23 @@ def coverage_summary() -> dict[str, Any]:
     return coverage(load_all())
 
 
+def _collection(name: str) -> list[dict[str, Any]]:
+    runtime_rows = runtime.collection(name)
+    if runtime_rows is not None:
+        return runtime_rows
+    return _dump(load_all()[name])
+
+
 def coverage_resolutions() -> list[dict[str, Any]]:
-    return _dump(load_all()["coverage_resolutions"])
+    return _collection("coverage_resolutions")
 
 
 def countries() -> list[dict[str, Any]]:
-    return _dump(load_all()["countries"])
+    return _collection("countries")
 
 
 def companies() -> list[dict[str, Any]]:
-    return _dump(load_all()["companies"])
+    return _collection("companies")
 
 
 def search_companies(
@@ -58,18 +66,18 @@ def search_companies(
     country: str | None = None,
     limit: int = 20,
 ) -> list[dict[str, Any]]:
-    rows = load_all()["companies"]
+    rows = companies()
     if country:
         code = country.upper()
-        rows = [row for row in rows if row.country_code == code]
+        rows = [row for row in rows if row["country_code"] == code]
     if query:
         token = query.casefold().strip()
         rows = [
             row
             for row in rows
-            if token in row.legal_name.casefold() or token in str(row.website).casefold()
+            if token in row["legal_name"].casefold() or token in str(row["website"]).casefold()
         ]
-    return _dump(rows[: _bounded_limit(limit)])
+    return rows[: _bounded_limit(limit)]
 
 
 def facilities(
@@ -79,32 +87,46 @@ def facilities(
     query: str | None = None,
     limit: int | None = None,
 ) -> list[dict[str, Any]]:
-    rows = load_all()["facilities"]
-    if country:
+    bounded_limit = _bounded_limit(limit) if limit is not None else MAX_RESULTS
+    searched_with_opensearch = False
+
+    if runtime.database_enabled():
+        ids: list[str] | None = None
+        if query and runtime.opensearch_enabled():
+            ids = runtime.search_facility_ids(query, bounded_limit)
+            searched_with_opensearch = True
+        rows = runtime.facility_rows(country=country, ids=ids) or []
+    else:
+        rows = _dump(load_all()["facilities"])
+
+    if country and not runtime.database_enabled():
         code = country.upper()
-        rows = [row for row in rows if row.country_code == code]
+        rows = [row for row in rows if row["country_code"] == code]
     if process:
-        rows = [row for row in rows if process in row.processes]
+        rows = [row for row in rows if process in row["processes"]]
     if product:
         token = product.casefold()
-        rows = [row for row in rows if any(token in item.casefold() for item in row.products)]
-    if query:
+        rows = [row for row in rows if any(token in item.casefold() for item in row["products"])]
+    if query and not searched_with_opensearch:
         token = query.casefold().strip()
         rows = [
             row
             for row in rows
-            if token in row.name.casefold()
-            or token in row.operator.casefold()
-            or any(token in item.casefold() for item in row.products)
-            or any(token in item.casefold() for item in row.processes)
+            if token in row["name"].casefold()
+            or token in row["operator"].casefold()
+            or any(token in item.casefold() for item in row["products"])
+            or any(token in item.casefold() for item in row["processes"])
         ]
     if limit is not None:
-        rows = rows[: _bounded_limit(limit)]
-    return _dump(rows)
+        rows = rows[:bounded_limit]
+    return rows
 
 
 def facility(facility_id: str) -> dict[str, Any] | None:
     key = facility_id if facility_id.startswith("facility:") else f"facility:{facility_id}"
+    runtime_row = runtime.record("facilities", key)
+    if runtime_row is not None:
+        return runtime_row
     for row in load_all()["facilities"]:
         if row.id == key:
             return row.model_dump(mode="json")
@@ -117,20 +139,23 @@ def facilities_batch(facility_ids: list[str]) -> list[dict[str, Any]]:
     wanted = {
         value if value.startswith("facility:") else f"facility:{value}" for value in facility_ids
     }
+    runtime_rows = runtime.facility_rows(ids=sorted(wanted))
+    if runtime_rows is not None:
+        return runtime_rows
     return _dump([row for row in load_all()["facilities"] if row.id in wanted])
 
 
 def products() -> list[dict[str, Any]]:
-    rows = load_all()["facilities"]
+    rows = facilities()
     result: dict[str, dict[str, Any]] = {}
     for row in rows:
-        for name in row.products:
+        for name in row["products"]:
             item = result.setdefault(
                 name,
                 {"name": name, "facility_ids": [], "country_codes": set()},
             )
-            item["facility_ids"].append(row.id)
-            item["country_codes"].add(row.country_code)
+            item["facility_ids"].append(row["id"])
+            item["country_codes"].add(row["country_code"])
     return [
         {
             "name": item["name"],
@@ -144,16 +169,16 @@ def products() -> list[dict[str, Any]]:
 
 
 def processes() -> list[dict[str, Any]]:
-    rows = load_all()["facilities"]
+    rows = facilities()
     result: dict[str, dict[str, Any]] = {}
     for row in rows:
-        for name in row.processes:
+        for name in row["processes"]:
             item = result.setdefault(
                 name,
                 {"name": name, "facility_ids": [], "country_codes": set()},
             )
-            item["facility_ids"].append(row.id)
-            item["country_codes"].add(row.country_code)
+            item["facility_ids"].append(row["id"])
+            item["country_codes"].add(row["country_code"])
     return [
         {
             "name": item["name"],
@@ -167,15 +192,15 @@ def processes() -> list[dict[str, Any]]:
 
 
 def assets() -> list[dict[str, Any]]:
-    return _dump(load_all()["assets"])
+    return _collection("assets")
 
 
 def investments() -> list[dict[str, Any]]:
-    return _dump(load_all()["investments"])
+    return _collection("investments")
 
 
 def financials() -> list[dict[str, Any]]:
-    return _dump(load_all()["financials"])
+    return _collection("financials")
 
 
 def ontology() -> list[dict[str, Any]]:
