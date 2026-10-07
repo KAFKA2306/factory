@@ -59,33 +59,32 @@ def _canonical_records() -> list[tuple[str, str, str | None, str]]:
 
 
 def _bootstrap_postgres(records: list[tuple[str, str, str | None, str]]) -> None:
-    with _connect() as connection:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS factorydb_records (
-                    collection TEXT NOT NULL,
-                    id TEXT NOT NULL,
-                    country_code TEXT,
-                    payload JSONB NOT NULL,
-                    PRIMARY KEY (collection, id)
-                )
-                """
+    with _connect() as connection, connection.cursor() as cursor:
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS factorydb_records (
+                collection TEXT NOT NULL,
+                id TEXT NOT NULL,
+                country_code TEXT,
+                payload JSONB NOT NULL,
+                PRIMARY KEY (collection, id)
             )
-            cursor.execute(
-                """
-                CREATE INDEX IF NOT EXISTS factorydb_records_collection_country_idx
-                ON factorydb_records (collection, country_code)
-                """
-            )
-            cursor.execute("TRUNCATE factorydb_records")
-            cursor.executemany(
-                """
-                INSERT INTO factorydb_records (collection, id, country_code, payload)
-                VALUES (%s, %s, %s, %s::jsonb)
-                """,
-                records,
-            )
+            """
+        )
+        cursor.execute(
+            """
+            CREATE INDEX IF NOT EXISTS factorydb_records_collection_country_idx
+            ON factorydb_records (collection, country_code)
+            """
+        )
+        cursor.execute("TRUNCATE factorydb_records")
+        cursor.executemany(
+            """
+            INSERT INTO factorydb_records (collection, id, country_code, payload)
+            VALUES (%s, %s, %s, %s::jsonb)
+            """,
+            records,
+        )
 
 
 def _bootstrap_opensearch() -> None:
@@ -241,21 +240,14 @@ def health_status() -> dict[str, str]:
     if not DATABASE_URL:
         return status
 
-    try:
-        initialize_runtime()
-        with _connect() as connection:
-            connection.execute("SELECT 1").fetchone()
-        status["storage"] = "postgresql"
-    except Exception:
-        return {"status": "degraded", "storage": "unavailable", "search": "unavailable"}
+    initialize_runtime()
+    with _connect() as connection:
+        connection.execute("SELECT 1").fetchone()
+    status["storage"] = "postgresql"
 
     if OPENSEARCH_URL:
-        try:
-            with httpx.Client(base_url=OPENSEARCH_URL, timeout=2.0) as client:
-                response = client.get("/_cluster/health")
-                response.raise_for_status()
-            status["search"] = "opensearch"
-        except Exception:
-            status["status"] = "degraded"
-            status["search"] = "unavailable"
+        with httpx.Client(base_url=OPENSEARCH_URL, timeout=2.0) as client:
+            response = client.get("/_cluster/health")
+            response.raise_for_status()
+        status["search"] = "opensearch"
     return status
