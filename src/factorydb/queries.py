@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from . import runtime
 from .provenance import PROVENANCE_SCHEMA_VERSION, citation_provenance
 from .store import coverage, load_all
 
@@ -86,28 +87,39 @@ def facilities(
     query: str | None = None,
     limit: int | None = None,
 ) -> list[dict[str, Any]]:
-    rows = load_all()["facilities"]
-    if country:
+    bounded_limit = _bounded_limit(limit) if limit is not None else MAX_RESULTS
+    searched_with_opensearch = False
+
+    if runtime.database_enabled():
+        ids: list[str] | None = None
+        if query and runtime.opensearch_enabled():
+            ids = runtime.search_facility_ids(query, bounded_limit)
+            searched_with_opensearch = True
+        rows = runtime.facility_rows(country=country, ids=ids) or []
+    else:
+        rows = _dump(load_all()["facilities"])
+
+    if country and not runtime.database_enabled():
         code = country.upper()
-        rows = [row for row in rows if row.country_code == code]
+        rows = [row for row in rows if row["country_code"] == code]
     if process:
-        rows = [row for row in rows if process in row.processes]
+        rows = [row for row in rows if process in row["processes"]]
     if product:
         token = product.casefold()
-        rows = [row for row in rows if any(token in item.casefold() for item in row.products)]
-    if query:
+        rows = [row for row in rows if any(token in item.casefold() for item in row["products"])]
+    if query and not searched_with_opensearch:
         token = query.casefold().strip()
         rows = [
             row
             for row in rows
-            if token in row.name.casefold()
-            or token in row.operator.casefold()
-            or any(token in item.casefold() for item in row.products)
-            or any(token in item.casefold() for item in row.processes)
+            if token in row["name"].casefold()
+            or token in row["operator"].casefold()
+            or any(token in item.casefold() for item in row["products"])
+            or any(token in item.casefold() for item in row["processes"])
         ]
     if limit is not None:
-        rows = rows[: _bounded_limit(limit)]
-    return _dump(rows)
+        rows = rows[:bounded_limit]
+    return rows
 
 
 def facility(facility_id: str) -> dict[str, Any] | None:
@@ -154,6 +166,8 @@ def products() -> list[dict[str, Any]]:
         }
         for item in sorted(result.values(), key=lambda value: value["name"])
     ]
+
+
 def processes() -> list[dict[str, Any]]:
     rows = facilities()
     result: dict[str, dict[str, Any]] = {}
