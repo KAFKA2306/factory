@@ -92,10 +92,7 @@ def _bootstrap_opensearch() -> None:
     if not OPENSEARCH_URL:
         return
 
-    facilities = [
-        model.model_dump(mode="json")
-        for model in load_all()["facilities"]
-    ]
+    facilities = [model.model_dump(mode="json") for model in load_all()["facilities"]]
     with httpx.Client(base_url=OPENSEARCH_URL, timeout=30.0) as client:
         if client.head(f"/{OPENSEARCH_INDEX}").status_code == 200:
             response = client.delete(f"/{OPENSEARCH_INDEX}")
