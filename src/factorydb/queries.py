@@ -42,7 +42,6 @@ def coverage_summary() -> dict[str, Any]:
     return coverage(load_all())
 
 
-
 def _collection(name: str) -> list[dict[str, Any]]:
     runtime_rows = runtime.collection(name)
     if runtime_rows is not None:
@@ -202,6 +201,7 @@ def investments() -> list[dict[str, Any]]:
 
 def financials() -> list[dict[str, Any]]:
     return _collection("financials")
+
 
 def ontology() -> list[dict[str, Any]]:
     return load_all()["ontology"]
