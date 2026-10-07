@@ -41,16 +41,23 @@ def coverage_summary() -> dict[str, Any]:
     return coverage(load_all())
 
 
+def _collection(name: str) -> list[dict[str, Any]]:
+    runtime_rows = runtime.collection(name)
+    if runtime_rows is not None:
+        return runtime_rows
+    return _dump(load_all()[name])
+
+
 def coverage_resolutions() -> list[dict[str, Any]]:
-    return _dump(load_all()["coverage_resolutions"])
+    return _collection("coverage_resolutions")
 
 
 def countries() -> list[dict[str, Any]]:
-    return _dump(load_all()["countries"])
+    return _collection("countries")
 
 
 def companies() -> list[dict[str, Any]]:
-    return _dump(load_all()["companies"])
+    return _collection("companies")
 
 
 def search_companies(
@@ -58,18 +65,18 @@ def search_companies(
     country: str | None = None,
     limit: int = 20,
 ) -> list[dict[str, Any]]:
-    rows = load_all()["companies"]
+    rows = companies()
     if country:
         code = country.upper()
-        rows = [row for row in rows if row.country_code == code]
+        rows = [row for row in rows if row["country_code"] == code]
     if query:
         token = query.casefold().strip()
         rows = [
             row
             for row in rows
-            if token in row.legal_name.casefold() or token in str(row.website).casefold()
+            if token in row["legal_name"].casefold() or token in str(row["website"]).casefold()
         ]
-    return _dump(rows[: _bounded_limit(limit)])
+    return rows[: _bounded_limit(limit)]
 
 
 def facilities(
@@ -105,6 +112,9 @@ def facilities(
 
 def facility(facility_id: str) -> dict[str, Any] | None:
     key = facility_id if facility_id.startswith("facility:") else f"facility:{facility_id}"
+    runtime_row = runtime.record("facilities", key)
+    if runtime_row is not None:
+        return runtime_row
     for row in load_all()["facilities"]:
         if row.id == key:
             return row.model_dump(mode="json")
@@ -117,20 +127,23 @@ def facilities_batch(facility_ids: list[str]) -> list[dict[str, Any]]:
     wanted = {
         value if value.startswith("facility:") else f"facility:{value}" for value in facility_ids
     }
+    runtime_rows = runtime.facility_rows(ids=sorted(wanted))
+    if runtime_rows is not None:
+        return runtime_rows
     return _dump([row for row in load_all()["facilities"] if row.id in wanted])
 
 
 def products() -> list[dict[str, Any]]:
-    rows = load_all()["facilities"]
+    rows = facilities()
     result: dict[str, dict[str, Any]] = {}
     for row in rows:
-        for name in row.products:
+        for name in row["products"]:
             item = result.setdefault(
                 name,
                 {"name": name, "facility_ids": [], "country_codes": set()},
             )
-            item["facility_ids"].append(row.id)
-            item["country_codes"].add(row.country_code)
+            item["facility_ids"].append(row["id"])
+            item["country_codes"].add(row["country_code"])
     return [
         {
             "name": item["name"],
@@ -141,19 +154,17 @@ def products() -> list[dict[str, Any]]:
         }
         for item in sorted(result.values(), key=lambda value: value["name"])
     ]
-
-
 def processes() -> list[dict[str, Any]]:
-    rows = load_all()["facilities"]
+    rows = facilities()
     result: dict[str, dict[str, Any]] = {}
     for row in rows:
-        for name in row.processes:
+        for name in row["processes"]:
             item = result.setdefault(
                 name,
                 {"name": name, "facility_ids": [], "country_codes": set()},
             )
-            item["facility_ids"].append(row.id)
-            item["country_codes"].add(row.country_code)
+            item["facility_ids"].append(row["id"])
+            item["country_codes"].add(row["country_code"])
     return [
         {
             "name": item["name"],
@@ -165,115 +176,3 @@ def processes() -> list[dict[str, Any]]:
         for item in sorted(result.values(), key=lambda value: value["name"])
     ]
 
-
-def assets() -> list[dict[str, Any]]:
-    return _dump(load_all()["assets"])
-
-
-def investments() -> list[dict[str, Any]]:
-    return _dump(load_all()["investments"])
-
-
-def financials() -> list[dict[str, Any]]:
-    return _dump(load_all()["financials"])
-
-
-def ontology() -> list[dict[str, Any]]:
-    return load_all()["ontology"]
-
-
-def country_coverage(country: str | None = None) -> dict[str, Any]:
-    data = load_all()
-    summary = coverage(data)
-    if country is None:
-        return summary
-
-    code = country.upper()
-    country_row = next((row for row in data["countries"] if row.iso2 == code), None)
-    if country_row is None:
-        raise ValueError(f"unknown ISO 3166-1 alpha-2 country code: {country}")
-
-    country_facilities = [row for row in data["facilities"] if row.country_code == code]
-    resolution = next(
-        (row for row in data["coverage_resolutions"] if row.country_code == code),
-        None,
-    )
-    if country_facilities:
-        status = "factory_present"
-    elif resolution is not None:
-        status = resolution.status
-    else:
-        status = "unresolved"
-
-    return {
-        "country_code": code,
-        "country": country_row.model_dump(mode="json"),
-        "status": status,
-        "facility_count": len(country_facilities),
-        "facility_ids": sorted(row.id for row in country_facilities),
-        "resolution": resolution.model_dump(mode="json") if resolution else None,
-    }
-
-
-def source_evidence(entity_id: str) -> dict[str, Any]:
-    data = load_all()
-    for collection in SOURCE_COLLECTIONS:
-        for row in data[collection]:
-            if row.id != entity_id:
-                continue
-            payload = row.model_dump(mode="json")
-            citations = _citations(payload)
-            return {
-                "schema_version": PROVENANCE_SCHEMA_VERSION,
-                "found": True,
-                "entity_id": entity_id,
-                "collection": collection,
-                "citations": citations,
-                "provenance": [citation_provenance(entity_id, item) for item in citations],
-            }
-    return {
-        "schema_version": PROVENANCE_SCHEMA_VERSION,
-        "found": False,
-        "entity_id": entity_id,
-        "collection": None,
-        "citations": [],
-        "provenance": [],
-    }
-
-
-def data_health() -> dict[str, Any]:
-    data = load_all()
-    source_dates: list[str] = []
-    citation_count = 0
-    for collection in SOURCE_COLLECTIONS:
-        for row in data[collection]:
-            citations = _citations(row.model_dump(mode="json"))
-            citation_count += len(citations)
-            source_dates.extend(item["retrieved_at"] for item in citations)
-
-    return {
-        "schema_version": "factorydb.data-health.v1",
-        "collections": {
-            "countries": len(data["countries"]),
-            "companies": len(data["companies"]),
-            "facilities": len(data["facilities"]),
-            "coverage_resolutions": len(data["coverage_resolutions"]),
-            "assets": len(data["assets"]),
-            "investments": len(data["investments"]),
-            "financials": len(data["financials"]),
-            "ontology_terms": len(data["ontology"]),
-        },
-        "source_retrieved_through": max(source_dates) if source_dates else None,
-        "provenance": {
-            "schema_version": PROVENANCE_SCHEMA_VERSION,
-            "citation_count": citation_count,
-            "source_content_hash_count": 0,
-            "freshness_policy": "not_defined",
-            "limitations": [
-                "core citations retain source URL, publisher, retrieval date, and evidence text but not the raw source body",
-                "source_hash and stale therefore remain explicit null/unknown values in provenance responses",
-                "Robotics raw evidence keeps separate SHA-256 snapshots and is not relabelled as a core citation hash",
-            ],
-        },
-        "coverage": coverage(data),
-    }
