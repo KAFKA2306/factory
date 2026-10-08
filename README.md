@@ -215,3 +215,7 @@ tests/            deterministic contracts
 FactoryDB の成功指標は「世界何か国に点を置いたか」ではありません。
 
 **利用者が、ある企業の製造拠点について「何を作る・どう作る・どの投資と結びつく・何を根拠にそう言える」を同じ証拠線上で確認できること**をDoneとします。
+
+## Operational ontology
+
+[Project ontology](ontology/project.yaml) maps domain objects, relationships, evidence rules, guarded actions and outcome metrics to the shared [Causal–Evidence Core](https://github.com/KAFKA2306/know/blob/main/ontology/causal-evidence-core.yaml). The manifest documents the intended decision boundary; it does not by itself implement or authorize new real-world actions.

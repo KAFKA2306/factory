@@ -1,0 +1,91 @@
+project:
+  id: "kafka:factory"
+  name: "FactoryDB"
+  repository: "https://github.com/KAFKA2306/factory"
+  version: "0.1.0"
+  updated: "2026-10-08"
+  core_ontology: "https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/causal-evidence-core.yaml"
+  schema: "https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/project.schema.json"
+
+purpose:
+  problem: "Compare manufacturer facilities, production processes, capacity, investment and financial snapshots with verifiable primary-source lineage."
+  intended_decisions: ["accept_fact","request_reverification","publish_record","compare_facilities","reject_claim"]
+  success_conditions:
+    - "Facilities, processes, assets, investments and company financial facts are separate linked objects."
+    - "Every published material claim can be traced to primary evidence."
+    - "Missing facility evidence differs from verified absence."
+  falsification_conditions:
+    - "Corporate capex is allocated to a facility without a source."
+    - "Planned automation is represented as operational."
+    - "An unknown region is reported as verified no qualifying factory."
+
+scope:
+  included: ["company","facility","product","process","asset","capacity","investment","financial snapshot","primary source","robotics evidence"]
+  excluded: ["synthetic factory counts","unsupported plant allocations","unverified production status","real-world purchasing"]
+  temporal: "Source publication, record observation, investment plan date, operating state and financial period remain separate."
+  abstraction_level: "Factory comparison and evidence-backed read model across REST, MCP and Web."
+
+competency_questions:
+  - "Which company owns or operates each facility and what products and processes are verified?"
+  - "Which published source supports an investment and its specific facility allocation?"
+  - "Is automation ordered, installed or operational?"
+  - "Are capacity and financial figures comparable by unit, scope and period?"
+
+domain_mapping:
+  System: "ManufacturingFacilityEvidenceSystem"
+  State: ["facility verification state","capacity state","automation state","investment state","publication state"]
+  Action: ["ingest source","normalize facility","link product and process","compare verified facts","publish evidence-backed record"]
+  Process: ["official data ingestion","identity resolution","catalog generation","robotics evidence audit","API generation"]
+  Observation: ["company disclosure","facility record","capacity value","automation milestone","financial snapshot"]
+  Model: ["factorydb.queries read model","normalization and provenance rules"]
+  Requirement: ["official source","identity consistency","unit and time comparability","state separation"]
+  Claim: ["facility exists","plant makes product","investment funds facility","automation operational","company financial performance"]
+  Evidence: ["official IR disclosure","government record","regulatory filing","source registry","content hash"]
+  Decision: ["accept_fact","request_reverification","publish_record","reject_claim"]
+
+claims_and_evidence:
+  assertion_types: ["ReportedFact","ObservedFact","CalculatedValue","RequirementAssertion","DecisionAssertion"]
+  required_evidence:
+    Facility: ["company identity","location","primary source"]
+    Investment: ["investment amount","currency","scope","announcement date","source"]
+    FinancialSnapshot: ["issuer","period","concept","unit","filing reference"]
+  unknown_policy: "Not observed, not disclosed and verified-no-qualifying-factory are distinct states."
+
+decision_rules:
+  - id: "source-backed-record"
+    when: "Stable facility identity and controlling primary-source evidence exist."
+    result: "accept_fact"
+  - id: "investment-allocation"
+    when: "Exact source links company capex to the named facility."
+    result: "accept_fact"
+  - id: "missing-evidence"
+    when: "Material relationship lacks a source or scopes conflict."
+    result: "request_reverification"
+
+provenance:
+  sources: ["company IR","government records","regulatory filings","official robotics source registry"]
+  generated_artifacts: ["canonical catalog","REST and MCP read models","source-linked facility views","robotics audit"]
+  agents: ["data collectors","normalizers","factorydb.queries","tests","human reviewer"]
+  lineage: "Official source -> normalized identity -> facility/product/process/investment relationship -> catalog/API."
+
+validation:
+  structural: "Validate canonical IDs and source registries and rebuild catalog deterministically."
+  semantic: "Keep company versus facility values and planned versus operational status distinct."
+  evidence: "Every material relationship must retain exact source, scope, time and status."
+  publication: "REST, MCP and Web use the same canonical read model; unsupported values remain unknown."
+
+operational_model:
+  implementation_status: "contract_only; execution integration must be proven separately"
+  canonical_sources: ["data/automation.jsonl","data/robotics-sources.json","factorydb.queries"]
+  objects: ["Company","Facility","Product","Process","Asset","Investment","FinancialSnapshot","Evidence"]
+  links:
+    - ["Company","OPERATES","Facility"]
+    - ["Facility","PRODUCES","Product"]
+    - ["Investment","TARGETS","Facility"]
+    - ["FinancialSnapshot","DESCRIBES","Company"]
+  actions:
+    - id: "publish_verified_facility_record"
+      preconditions: "Facility ID, status and primary-source link verified"
+      recorded_effect: "Canonical catalog and read model reflect the same verified record"
+      rollback_or_recovery: "Withdraw disputed record and preserve its audit evidence"
+  outcome_metrics: ["primary_source_coverage","verified_facility_relationships","unresolved_capacity_conflicts"]
