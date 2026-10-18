@@ -80,3 +80,9 @@ Report verified factory/robotics evidence or user capability Before -> After, pr
 - **Range:** Combine code, data, tests, runtime/UI, and domain expertise when that materially improves the outcome, while respecting canonical owners and avoiding duplicate systems.
 - **Speed:** Complete authorized read-only and reversible work through implementation, focused checks, and read-back without unnecessary approval loops. Bound retries and stop at the proven outcome.
 - These principles never bypass repository-specific security, privacy, permission, publication, spending, destructive-action, or release boundaries. State verified results and any remaining `UNVERIFIED` layers.
+
+## Compute-scaling adoption
+
+Primary-source data: Limit model/compute scaling to discovery, document extraction, disambiguation and contradiction detection. Against frozen official-source records, compare precision, recall, unsupported factory claims, unknown-to-verified errors, runtime and memory. Keep existing source URLs, retrieval dates, canonical JSONL and REST/MCP/Web read model authoritative. Never hallucinate sites, capacity or actual robot deployments; no duplicate collector or secondary fact ledger.
+
+Adopt a higher-compute path only after an identical-input baseline comparison and exact-revision verification; record input/model revision, budget, measured quality and measured resource usage. A no-gain result means keeping the existing path.
